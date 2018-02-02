@@ -2,7 +2,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { LANGUAGES } from '../../constants/appConstants';
+import { LANGUAGES } from '../constants/appConstants';
 
 const LanguageSwitcher = ({ setLanguage }) => {
   return (

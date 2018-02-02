@@ -1,0 +1,11 @@
+@import '../../styles/import';
+
+.sidebar {
+  position: absolute;
+  width: $sidebar-width;
+  background-color: $app-orange;
+  top: 0;
+  bottom: 0;
+  padding: $standard-padding;
+  margin: 0;
+}

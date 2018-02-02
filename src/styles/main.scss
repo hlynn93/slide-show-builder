@@ -1,6 +1,9 @@
-@import 'utils/variables';
-@import 'utils/mixins';
+@import './import';
 
-.User {
-    background: lighten($color: $app-color, $amount: 20%);
+body {
+    margin: 0;
+}
+
+.main-content {
+  margin: $header-height 0 0 $sidebar-abs-width;
 }
