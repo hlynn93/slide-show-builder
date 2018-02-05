@@ -4,9 +4,10 @@ import { DraggableImage } from '../../../components/Draggables';
 
 import './Canvas.scss';
 
-const renderImages = (ids, objects, onClick) =>
+const renderImages = (ids, objects, activeId, onClick) =>
   ids.map(id => (
     <DraggableImage
+      isActive={id === activeId}
       onClick={() => onClick(id)}
       key={id}
       bounds={"parent"}
@@ -16,15 +17,13 @@ const renderImages = (ids, objects, onClick) =>
 
 
 class Canvas extends PureComponent {
-
-
-
   render() {
-    const { imgIds, objects, onClick } = this.props
+    const { imgIds, objects, onClick, activeId } = this.props
+    console.warn(activeId);
     return (
       <div className="canvas_wrapper">
         <div className="canvas canvas--desktop">
-          { renderImages(imgIds, objects, onClick) }
+          { renderImages(imgIds, objects, activeId, onClick) }
         </div>
       </div>
     );
@@ -35,6 +34,7 @@ Canvas.propTypes = {
   imgIds: PropTypes.array,
   objects: PropTypes.object,
   onClick: PropTypes.func,
+  activeId: PropTypes.number,
 };
 
 export default Canvas;

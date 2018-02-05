@@ -59,7 +59,7 @@ class Builder extends PureComponent {
   }
 
   render() {
-    const { objects, imgIds } = this.state
+    const { objects, imgIds, currentObject } = this.state
     return (
       <div className="builder">
         <SideTools />
@@ -71,6 +71,7 @@ class Builder extends PureComponent {
             objects={objects}
             imgIds={imgIds}
             onClick={this.handleClick}
+            activeId={currentObject.id}
             />
           <ImageEditor />
         </div>
