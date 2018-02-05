@@ -1,0 +1,18 @@
+import React, { PureComponent } from 'react';
+// import PropTypes from 'prop-types';
+
+class BottomBar extends PureComponent {
+  render() {
+    return (
+      <div className="bottom-bar">
+
+      </div>
+    );
+  }
+}
+
+BottomBar.propTypes = {
+
+};
+
+export default BottomBar;
