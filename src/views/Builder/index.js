@@ -3,6 +3,8 @@ import SideTools from './components/SideTools';
 import Canvas from './components/Canvas';
 import ImageEditor from './components/ImageEditor';
 import ImageUploader from './components/ImageUploader';
+import BottomBar from './components/BottomBar';
+import html2canvas from 'html2canvas';
 // import PropTypes from 'prop-types';
 
 const formatObjectData = (content, url, type, id) => ({
@@ -20,8 +22,20 @@ class Builder extends PureComponent {
       imgIds: [],
       currentObject: {}
     }
+    this.handleDragEnd = this.handleDragEnd.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.handleImageChange = this.handleImageChange.bind(this)
+  }
+
+  handleDragEnd() {
+    const element = document.getElementById('canvas')
+    html2canvas(element).then(function(canvas) {
+      // Export the canvas to its data URI representation
+      const base64image = canvas.toDataURL("image/png");
+
+      // Open the image in a new window
+      window.open(base64image , "_blank");
+    });
   }
 
   handleClick(id) {
@@ -68,12 +82,14 @@ class Builder extends PureComponent {
             onImageChange={this.handleImageChange}
             />
           <Canvas
+            onDragStop={this.handleDragEnd}
             objects={objects}
             imgIds={imgIds}
             onClick={this.handleClick}
             activeId={currentObject.id}
             />
           <ImageEditor />
+          <BottomBar />
         </div>
       </div>
     );
