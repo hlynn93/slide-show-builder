@@ -29,14 +29,14 @@ class Builder extends PureComponent {
     this.updateSnapshot = this.updateSnapshot.bind(this)
     this.updateCurrentObject = this.updateCurrentObject.bind(this)
     this.updateAttr = this.updateAttr.bind(this)
+    this.handResizeEnd = this.handleResizeEnd.bind(this)
     this.handleDragEnd = this.handleDragEnd.bind(this)
-    this.handleResize = this.handleResize.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.handleImageChange = this.handleImageChange.bind(this)
   }
 
-  handleResize(id, event, direction, ref, delta, position) {
-      this.updateAttr(id, {
+  handleResizeEnd(id, event, direction, ref, delta, position) {
+      return this.updateAttr(id, {
         width: ref.offsetWidth,
         height: ref.offsetHeight,
         ...position
@@ -44,14 +44,13 @@ class Builder extends PureComponent {
   }
 
   handleDragEnd(id, e, d) {
-    this.updateAttr(id, {
-      ...d
-    })
+    this.updateAttr(id, { ...d })
+    this.updateSnapshot()
   }
 
   updateAttr(id, attr) {
     const { objects } = this.state
-    this.setState({
+    return this.setState({
       objects: {
         ...objects,
         [id]: {
@@ -59,7 +58,7 @@ class Builder extends PureComponent {
           attr: { ...objects[id].attr, ...attr }
         }
       }
-    }, () => this.updateSnapshot());
+    });
   }
 
   updateSnapshot() {
@@ -115,7 +114,14 @@ class Builder extends PureComponent {
   }
 
   render() {
-    const { objects, imgIds, currentObject, currentSlide, snapshots } = this.state
+    const {
+      objects,
+      imgIds,
+      currentObject,
+      currentSlide,
+      snapshots
+    } = this.state
+
     return (
       <div className="builder">
         <SideTools />
@@ -124,7 +130,7 @@ class Builder extends PureComponent {
             onImageChange={this.handleImageChange}
             />
           <Canvas
-            onResize={this.handleResize}
+            onResizeEnd={this.handleResizeEnd}
             onDragStop={this.handleDragEnd}
             objects={objects}
             imgIds={imgIds}

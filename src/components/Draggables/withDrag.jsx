@@ -11,7 +11,7 @@ export default (Component) => {
     onDragStop,
     onResize,
     onResizeStart,
-    onResizeStop,
+    onResizeEnd,
     bounds,
     object,
     ...props
@@ -20,7 +20,7 @@ export default (Component) => {
       bounds={bounds}
       onResizeStart={onResizeStart}
       onResize={onResize}
-      onResizeStop={onResizeStop}
+      onResizeEnd={onResizeEnd}
       onDragStart={onDragStart}
       onDrag={onDrag}
       onDragStop={onDragStop}>

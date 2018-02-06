@@ -12,11 +12,11 @@ class Canvas extends PureComponent {
   }
 
   renderImages() {
-    const { imgIds, objects, onClick, onDragStop, onResize, activeId } = this.props
+    const { imgIds, objects, onClick, onDragStop, onResizeEnd, activeId } = this.props
     return imgIds.map(id => (
       <DraggableImage
         onDragStop={onDragStop.bind(null, id)}
-        onResize={onResize.bind(null, id)}
+        onResizeEnd={onResizeEnd.bind(null, id)}
         isActive={id === activeId}
         onClick={onClick.bind(null, id)}
         object={objects[id]}
@@ -43,7 +43,7 @@ Canvas.propTypes = {
   objects: PropTypes.object,
   onClick: PropTypes.func,
   onDragStop: PropTypes.func,
-  onResize: PropTypes.func,
+  onResizeEnd: PropTypes.func,
   activeId: PropTypes.number,
 };
 
