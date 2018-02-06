@@ -12,16 +12,17 @@ class Canvas extends PureComponent {
   }
 
   renderImages() {
-    const { imgIds, objects, onClick, onDragStop, activeId } = this.props
+    const { imgIds, objects, onClick, onDragStop, onResize, activeId } = this.props
     return imgIds.map(id => (
       <DraggableImage
-        onStop={onDragStop.bind(null, id)}
+        onDragStop={onDragStop.bind(null, id)}
+        onResize={onResize.bind(null, id)}
         isActive={id === activeId}
         onClick={onClick.bind(null, id)}
+        object={objects[id]}
         key={id}
         bounds={"parent"}
-        className={`canvas_image canvas_image--${id}`}
-        src={objects[id].url} />
+        className={`canvas_image canvas_image--${id}`}/>
     ))
   }
 
@@ -42,6 +43,7 @@ Canvas.propTypes = {
   objects: PropTypes.object,
   onClick: PropTypes.func,
   onDragStop: PropTypes.func,
+  onResize: PropTypes.func,
   activeId: PropTypes.number,
 };
 

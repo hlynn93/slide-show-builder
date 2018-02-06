@@ -1,24 +1,29 @@
 import React from 'react';
-import Draggable from 'react-draggable';
+// import Draggable from 'react-draggable';
+import Rnd from 'react-rnd';
 
 /* eslint-disable */
 
 export default (Component) => {
   return ({
-    onStart,
     onDrag,
-    onStop,
-    grid,
-    defaultPosition,
+    onDragStart,
+    onDragStop,
+    onResize,
+    onResizeStart,
+    onResizeStop,
     bounds,
+    object,
     ...props
-  }) => (<Draggable
-      defaultPosition={defaultPosition}
-      grid={grid}
+  }) => (<Rnd
+      default={object.attr}
       bounds={bounds}
-      onStart={onStart}
+      onResizeStart={onResizeStart}
+      onResize={onResize}
+      onResizeStop={onResizeStop}
+      onDragStart={onDragStart}
       onDrag={onDrag}
-      onStop={onStop}>
-      <Component {...props} />
-    </Draggable>)
+      onDragStop={onDragStop}>
+      <Component src={object.url} {...props} />
+    </Rnd>)
 }

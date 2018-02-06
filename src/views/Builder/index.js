@@ -7,41 +7,83 @@ import BottomBar from './components/BottomBar';
 import html2canvas from 'html2canvas';
 // import PropTypes from 'prop-types';
 
+
 const formatObjectData = (content, url, type, id) => ({
   content,
   url,
   type,
-  id
+  id,
+  attr: { width: 100, height: 100, x: 0, y: 0}
 })
 
 class Builder extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      currentSlide: 0,
       objects: {},
       imgIds: [],
-      currentObject: {}
+      currentObject: {},
+      snapshots: {},
     }
+    this.updateSnapshot = this.updateSnapshot.bind(this)
+    this.updateCurrentObject = this.updateCurrentObject.bind(this)
+    this.updateAttr = this.updateAttr.bind(this)
     this.handleDragEnd = this.handleDragEnd.bind(this)
+    this.handleResize = this.handleResize.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.handleImageChange = this.handleImageChange.bind(this)
   }
 
-  handleDragEnd() {
+  handleResize(id, event, direction, ref, delta, position) {
+      this.updateAttr(id, {
+        width: ref.offsetWidth,
+        height: ref.offsetHeight,
+        ...position
+      })
+  }
+
+  handleDragEnd(id, e, d) {
+    this.updateAttr(id, {
+      ...d
+    })
+  }
+
+  updateAttr(id, attr) {
+    const { objects } = this.state
+    this.setState({
+      objects: {
+        ...objects,
+        [id]: {
+          ...objects[id],
+          attr: { ...objects[id].attr, ...attr }
+        }
+      }
+    }, () => this.updateSnapshot());
+  }
+
+  updateSnapshot() {
     const element = document.getElementById('canvas')
-    html2canvas(element).then(function(canvas) {
+    html2canvas(element)
+    .then(canvas => {
       // Export the canvas to its data URI representation
       const base64image = canvas.toDataURL("image/png");
+      this.setState({
+        snapshots: {
+          [this.state.currentSlide]: base64image
+        }
+      });
+    });
+  }
 
-      // Open the image in a new window
-      window.open(base64image , "_blank");
+  updateCurrentObject(id) {
+    this.setState({
+      currentObject: { ...this.state.objects[id] }
     });
   }
 
   handleClick(id) {
-    this.setState({
-      currentObject: { ...this.state.objects[id] }
-    });
+    this.updateCurrentObject(id)
   }
 
   handleImageChange(e) {
@@ -73,7 +115,7 @@ class Builder extends PureComponent {
   }
 
   render() {
-    const { objects, imgIds, currentObject } = this.state
+    const { objects, imgIds, currentObject, currentSlide, snapshots } = this.state
     return (
       <div className="builder">
         <SideTools />
@@ -82,6 +124,7 @@ class Builder extends PureComponent {
             onImageChange={this.handleImageChange}
             />
           <Canvas
+            onResize={this.handleResize}
             onDragStop={this.handleDragEnd}
             objects={objects}
             imgIds={imgIds}
@@ -89,7 +132,10 @@ class Builder extends PureComponent {
             activeId={currentObject.id}
             />
           <ImageEditor />
-          <BottomBar />
+          <BottomBar
+            currentSlide={currentSlide}
+            snapshots={snapshots}
+            />
         </div>
       </div>
     );
