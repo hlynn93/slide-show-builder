@@ -13,7 +13,7 @@ const formatObjectData = (content, url, type, id) => ({
   url,
   type,
   id,
-  attr: { width: 100, height: 100, x: 0, y: 0}
+  attr: { width: 100, height: 100, x: 110, y: 110}
 })
 
 class Builder extends PureComponent {
@@ -29,7 +29,7 @@ class Builder extends PureComponent {
     this.updateSnapshot = this.updateSnapshot.bind(this)
     this.updateCurrentObject = this.updateCurrentObject.bind(this)
     this.updateAttr = this.updateAttr.bind(this)
-    this.handResizeEnd = this.handleResizeEnd.bind(this)
+    this.handleResizeEnd = this.handleResizeEnd.bind(this)
     this.handleDragEnd = this.handleDragEnd.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.handleImageChange = this.handleImageChange.bind(this)
@@ -39,13 +39,16 @@ class Builder extends PureComponent {
       return this.updateAttr(id, {
         width: ref.offsetWidth,
         height: ref.offsetHeight,
-        ...position
+        x: position.x,
+        y: position.y
       })
   }
 
   handleDragEnd(id, e, d) {
-    this.updateAttr(id, { ...d })
-    this.updateSnapshot()
+    this.updateAttr(id, {
+      x: d.x,
+      y: d.y
+    })
   }
 
   updateAttr(id, attr) {
@@ -58,7 +61,7 @@ class Builder extends PureComponent {
           attr: { ...objects[id].attr, ...attr }
         }
       }
-    });
+    }, () => this.updateSnapshot());
   }
 
   updateSnapshot() {
@@ -122,6 +125,8 @@ class Builder extends PureComponent {
       snapshots
     } = this.state
 
+    console.warn(this.state);
+
     return (
       <div className="builder">
         <SideTools />
@@ -130,7 +135,7 @@ class Builder extends PureComponent {
             onImageChange={this.handleImageChange}
             />
           <Canvas
-            onResizeEnd={this.handleResizeEnd}
+            onResizeStop={this.handleResizeEnd}
             onDragStop={this.handleDragEnd}
             objects={objects}
             imgIds={imgIds}
