@@ -2,7 +2,6 @@
 
 .canvas_wrapper {
   overflow: scroll;
-  margin-left: 60px;
 }
 
 .canvas {
@@ -10,15 +9,12 @@
   position: relative;
 
   &--desktop {
+    margin: auto;
     height: 600px;
     width: 960px;
     background: white;
     border: 1px solid grey;
   }
-
-  // &--mobile {
-
-  // }
 
   &_image {
     width: 100%;

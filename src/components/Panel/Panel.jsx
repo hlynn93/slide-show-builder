@@ -30,7 +30,10 @@ Panel.propTypes = {
   onDragStart: PropTypes.func,
   onDragStop: PropTypes.func,
   disableDragging: PropTypes.bool,
-  children: PropTypes.object,
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+  ]),
 };
 
 Panel.defaultProps = {

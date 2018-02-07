@@ -20,3 +20,8 @@ export const ASPECT_RATIO = {
     height: 640
   }
 }
+
+export const CANVAS_MODE = {
+  DESKTOP: 'desktop',
+  MOBILE: 'mobile',
+}
