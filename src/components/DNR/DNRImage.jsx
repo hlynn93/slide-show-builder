@@ -1,5 +1,5 @@
 import React from 'react';
-import withDrag from './withDrag';
+import withDNR from './withDNR';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -24,4 +24,4 @@ Image.propTypes = {
   className: PropTypes.string,
 }
 
-export default withDrag(Image)
+export default withDNR(Image)

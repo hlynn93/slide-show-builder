@@ -5,3 +5,14 @@
   height: 100px;
   border: 1px solid gray;
 }
+
+.bottom-bar {
+  padding: $standard-padding !important;
+  position: fixed !important;
+  width: 100% !important;
+  margin-left: 60px;
+  top: auto !important;
+  bottom: 0px !important;
+  height: 120px !important;
+  background-color: $app-cyan;
+}

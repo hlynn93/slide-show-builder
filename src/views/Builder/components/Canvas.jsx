@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { DraggableImage } from '../../../components/Draggables';
+import { DNRImage } from '../../../components/DNR';
 
 import './Canvas.scss';
 
@@ -14,7 +14,7 @@ class Canvas extends PureComponent {
   renderImages() {
     const { objectIds, objects, onClick, onDragStop, onResizeStop, activeId } = this.props
     return objectIds.map(id => (
-      <DraggableImage
+      <DNRImage
         onDragStop={onDragStop.bind(null, id)}
         onResizeStop={onResizeStop.bind(null, id)}
         isActive={id === activeId}

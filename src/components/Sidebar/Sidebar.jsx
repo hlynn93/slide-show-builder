@@ -1,26 +1,25 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 
 import './Sidebar.scss';
 
-class Sidebar extends PureComponent {
-  render() {
+const Sidebar = ({
+  className,
+  ...props
+}) => {
 
-    const { className } = this.props;
+  const classes = cx(
+    'sidebar',
+    className
+  )
 
-    const classes = cx(
-      'sidebar',
-      className
-    )
+  return (
+    <div className={classes} {...props}>
 
-    return (
-      <div className={classes}>
-
-      </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 Sidebar.propTypes = {
   className: PropTypes.string,

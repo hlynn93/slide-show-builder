@@ -5,16 +5,22 @@ import ImageEditor from './components/ImageEditor';
 import ImageUploader from './components/ImageUploader';
 import BottomBar from './components/BottomBar';
 import html2canvas from 'html2canvas';
+import { OBJECT_TYPES } from '../../constants/appConstants';
 // import PropTypes from 'prop-types';
 
 const generateId = () => (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase()
 
-const createObjectData = (content, url, type, id) => ({
+const createObjectData = (content, url, type, id, attr={
+  width: 100,
+  height: 100,
+  x: 0,
+  y: 0
+}) => ({
   content,
   url,
   type,
   id,
-  attr: { width: 100, height: 100, x: 0, y: 0}
+  attr
 })
 
 const NEW_SLIDE = {
@@ -41,22 +47,10 @@ class Builder extends PureComponent {
     this.handleImageChange = this.handleImageChange.bind(this)
   }
 
-  handleResizeEnd(id, event, direction, ref, delta, position) {
-      return this.updateAttr(id, {
-        width: ref.offsetWidth,
-        height: ref.offsetHeight,
-        x: position.x,
-        y: position.y
-      })
-  }
-
-  handleDragEnd(id, e, d) {
-    this.updateAttr(id, {
-      x: d.x,
-      y: d.y
-    })
-  }
-
+  /**
+   * Create a new slide
+   * @param {Number} index
+   */
   createSlide(index = 0) {
     const newSlide = NEW_SLIDE
     const newSlides = this.state.slides.slice(0).splice(index, 0, newSlide)
@@ -66,6 +60,9 @@ class Builder extends PureComponent {
     });
   }
 
+  /**
+   * Update the attributes such as width, height, x and y of an object
+   */
   updateAttr(id, attr) {
     const { objects } = this.state
     return this.setState({
@@ -110,10 +107,30 @@ class Builder extends PureComponent {
     });
   }
 
+  handleResizeEnd(id, event, direction, ref, delta, position) {
+    return this.updateAttr(id, {
+      width: ref.offsetWidth,
+      height: ref.offsetHeight,
+      x: position.x,
+      y: position.y
+    })
+  }
+
+  handleDragEnd(id, e, d) {
+    this.updateAttr(id, {
+      x: d.x,
+      y: d.y
+    })
+  }
+
   handleClick(id) {
     this.updateCurrentObject(id)
   }
 
+  /**
+   * Add a new image
+   * @param {Object} e
+   */
   handleImageChange(e) {
     e.preventDefault();
 
@@ -123,9 +140,12 @@ class Builder extends PureComponent {
     reader.onloadend = () => {
       const { objects, slides, currentSlide } = this.state;
 
+      /**
+       * Create an image object
+       */
       const image = createObjectData(file,
         reader.result,
-        "image",
+        OBJECT_TYPES.IMAGE,
         generateId()
       )
 

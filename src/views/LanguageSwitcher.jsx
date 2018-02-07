@@ -6,7 +6,7 @@ import { LANGUAGES } from '../constants/appConstants';
 
 const LanguageSwitcher = ({ setLanguage }) => {
   return (
-    <div>
+    <div className="lang_switcher">
       {
         Object.keys(LANGUAGES).map(k => (
           <button

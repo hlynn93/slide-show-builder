@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import FaBeer from 'react-icons/lib/fa/beer';
+import Panel from '../../../components/Panel';
 // import PropTypes from 'prop-types';
 
 import './SideTools.scss'
@@ -7,9 +8,9 @@ import './SideTools.scss'
 class SideTools extends PureComponent {
   render() {
     return (
-      <div className="side-tools">
-        <FaBeer className="side-tools-icon" />
-      </div>
+      <Panel className="side-tools">
+          <FaBeer className="side-tools-icon" />
+      </Panel>
     );
   }
 }

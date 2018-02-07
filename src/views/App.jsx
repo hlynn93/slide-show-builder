@@ -7,8 +7,8 @@ import { withRouter } from 'react-router-dom'
 
 import i18n from '../utils/i18n'
 import LanguageSwitcher from './LanguageSwitcher'
-import Header from '../components/Header';
-import Sidebar from '../components/Sidebar';
+// import Header from '../components/Header';
+// import Sidebar from '../components/Sidebar';
 import { setLanguage } from '../actions/helpers'
 
 class App extends Component {
@@ -40,14 +40,12 @@ class App extends Component {
     // Chilren, in this case comes from React Router components (See Root.dev.jsx or Root.prod.jsx)
     const { children, setLanguage } = this.props
     return (
-      <div className="body">
-        <Header />
-        <Sidebar />
-        <div className="main-content">
+      <div className="app">
+        <div className="main">
+          {children}
           <LanguageSwitcher
             setLanguage={setLanguage}
           />
-          {children}
         </div>
       </div>
     )
