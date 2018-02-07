@@ -5,14 +5,14 @@ import './BottomBar.scss';
 
 class BottomBar extends PureComponent {
   render() {
-    const { snapshots } = this.props
+    const { slides } = this.props
     return (
       <div className="bottom-bar">
         {
-          Object.keys(snapshots).map(key => (
+          Object.keys(slides).map(key => (
             <img
               key={key}
-              src={snapshots[key]}
+              src={slides[key].snapshot}
               width="100" height="100"
               className="slide_snapshot"
               />
@@ -25,7 +25,7 @@ class BottomBar extends PureComponent {
 
 BottomBar.propTypes = {
   currentSlide: PropTypes.number,
-  snapshots: PropTypes.object,
+  slides: PropTypes.object,
 };
 
 export default BottomBar;

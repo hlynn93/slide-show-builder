@@ -7,24 +7,30 @@ import BottomBar from './components/BottomBar';
 import html2canvas from 'html2canvas';
 // import PropTypes from 'prop-types';
 
+const generateId = () => (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase()
 
-const formatObjectData = (content, url, type, id) => ({
+const createObjectData = (content, url, type, id) => ({
   content,
   url,
   type,
   id,
-  attr: { width: 100, height: 100, x: 110, y: 110}
+  attr: { width: 100, height: 100, x: 0, y: 0}
 })
+
+const NEW_SLIDE = {
+  objectIds: [],
+  snapshot: undefined
+}
 
 class Builder extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      currentSlide: 0,
       objects: {},
-      imgIds: [],
-      currentObject: {},
+      slides: [ NEW_SLIDE ],
       snapshots: {},
+      currentObject: {},
+      currentSlide: 0,
     }
     this.updateSnapshot = this.updateSnapshot.bind(this)
     this.updateCurrentObject = this.updateCurrentObject.bind(this)
@@ -51,6 +57,16 @@ class Builder extends PureComponent {
     })
   }
 
+  createSlide(index = 0) {
+    const newSlides = this.state.slides.slice(0)
+    const newSlide = NEW_SLIDE
+    newSlides.splice(index, 0, newSlide);
+    this.setState({
+      currentSlide: index,
+      slides: newSlides
+    });
+  }
+
   updateAttr(id, attr) {
     const { objects } = this.state
     return this.setState({
@@ -70,10 +86,14 @@ class Builder extends PureComponent {
     .then(canvas => {
       // Export the canvas to its data URI representation
       const base64image = canvas.toDataURL("image/png");
+
+      const { slides, currentSlide } = this.state
+      const newSlide = { ...slides[currentSlide], snapshot: base64image }
+      const newSlides = slides.slice(0);
+      newSlides[currentSlide] = newSlide;
+
       this.setState({
-        snapshots: {
-          [this.state.currentSlide]: base64image
-        }
+        slides: newSlides
       });
     });
   }
@@ -95,20 +115,27 @@ class Builder extends PureComponent {
     let file = e.target.files[0];
 
     reader.onloadend = () => {
-      const { objects, imgIds } = this.state;
+      const { objects, slides, currentSlide } = this.state;
 
-      const image = formatObjectData(file,
+      const image = createObjectData(file,
         reader.result,
         "image",
-        Object.keys(objects).length
+        generateId()
       )
+
+      const newSlides = slides.slice(0);
+      const newSlide = {
+        ...slides[currentSlide],
+        objectIds: slides[currentSlide].objectIds.concat(image.id)
+      }
+      newSlides[currentSlide] = newSlide
 
       this.setState({
         objects: {
           ...objects,
           [image.id]: image
         },
-        imgIds: imgIds.concat(image.id)
+        slides: newSlides
       });
     }
 
@@ -119,10 +146,9 @@ class Builder extends PureComponent {
   render() {
     const {
       objects,
-      imgIds,
+      slides,
       currentObject,
       currentSlide,
-      snapshots
     } = this.state
 
     console.warn(this.state);
@@ -138,14 +164,14 @@ class Builder extends PureComponent {
             onResizeStop={this.handleResizeEnd}
             onDragStop={this.handleDragEnd}
             objects={objects}
-            imgIds={imgIds}
+            objectIds={slides[currentSlide].objectIds}
             onClick={this.handleClick}
             activeId={currentObject.id}
             />
           <ImageEditor />
           <BottomBar
             currentSlide={currentSlide}
-            snapshots={snapshots}
+            slides={slides}
             />
         </div>
       </div>
