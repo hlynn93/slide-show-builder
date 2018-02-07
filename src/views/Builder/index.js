@@ -29,7 +29,7 @@ class Builder extends PureComponent {
       objects: {},
       slides: [ NEW_SLIDE ],
       snapshots: {},
-      currentObject: {},
+      currentObjectId: undefined,
       currentSlide: 0,
     }
     this.updateSnapshot = this.updateSnapshot.bind(this)
@@ -58,9 +58,8 @@ class Builder extends PureComponent {
   }
 
   createSlide(index = 0) {
-    const newSlides = this.state.slides.slice(0)
     const newSlide = NEW_SLIDE
-    newSlides.splice(index, 0, newSlide);
+    const newSlides = this.state.slides.slice(0).splice(index, 0, newSlide)
     this.setState({
       currentSlide: index,
       slides: newSlides
@@ -98,9 +97,16 @@ class Builder extends PureComponent {
     });
   }
 
+  /**
+   * Set the current object as active
+   * @param {String} id
+   */
   updateCurrentObject(id) {
+    if(this.state.currentObjectId === id)
+      return
+
     this.setState({
-      currentObject: { ...this.state.objects[id] }
+      currentObjectId: id
     });
   }
 
@@ -123,6 +129,9 @@ class Builder extends PureComponent {
         generateId()
       )
 
+      /**
+       * Add the new image id into the current slide's object list
+       */
       const newSlides = slides.slice(0);
       const newSlide = {
         ...slides[currentSlide],
@@ -147,7 +156,7 @@ class Builder extends PureComponent {
     const {
       objects,
       slides,
-      currentObject,
+      currentObjectId,
       currentSlide,
     } = this.state
 
@@ -166,7 +175,7 @@ class Builder extends PureComponent {
             objects={objects}
             objectIds={slides[currentSlide].objectIds}
             onClick={this.handleClick}
-            activeId={currentObject.id}
+            activeId={currentObjectId}
             />
           <ImageEditor />
           <BottomBar
