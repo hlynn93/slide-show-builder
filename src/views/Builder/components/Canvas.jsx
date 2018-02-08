@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DNRImage } from '../../../components/DNR';
+import { ASPECT_RATIO } from '../../../constants/appConstants';
 
 import './Canvas.scss';
 
@@ -27,10 +28,13 @@ class Canvas extends PureComponent {
   }
 
   render() {
-    const { objectIds, objects, onClick, activeId } = this.props
+    const { objectIds, objects, onClick, activeId, mode } = this.props
+
+    const style = ASPECT_RATIO[mode]
+
     return (
       <div className="canvas_wrapper">
-        <div id="canvas" className="canvas canvas--desktop">
+        <div id="canvas" className="canvas" style={style}>
           { this.renderImages(objectIds, objects, activeId, onClick) }
         </div>
       </div>
@@ -45,6 +49,7 @@ Canvas.propTypes = {
   onDragStop: PropTypes.func,
   onResizeStop: PropTypes.func,
   activeId: PropTypes.string,
+  mode: PropTypes.string,
 };
 
 export default Canvas;

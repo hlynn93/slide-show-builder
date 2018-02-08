@@ -7,13 +7,13 @@
 .canvas {
 
   position: relative;
+  background: white;
+  border: 1px solid grey;
+  margin: auto;
 
   &--desktop {
-    margin: auto;
     height: 600px;
     width: 960px;
-    background: white;
-    border: 1px solid grey;
   }
 
   &_image {

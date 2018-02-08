@@ -10,18 +10,18 @@ export const OBJECT_TYPES = {
   VIDEO: 'video'
 }
 
-export const ASPECT_RATIO = {
-  DESKTOP: {
-    width: 960,
-    height: 600,
-  },
-  MOBILE: {
-    width: 300,
-    height: 640
-  }
-}
-
 export const CANVAS_MODE = {
   DESKTOP: 'desktop',
   MOBILE: 'mobile',
+}
+
+export const ASPECT_RATIO = {
+  [CANVAS_MODE.DESKTOP]: {
+    width: 960,
+    height: 600,
+  },
+  [CANVAS_MODE.MOBILE]: {
+    width: 300,
+    height: 640
+  }
 }

@@ -1,18 +1,37 @@
 @import '../../../styles/import.scss';
 
 .slide_snapshot {
-  width: 100px;
-  height: 100px;
+  width: auto;
+  height: $bottom-bar-height - (2*$standard-padding);
   border: 1px solid gray;
+  margin: 16px;
 }
 
-.bottom-bar {
-  padding: $standard-padding !important;
-  position: fixed !important;
+.bottom_bar {
+  position: fixed !important; // to override react-dnr library default styles
   width: 100% !important;
   margin-left: 60px;
   top: auto !important;
   bottom: 0px !important;
   height: 120px !important;
   background-color: $app-cyan;
+
+  &_inner {
+    margin-right: 60px;
+    overflow-x: scroll;
+    display: flex;
+  }
+}
+
+.new_slide {
+  height: $bottom-bar-height - (2*$standard-padding);
+  color: white;
+  border: 1px solid white;
+  border-radius: 4px;
+  margin: 16px;
+
+  &_icon {
+    font-size: $bottom-bar-height - (2*$standard-padding);
+    vertical-align: top !important; // to override react-icon default styles
+  }
 }
