@@ -30,30 +30,34 @@ const createObjectData = (content, url, type, id, attr={
   url,
   type,
   id,
-  attr
+  attr,
 })
 
 const NEW_SLIDE = {
-  objectIds: [],
-  snapshot: undefined
+  modes: {
+    [CANVAS_MODE.DESKTOP]: {
+      objectIds: [],
+      snapshot: undefined,
+    },
+    [CANVAS_MODE.MOBILE]: {
+      objectIds: [],
+      snapshot: undefined,
+    },
+  }
 }
 
 const DEFAULT_STATE = {
   objects: {},
   slides: [ NEW_SLIDE ],
-  snapshots: {},
   currentObjectId: undefined,
   currentSlide: 0,
+  mode: CANVAS_MODE.DESKTOP
 }
 
 class Builder extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      [CANVAS_MODE.MOBILE]: DEFAULT_STATE,
-      [CANVAS_MODE.DESKTOP]: DEFAULT_STATE,
-      mode: CANVAS_MODE.DESKTOP
-    }
+    this.state = DEFAULT_STATE
     this.createSlide = this.createSlide.bind(this)
     this.updateSnapshot = this.updateSnapshot.bind(this)
     this.updateCurrentObject = this.updateCurrentObject.bind(this)
@@ -75,20 +79,17 @@ class Builder extends PureComponent {
    * @param {Number} index
    */
   createSlide(index = 0) {
-    const { mode } = this.state
+    const { slides } = this.state
     const newSlide = NEW_SLIDE
     const newSlides = insertElementIntoArray(
-      this.state[mode].slides,
+      slides,
       index,
       newSlide
     )
 
     this.setState({
-      [mode]: {
-        ...this.state[mode],
         currentSlide: index,
         slides: newSlides
-      }
     }, ()=> this.updateSnapshot());
   }
 
@@ -96,30 +97,23 @@ class Builder extends PureComponent {
    * Update the attributes such as width, height, x and y of an object
    */
   updateAttr(id, attr) {
-    const { mode } = this.state
-    const { objects } = this.state[mode]
+    const { objects } = this.state
     return this.setState({
-      [mode]: {
-        ...this.state[mode],
         objects: {
           ...objects,
           [id]: {
             ...objects[id],
-            attr: { ...objects[id].attr, ...attr }
+            attr: {
+              ...objects[id].attr,
+              ...attr
+            }
           }
         }
-      }
     }, () => this.updateSnapshot());
   }
 
   updateCurrnetSlide(id) {
-    const { mode } = this.state
-    this.setState({
-      [mode]: {
-        ...this.state[mode],
-        currentSlide: id,
-      }
-    });
+    this.setState({ currentSlide: id });
   }
 
   updateSnapshot() {
@@ -129,18 +123,21 @@ class Builder extends PureComponent {
       // Export the canvas to its data URI representation
       const base64image = canvas.toDataURL("image/png");
 
-      const { mode } = this.state
-      const { slides, currentSlide } = this.state[mode]
-      const newSlide = { ...slides[currentSlide], snapshot: base64image }
+      const { slides, currentSlide, mode } = this.state
+      const newSlide = {
+        ...slides[currentSlide],
+        modes: {
+          ...slides[currentSlide].modes,
+          [mode]: {
+            ...slides[currentSlide].modes[mode],
+            snapshot: base64image
+          }
+        }
+      }
       const newSlides = slides.slice(0);
       newSlides[currentSlide] = newSlide;
 
-      this.setState({
-        [mode]: {
-          ...this.state[mode],
-          slides: newSlides
-        }
-      });
+      this.setState({ slides: newSlides });
     });
   }
 
@@ -149,20 +146,14 @@ class Builder extends PureComponent {
    * @param {String} id
    */
   updateCurrentObject(id) {
-    const { mode } = this.state
-    if(this.state[mode].currentObjectId === id)
+    if(this.state.currentObjectId === id)
       return
 
-    this.setState({
-      [mode]: {
-        ...this.state[mode],
-        currentObjectId: id
-      }
-    });
+    this.setState({ currentObjectId: id });
   }
 
   handleModeSwitch(mode) {
-    this.setState({ mode }, ()=>this.updateSnapshot() );
+    this.setState({ mode });
   }
 
   handleResizeEnd(id, event, direction, ref, delta, position) {
@@ -196,37 +187,40 @@ class Builder extends PureComponent {
     let file = e.target.files[0];
 
     reader.onloadend = () => {
-      const { mode } = this.state
-      const { objects, slides, currentSlide } = this.state[mode];
+      const { objects, slides, currentSlide } = this.state;
 
       /**
        * Create an image object
        */
-      const image = createObjectData(file,
+      const image = () => createObjectData(file,
         reader.result,
         OBJECT_TYPES.IMAGE,
         generateId()
       )
 
+      const newObjects = { ...objects }
+      const newSlides = slides.slice(0);
+      const newSlide = { ...slides[currentSlide] }
+      Object.values(CANVAS_MODE).map(mode => {
+        const newImage = image()
+        newObjects[newImage.id] = newImage;
+        newSlide.modes[mode].objectIds.push(newImage.id)
+      })
+      newSlides[currentSlide] = newSlide
+
       /**
        * Add the new image id into the current slide's object list
        */
-      const newSlides = slides.slice(0);
-      const newSlide = {
-        ...slides[currentSlide],
-        objectIds: slides[currentSlide].objectIds.concat(image.id)
-      }
-      newSlides[currentSlide] = newSlide
+
+      // const newSlide = {
+      //   ...slides[currentSlide],
+      //   objectIds: slides[currentSlide].objectIds.concat(image.id)
+      // }
+      // newSlides[currentSlide] = newSlide
 
       this.setState({
-        [mode]: {
-          ...this.state[mode],
-          objects: {
-            ...objects,
-            [image.id]: image
-          },
+          objects: newObjects,
           slides: newSlides
-        }
       }, () => this.updateSnapshot());
     }
 
@@ -235,13 +229,13 @@ class Builder extends PureComponent {
   }
 
   render() {
-    const { mode } = this.state
     const {
+      mode,
       objects,
       slides,
       currentObjectId,
       currentSlide,
-    } = this.state[mode]
+    } = this.state
 
     console.warn(this.state);
 
@@ -254,18 +248,20 @@ class Builder extends PureComponent {
             />
           <ModeSwitch
             onSelect={this.handleModeSwitch}
+            mode={mode}
             />
           <Canvas
             mode={mode}
             onResizeStop={this.handleResizeEnd}
             onDragStop={this.handleDragEnd}
             objects={objects}
-            objectIds={slides[currentSlide].objectIds}
+            objectIds={slides[currentSlide].modes[mode].objectIds}
             onClick={this.handleClick}
             activeId={currentObjectId}
             />
           <ImageEditor />
           <BottomBar
+            mode={mode}
             currentSlide={currentSlide}
             onClick={this.updateCurrnetSlide}
             onAdd={this.createSlide}

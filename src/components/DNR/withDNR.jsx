@@ -15,7 +15,8 @@ export default (Component) => {
     bounds,
     object,
     ...props
-  }) => (<Rnd
+  }) => {
+    return (<Rnd
       default={object.attr}
       bounds={bounds}
       onResizeStart={onResizeStart}
@@ -26,4 +27,5 @@ export default (Component) => {
       onDragStop={onDragStop}>
       <Component src={object.url} {...props} />
     </Rnd>)
+  }
 }

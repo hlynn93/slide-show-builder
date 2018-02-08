@@ -5,6 +5,11 @@
   height: $bottom-bar-height - (2*$standard-padding);
   border: 1px solid gray;
   margin: 16px;
+  background-color: white;
+
+  &--active {
+    border: 2px solid black;
+  }
 }
 
 .bottom_bar {
