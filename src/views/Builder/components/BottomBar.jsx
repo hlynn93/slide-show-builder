@@ -1,3 +1,6 @@
+/**
+ * Bottom bar that displays snapshots of the slides
+ */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import MdAddBox from 'react-icons/lib/md/add-box';

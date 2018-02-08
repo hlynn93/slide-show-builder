@@ -7,10 +7,15 @@ import BottomBar from './components/BottomBar';
 import ModeSwitch from './components/ModeSwitch';
 import html2canvas from 'html2canvas';
 import { OBJECT_TYPES, CANVAS_MODE } from '../../constants/appConstants';
-// import PropTypes from 'prop-types';
 
+/**
+ * Generate a unique value to be used as an ID for objects
+ */
 const generateId = () => (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase()
 
+/**
+ * Copy and insert the new element into the array
+ */
 const insertElementIntoArray = (array, index, ele) => {
   const newArray = array.slice(0)
   newArray.splice(index, 0, ele)
@@ -46,7 +51,7 @@ const NEW_SLIDE = {
   }
 }
 
-const DEFAULT_STATE = {
+const DEFAULT_BUILDER_STATE = {
   objects: {},
   slides: [ NEW_SLIDE ],
   currentObjectId: undefined,
@@ -57,7 +62,7 @@ const DEFAULT_STATE = {
 class Builder extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = DEFAULT_STATE
+    this.state = DEFAULT_BUILDER_STATE
     this.createSlide = this.createSlide.bind(this)
     this.updateSnapshot = this.updateSnapshot.bind(this)
     this.updateCurrentObject = this.updateCurrentObject.bind(this)
@@ -123,6 +128,9 @@ class Builder extends PureComponent {
       // Export the canvas to its data URI representation
       const base64image = canvas.toDataURL("image/png");
 
+      /**
+       * Create a new slide object with the updated snapshot value
+       */
       const { slides, currentSlide, mode } = this.state
       const newSlide = {
         ...slides[currentSlide],
@@ -198,9 +206,14 @@ class Builder extends PureComponent {
         generateId()
       )
 
+      /**
+       * Create image objects and add them to the object list
+       * Add the new object IDs to the respective slide view modes
+       */
       const newObjects = { ...objects }
       const newSlides = slides.slice(0);
       const newSlide = { ...slides[currentSlide] }
+
       Object.values(CANVAS_MODE).map(mode => {
         const newImage = image()
         newObjects[newImage.id] = newImage;
@@ -209,15 +222,9 @@ class Builder extends PureComponent {
       newSlides[currentSlide] = newSlide
 
       /**
-       * Add the new image id into the current slide's object list
-       */
-
-      // const newSlide = {
-      //   ...slides[currentSlide],
-      //   objectIds: slides[currentSlide].objectIds.concat(image.id)
-      // }
-      // newSlides[currentSlide] = newSlide
-
+       * Update with the new slides and objects to the state
+       * and update the snapshot of the slide
+      */
       this.setState({
           objects: newObjects,
           slides: newSlides

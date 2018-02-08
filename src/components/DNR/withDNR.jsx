@@ -1,5 +1,7 @@
+/**
+ * HOC to inject Drag and Resize property to the component
+ */
 import React from 'react';
-// import Draggable from 'react-draggable';
 import Rnd from 'react-rnd';
 
 /* eslint-disable */

@@ -1,3 +1,6 @@
+/**
+ * Draggable and Resizable Image
+ */
 import React from 'react';
 import withDNR from './withDNR';
 import cx from 'classnames';

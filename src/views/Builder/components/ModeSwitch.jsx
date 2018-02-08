@@ -8,6 +8,7 @@ import './ModeSwitch.scss';
 class ScreenSwitcher extends PureComponent {
   render() {
     const { mode, onSelect } = this.props
+
     const modes = [CANVAS_MODE.DESKTOP, CANVAS_MODE.MOBILE]
     const switches = modes.map(m =>
       <span
@@ -17,6 +18,7 @@ class ScreenSwitcher extends PureComponent {
         {m.toUpperCase()}
       </span>
     )
+
     return (
       <div className="switches">
           {switches}
@@ -25,6 +27,9 @@ class ScreenSwitcher extends PureComponent {
   }
 }
 
+/**
+ * Insert the class 'active' if the currentMode === mode
+ */
 const baseClass = 'switch_text'
 const getClass = (mode, currentMode) => cx(
   baseClass,
