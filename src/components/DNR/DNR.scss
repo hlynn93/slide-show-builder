@@ -1,0 +1,8 @@
+@import "../../styles/import.scss";
+
+.canvas_image, .canvas_text {
+
+  &--active{
+    outline: 3px solid orange;
+  }
+}

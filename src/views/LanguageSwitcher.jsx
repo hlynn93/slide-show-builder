@@ -2,6 +2,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Button } from 'element-react';
 import { LANGUAGES } from '../constants/appConstants';
 
 const LanguageSwitcher = ({ setLanguage }) => {
@@ -9,12 +10,14 @@ const LanguageSwitcher = ({ setLanguage }) => {
     <div className="lang_switcher">
       {
         Object.keys(LANGUAGES).map(k => (
-          <button
+          <Button
             key={k}
             onClick={setLanguage.bind(null, LANGUAGES[k])}
+            plain
+            type="success"
           >
-            {k}
-          </button>
+          {k}
+          </Button>
         ))
       }
     </div>

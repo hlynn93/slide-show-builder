@@ -1,13 +1,18 @@
 @import '../../../styles/import.scss';
 
-.side-tools {
+.sidetools {
   position: fixed !important;
   top: 60px !important;
   width: 60px !important;
   background: grey;
   z-index: 3;
 
-  &-icon {
+  &_item {
+    border-bottom: 2px solid white;
+  }
+
+  &_icon {
+    color: white;
     font-size: 32px;
     display: block;
     margin: auto;

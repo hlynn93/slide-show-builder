@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import 'element-theme-default';
 
 import i18n from '../utils/i18n'
 import LanguageSwitcher from './LanguageSwitcher'

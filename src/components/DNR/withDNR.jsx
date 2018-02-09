@@ -20,7 +20,7 @@ export default (Component) => {
   }) => {
     return (<Rnd
       default={object.attr}
-      bounds={bounds}
+      bounds={bounds || 'parent'}
       onResizeStart={onResizeStart}
       onResize={onResize}
       onResizeStop={onResizeStop}
