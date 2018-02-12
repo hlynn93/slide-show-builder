@@ -8,8 +8,9 @@ import './DNR.scss';
 const Text = ({
   className,
   isActive,
-  onChange,
-  editorState,
+  onTextChange,
+  onTextKeyCommand,
+  content,
   placeholder,
   onClick,
   ...props
@@ -25,8 +26,9 @@ const Text = ({
     <div className={classes} onClick={onClick}>
       <Editor
         { ...props }
-        editorState={editorState}
-        onChange={onChange}
+        handleKeyCommand={onTextKeyCommand}
+        editorState={content}
+        onChange={onTextChange}
         placeholder={ placeholder || "Write something..."}
       />
     </div>
@@ -36,8 +38,9 @@ const Text = ({
 Text.propTypes = {
   isActive: PropTypes.bool,
   className: PropTypes.string,
-  onChange: PropTypes.func,
-  editorState: PropTypes.object,
+  onTextChange: PropTypes.func,
+  onTextKeyCommand: PropTypes.func,
+  content: PropTypes.any,
   placeholder: PropTypes.string,
   onClick: PropTypes.func,
 };

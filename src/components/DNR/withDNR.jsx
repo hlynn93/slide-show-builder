@@ -27,7 +27,7 @@ export default (Component) => {
       onDragStart={onDragStart}
       onDrag={onDrag}
       onDragStop={onDragStop}>
-      <Component src={object.url} {...props} />
+      <Component {...object} {...props} />
     </Rnd>)
   }
 }
