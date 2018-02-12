@@ -4,7 +4,7 @@
   position: fixed !important;
   top: 60px !important;
   width: 60px !important;
-  background: grey;
+  background: $app-grey-900;
   z-index: 3;
 
   &_item {

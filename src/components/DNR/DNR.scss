@@ -3,6 +3,6 @@
 .canvas_image, .canvas_text {
 
   &--active{
-    outline: 3px solid orange;
+    outline: 3px solid $app-orange;
   }
 }

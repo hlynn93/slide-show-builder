@@ -6,6 +6,7 @@ import { EditorState, RichUtils } from 'draft-js';
 import SideTools from './components/SideTools';
 import Canvas from './components/Canvas';
 import ImageEditor from './components/ImageEditor';
+import TextEditor from './components/TextEditor';
 import ImageUploader from './components/ImageUploader';
 import BottomBar from './components/BottomBar';
 import ModeSwitch from './components/ModeSwitch';
@@ -32,7 +33,8 @@ const NEW_SLIDE = {
 }
 
 const DIALOG = {
-  IMAGE_UPLOADER: 'imageUploader'
+  IMAGE_UPLOADER: 'imageUploader',
+  TEXT_EDITOR: 'textEditor'
 }
 
 const DEFAULT_BUILDER_STATE = {
@@ -43,6 +45,7 @@ const DEFAULT_BUILDER_STATE = {
   mode: CANVAS_MODE.DESKTOP,
   dialogs: {
     [DIALOG.IMAGE_UPLOADER]: false,
+    [DIALOG.TEXT_EDITOR]: false
   },
   status: {
     isTakingSnapshot: false
@@ -174,9 +177,9 @@ class Builder extends PureComponent {
     const newSlide = { ...slides[currentSlide] }
 
     Object.values(CANVAS_MODE).map(mode => {
-      const newImage = createObject()
-      newObjects[newImage.id] = newImage;
-      newSlide.modes[mode].objectIds.push(newImage.id)
+      const newObject = createObject()
+      newObjects[newObject.id] = newObject;
+      newSlide.modes[mode].objectIds.push(newObject.id)
     })
     newSlides[currentSlide] = newSlide
 
@@ -281,7 +284,7 @@ class Builder extends PureComponent {
 
     this.setState({ currentObjectId: id });
   }
-onKeyCommand
+
   handleModeSwitch(mode) {
     this.setState({ mode });
   }
@@ -364,6 +367,11 @@ onKeyCommand
             activeId={currentObjectId}
             />
           <ImageEditor />
+          <TextEditor
+            id={currentObjectId}
+            editorState={objects[currentObjectId] ? objects[currentObjectId].content : undefined}
+            onClick={this.handleTextChange}
+            />
           <BottomBar
             mode={mode}
             currentSlide={currentSlide}

@@ -8,11 +8,11 @@
 .switch_text {
   padding: 4px 8px;
   margin: 36px 4px 12px 4px;
-  border: 1px solid orange;
+  border: 1px solid $app-orange;
   border-radius: 2px;
   display: inline-block;
 
   &--active {
-    background-color: lightsalmon;
+    background-color: $app-orange;
   }
 }
