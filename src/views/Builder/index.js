@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import html2canvas from 'html2canvas';
-import { cloneDeep, merge } from 'lodash';
+import { cloneDeep, merge, mapValues } from 'lodash';
 import { EditorState, RichUtils } from 'draft-js';
 
 import SideTools from './components/SideTools';
@@ -92,6 +92,8 @@ class Builder extends PureComponent {
     super(props);
     this.state = DEFAULT_BUILDER_STATE
     this.toggleDialog = this.toggleDialog.bind(this)
+    this.showOneDialog = this.showOneDialog.bind(this)
+    this.hideAllDialogs = this.hideAllDialogs.bind(this)
     this.addSlide = this.addSlide.bind(this)
     this.addObject = this.addObject.bind(this)
     this.changeCurrentObjectId = this.changeCurrentObjectId.bind(this)
@@ -114,8 +116,35 @@ class Builder extends PureComponent {
   toggleDialog(key) {
     this.setState({
       dialogs: {
+        ...this.state.dialogs,
         [key]: !this.state.dialogs[key]
       }
+    });
+  }
+
+  /**
+   * Show only the particular dialog and hide everything else
+   * @param {string} key
+   */
+  showOneDialog(key) {
+    const newDialogState = mapValues({ ...this.state.dialogs },  () => false )
+    this.setState({
+      dialogs: {
+        ...newDialogState,
+        [key]: true
+      }
+    });
+  }
+
+  /**
+   * Show only the particular dialog and hide everything else
+   * @param {string} key
+   */
+  hideAllDialogs() {
+    // Change all values to false
+    const newDialogState = mapValues({ ...this.state.dialogs },  () => false )
+    this.setState({
+      dialogs: newDialogState
     });
   }
 
@@ -197,11 +226,10 @@ class Builder extends PureComponent {
    * Update the attributes such as attr, content, src, etc.
    */
   updateObject(id, attr) {
-    const newObject = merge(this.state.objects[id], attr)
     this.setState({
       objects: {
         ...this.state.objects,
-        [id]: newObject
+        [id]: merge({}, this.state.objects[id], attr)
       }
     }, () => this.updateSnapshot());
   }
@@ -279,10 +307,18 @@ class Builder extends PureComponent {
    * @param {String} id
    */
   changeCurrentObjectId(id) {
-    if(this.state.currentObjectId === id)
+    const { currentObjectId, objects } = this.state
+
+    if(currentObjectId === id)
       return
 
-    this.setState({ currentObjectId: id });
+    this.setState({ currentObjectId: id }, () => {
+
+      if(objects[id].type === OBJECT_TYPES.TEXT)
+        this.showOneDialog(DIALOG.TEXT_EDITOR)
+      else this.hideAllDialogs()
+
+    });
   }
 
   handleModeSwitch(mode) {
@@ -335,6 +371,7 @@ class Builder extends PureComponent {
       slides,
       currentObjectId,
       currentSlide,
+      dialogs
     } = this.state
 
     console.warn(this.state);
@@ -347,7 +384,7 @@ class Builder extends PureComponent {
         />
         <div style={{marginLeft: 60}}>
           <ImageUploader
-            visible={this.state.dialogs[DIALOG.IMAGE_UPLOADER]}
+            visible={dialogs[DIALOG.IMAGE_UPLOADER]}
             onCancel={this.toggleDialog.bind(null, DIALOG.IMAGE_UPLOADER)}
             onImageChange={this.addObject}
             />
@@ -368,6 +405,7 @@ class Builder extends PureComponent {
             />
           <ImageEditor />
           <TextEditor
+            visible={dialogs[DIALOG.TEXT_EDITOR]}
             id={currentObjectId}
             editorState={objects[currentObjectId] ? objects[currentObjectId].content : undefined}
             onClick={this.handleTextChange}

@@ -53,7 +53,10 @@ class TextEditor extends PureComponent {
     ))
 
     return (
-      <Panel className="text_editor">
+      <Panel
+        className="text_editor"
+        minimize={!this.props.visible}
+        >
         <div className="text_editor_inner">
           { buttonGroups }
         </div>
@@ -66,6 +69,7 @@ TextEditor.propTypes = {
   onClick: PropTypes.func,
   editorState: PropTypes.object,
   id: PropTypes.string,
+  visible: PropTypes.bool,
 };
 
 export default TextEditor;

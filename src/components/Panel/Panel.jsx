@@ -7,11 +7,13 @@ const Panel = ({
   onDragStart,
   onDragStop,
   disableDragging,
+  minimize,
   children,
   ...props,
 }) => {
   return (
     <Rnd
+      style={minimize ? { display: 'none'} : {}}
       bounds={'.builder'}
       onDrag={onDrag}
       onDragStart={onDragStart}
@@ -30,6 +32,7 @@ Panel.propTypes = {
   onDragStart: PropTypes.func,
   onDragStop: PropTypes.func,
   disableDragging: PropTypes.bool,
+  minimize: PropTypes.bool,
   children: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.object,

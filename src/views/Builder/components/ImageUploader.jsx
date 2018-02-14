@@ -21,7 +21,7 @@ class ImageUploader extends PureComponent {
         OBJECT_TYPES.IMAGE,
         {
           content: file,
-          url: reader.result
+          src: reader.result
         }
       );
     }
