@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import html2canvas from 'html2canvas';
 import { cloneDeep, merge, mapValues } from 'lodash';
-import { EditorState, RichUtils } from 'draft-js';
+import { EditorState } from 'draft-js';
 
 import SideTools from './components/SideTools';
 import Canvas from './components/Canvas';
@@ -100,8 +100,8 @@ class Builder extends PureComponent {
     this.changeCurrentSlideId = this.changeCurrentSlideId.bind(this)
     this.updateSnapshot = this.updateSnapshot.bind(this)
     this.updateObject = this.updateObject.bind(this)
+    this.handleCanvasClick = this.handleCanvasClick.bind(this)
     this.handleTextChange = this.handleTextChange.bind(this)
-    this.handleTextKeyCommand = this.handleTextKeyCommand.bind(this)
     this.handleModeSwitch = this.handleModeSwitch.bind(this)
     this.handleResizeEnd = this.handleResizeEnd.bind(this)
     this.handleDragEnd = this.handleDragEnd.bind(this)
@@ -234,19 +234,6 @@ class Builder extends PureComponent {
     }, () => this.updateSnapshot());
   }
 
-
-  // updateAttr(id, attr) {
-  //   const { objects } = this.state
-  //   const newObject = createObjectData(
-  //     objects[id].content,
-  //     objects[id].src,
-  //     objects[id].type,
-  //     id,
-  //     { ...objects[id].attr, ...attr }
-  //   )
-  //   this.updateObject(id, newObject)
-  // }
-
   changeCurrentSlideId(id) {
     this.setState({ currentSlide: id });
   }
@@ -314,9 +301,14 @@ class Builder extends PureComponent {
 
     this.setState({ currentObjectId: id }, () => {
 
+      // If the current object is undefined
+      if(!objects[id])
+        return this.hideAllDialogs();
+
       if(objects[id].type === OBJECT_TYPES.TEXT)
-        this.showOneDialog(DIALOG.TEXT_EDITOR)
-      else this.hideAllDialogs()
+        return this.showOneDialog(DIALOG.TEXT_EDITOR)
+      else
+        return this.hideAllDialogs()
 
     });
   }
@@ -331,13 +323,8 @@ class Builder extends PureComponent {
     });
   }
 
-  handleTextKeyCommand(id, command, editorState) {
-    const newState = RichUtils.handleKeyCommand(editorState, command);
-    if (newState) {
-      this.handleTextChange(id, newState);
-      return 'handled';
-    }
-    return 'not-handled';
+  handleCanvasClick() {
+    this.changeCurrentObjectId()
   }
 
   handleResizeEnd(id, event, direction, ref, delta, position) {
@@ -352,6 +339,14 @@ class Builder extends PureComponent {
   }
 
   handleDragEnd(id, e, d) {
+
+    /**
+     * To avoid getting trigger upon clicking without dragging
+     */
+    const objectAttr = this.state.objects[id].attr
+    if(objectAttr.x === d.x && objectAttr.y === d.y)
+      return
+
     this.updateObject(id, {
       attr: {
         x: d.x,
@@ -360,7 +355,8 @@ class Builder extends PureComponent {
     })
   }
 
-  handleObjectClick(id) {
+  handleObjectClick(id, e) {
+    e.stopPropagation();
     this.changeCurrentObjectId(id)
   }
 
@@ -374,7 +370,7 @@ class Builder extends PureComponent {
       dialogs
     } = this.state
 
-    console.warn(this.state);
+    // console.warn(this.state);
 
     return (
       <div className="builder">
@@ -394,13 +390,13 @@ class Builder extends PureComponent {
             />
           <Canvas
             mode={mode}
+            onCanvasClick={this.handleCanvasClick}
             onResizeStop={this.handleResizeEnd}
             onDragStop={this.handleDragEnd}
             objects={objects}
             objectIds={slides[currentSlide].modes[mode].objectIds}
             onObjectClick={this.handleObjectClick}
             onTextChange={this.handleTextChange}
-            onTextKeyCommand={this.handleTextKeyCommand}
             activeId={currentObjectId}
             />
           <ImageEditor />

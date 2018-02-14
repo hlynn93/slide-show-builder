@@ -19,7 +19,6 @@ class Canvas extends PureComponent {
       objects,
       onObjectClick,
       onTextChange,
-      onTextKeyCommand,
       onDragStop,
       onResizeStop,
       activeId
@@ -33,19 +32,21 @@ class Canvas extends PureComponent {
         onClick: onObjectClick.bind(null, id),
         object,
         key: id,
+        id: `canvas_object--${id}`,
         className: `canvas_object canvas_object--${id}`
       }
       switch (object.type) {
         case OBJECT_TYPES.IMAGE:
           return (
-            <DNRImage {...props }/>
+            <DNRImage
+              {...props }
+              />
           )
 
         case OBJECT_TYPES.TEXT:
           return (
             <DNRText
               onTextChange={onTextChange.bind(null, id)}
-              onTextKeyCommand={onTextKeyCommand.bind(null, id)}
               {...props}
             />
           )
@@ -56,12 +57,12 @@ class Canvas extends PureComponent {
   }
 
   render() {
-    const { mode } = this.props
+    const { mode, onCanvasClick } = this.props
 
     const style = ASPECT_RATIO[mode]
 
     return (
-      <div className="canvas_wrapper">
+      <div className="canvas_wrapper" onClick={onCanvasClick}>
         <div id="canvas" className="canvas" style={style}>
           { this.renderObjects() }
         </div>
@@ -75,7 +76,7 @@ Canvas.propTypes = {
   objects: PropTypes.object,
   onObjectClick: PropTypes.func,
   onTextChange: PropTypes.func,
-  onTextKeyCommand: PropTypes.func,
+  onCanvasClick: PropTypes.func,
   onDragStop: PropTypes.func,
   onResizeStop: PropTypes.func,
   activeId: PropTypes.string,

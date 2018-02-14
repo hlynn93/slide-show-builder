@@ -38,7 +38,7 @@ class ImageUploader extends PureComponent {
 
     return (
       <Dialog
-        title="Tips"
+        title="Upload image"
         onCancel={onCancel}
         visible={visible}
         >

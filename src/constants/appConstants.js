@@ -32,21 +32,35 @@ export const textToolTypes = {
   BLOCK_TYPE_BUTTONS: 'BLOCK_TYPE_BUTTONS'
 }
 
-export const textEditorConfig = {
+export const toolbarTypes = {
+  BUTTON: 'button',
+  SELECT: 'select'
+}
+
+export const textEditorToolbarConfig = {
   display: Object.values(textToolTypes),
-  [textToolTypes.INLINE_STYLE_BUTTONS]: [
-    {label: 'Bold', style: 'BOLD'},
-    {label: 'Italic', style: 'ITALIC'},
-    {label: 'Underline', style: 'UNDERLINE'}
-  ],
-  [textToolTypes.BLOCK_TYPE_DROPDOWN]: [
-    {label: 'Normal', style: 'unstyled'},
-    {label: 'Heading Large', style: 'header-one'},
-    {label: 'Heading Medium', style: 'header-two'},
-    {label: 'Heading Small', style: 'header-three'}
-  ],
-  [textToolTypes.BLOCK_TYPE_BUTTONS]: [
-    {label: 'UL', style: 'unordered-list-item'},
-    {label: 'OL', style: 'ordered-list-item'}
-  ]
+  [textToolTypes.INLINE_STYLE_BUTTONS]: {
+    type: toolbarTypes.BUTTON,
+    items: [
+      {label: 'Bold', style: 'BOLD'},
+      {label: 'Italic', style: 'ITALIC'},
+      {label: 'Underline', style: 'UNDERLINE'}
+    ]
+  },
+  [textToolTypes.BLOCK_TYPE_DROPDOWN]: {
+    type: toolbarTypes.SELECT,
+    items: [
+      {label: 'Normal', style: 'unstyled'},
+      {label: 'Heading Large', style: 'header-one'},
+      {label: 'Heading Medium', style: 'header-two'},
+      {label: 'Heading Small', style: 'header-three'}
+    ]
+  },
+  [textToolTypes.BLOCK_TYPE_BUTTONS]: {
+    type: toolbarTypes.BUTTON,
+    items: [
+      {label: 'UL', style: 'unordered-list-item'},
+      {label: 'OL', style: 'ordered-list-item'}
+    ]
+  }
 }
