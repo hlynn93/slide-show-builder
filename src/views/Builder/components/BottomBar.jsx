@@ -45,7 +45,7 @@ class BottomBar extends PureComponent {
     ))
 
     return (
-      <Panel disableDragging className="bottom_bar">
+      <Panel disableDragging disableMinimize className="bottom_bar">
         <div className="bottom_bar_inner">
           { slideSnapshots }
           <div className="new_slide">

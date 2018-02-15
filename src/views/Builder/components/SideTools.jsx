@@ -8,17 +8,22 @@ import './SideTools.scss'
 
 class SideTools extends PureComponent {
   render() {
+
+    const { onClick, onToggle, onTextClick, visible } = this.props
     return (
-      <Panel className="sidetools">
+      <Panel
+        className="sidetools"
+        onToggle={onToggle}
+        minimize={!visible}>
         <div className="sidetools_item">
           <MdImage
-            onClick={this.props.onClick}
+            onClick={onClick}
             className="sidetools_icon"
           />
         </div>
         <div className="sidetools_item">
           <MdTextFields
-            onClick={this.props.onTextClick}
+            onClick={onTextClick}
             className="sidetools_icon"
           />
         </div>
@@ -29,7 +34,9 @@ class SideTools extends PureComponent {
 
 SideTools.propTypes = {
   onClick: PropTypes.func,
+  onToggle: PropTypes.func,
   onTextClick: PropTypes.func,
+  visible: PropTypes.bool,
 };
 
 export default SideTools;

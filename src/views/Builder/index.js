@@ -34,7 +34,8 @@ const NEW_SLIDE = {
 
 const DIALOG = {
   IMAGE_UPLOADER: 'imageUploader',
-  TEXT_EDITOR: 'textEditor'
+  TEXT_EDITOR: 'textEditor',
+  SIDE_TOOLS: 'sideTools'
 }
 
 const DEFAULT_BUILDER_STATE = {
@@ -45,7 +46,8 @@ const DEFAULT_BUILDER_STATE = {
   mode: CANVAS_MODE.DESKTOP,
   dialogs: {
     [DIALOG.IMAGE_UPLOADER]: false,
-    [DIALOG.TEXT_EDITOR]: false
+    [DIALOG.TEXT_EDITOR]: false,
+    [DIALOG.SIDE_TOOLS]: true
   },
   status: {
     isTakingSnapshot: false
@@ -114,6 +116,7 @@ class Builder extends PureComponent {
   }
 
   toggleDialog(key) {
+    console.warn("toggleDialog");
     this.setState({
       dialogs: {
         ...this.state.dialogs,
@@ -375,7 +378,9 @@ class Builder extends PureComponent {
     return (
       <div className="builder">
         <SideTools
+          visible={dialogs[DIALOG.SIDE_TOOLS]}
           onClick={this.toggleDialog.bind(null, DIALOG.IMAGE_UPLOADER)}
+          onToggle={this.toggleDialog.bind(null, DIALOG.SIDE_TOOLS)}
           onTextClick={this.addObject.bind(null, OBJECT_TYPES.TEXT)}
         />
         <div style={{marginLeft: 60}}>
@@ -402,7 +407,12 @@ class Builder extends PureComponent {
           <ImageEditor />
           <TextEditor
             visible={dialogs[DIALOG.TEXT_EDITOR]}
-            id={currentObjectId}
+            onToggle={this.toggleDialog.bind(null, DIALOG.TEXT_EDITOR)}
+            id={
+              // Pass undefined if no object is selected or currently selected object is not text type
+              (objects[currentObjectId] && objects[currentObjectId].type === OBJECT_TYPES.TEXT)
+              ? currentObjectId : undefined
+            }
             editorState={objects[currentObjectId] ? objects[currentObjectId].content : undefined}
             onClick={this.handleTextChange}
             />

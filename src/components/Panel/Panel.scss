@@ -1,0 +1,12 @@
+@import '../../styles/import.scss';
+
+.panel_header {
+  background-color: white;
+  border: 1px solid gray;
+}
+
+.panel_header_controls {
+  text-align: center;
+  width: 28px;
+  border-right: 1px solid $app-grey;
+}

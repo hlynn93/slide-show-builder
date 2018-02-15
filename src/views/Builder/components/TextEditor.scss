@@ -2,6 +2,7 @@
 
 .text_editor {
   z-index: 6;
+  margin: 4px;
 }
 
 .text_editor_inner {
@@ -9,7 +10,6 @@
   background-color: $app-grey-100;
   border: 1px solid $app-grey;
   border-radius: 2px;
-  margin: 4px;
 }
 
 .button_group {

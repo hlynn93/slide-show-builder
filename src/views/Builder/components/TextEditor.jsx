@@ -19,6 +19,9 @@ class TextEditor extends PureComponent {
   onClick(type, style) {
     const { onClick, editorState, id } = this.props
 
+    if(!id)
+      return
+
     const typeMapping = {
       [textToolTypes.INLINE_STYLE_BUTTONS]: RichUtils.toggleInlineStyle,
       [textToolTypes.BLOCK_TYPE_BUTTONS]: RichUtils.toggleBlockType,
@@ -72,6 +75,8 @@ class TextEditor extends PureComponent {
 
   render() {
 
+    const { visible, onToggle } = this.props
+
     const buttonGroups = Object.values(textToolTypes).map(tool => {
       const toolItem = textEditorToolbarConfig[tool]
       switch (toolItem.type) {
@@ -88,7 +93,8 @@ class TextEditor extends PureComponent {
     return (
       <Panel
         className="text_editor"
-        minimize={!this.props.visible}
+        minimize={!visible}
+        onToggle={onToggle}
         >
         <div className="text_editor_inner">
           { buttonGroups }
@@ -101,6 +107,7 @@ class TextEditor extends PureComponent {
 TextEditor.propTypes = {
   onClick: PropTypes.func,
   editorState: PropTypes.object,
+  onToggle: PropTypes.func,
   id: PropTypes.string,
   visible: PropTypes.bool,
 };
