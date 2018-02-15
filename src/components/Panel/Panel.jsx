@@ -23,6 +23,7 @@ const Panel = ({
       onDragStop={onDragStop}
       disableDragging={disableDragging}
       enableResizing={false}
+      dragHandleClassName={".panel_header"}
       {...props}
       >
       {

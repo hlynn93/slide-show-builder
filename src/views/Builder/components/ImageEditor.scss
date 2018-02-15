@@ -1,0 +1,15 @@
+@import '../../../styles/import.scss';
+
+.editor_slider {
+  width: 300px;
+
+  // Overrides element-react css
+  .el-input-number--small {
+    width: 50px;
+  }
+
+  // Overrides element-react css
+  .el-slider__runway.show-input {
+    margin: 16px 72px 16px 16px;
+  }
+}

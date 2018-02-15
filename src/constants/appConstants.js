@@ -26,19 +26,20 @@ export const ASPECT_RATIO = {
   }
 }
 
+export const toolbarTypes = {
+  BUTTON: 'button',
+  SELECT: 'select',
+  SLIDER: 'slider',
+  TEXTFIELD: 'textfield',
+}
+
 export const textToolTypes = {
   INLINE_STYLE_BUTTONS: 'INLINE_STYLE_BUTTONS',
   BLOCK_TYPE_DROPDOWN: 'BLOCK_TYPE_DROPDOWN',
   BLOCK_TYPE_BUTTONS: 'BLOCK_TYPE_BUTTONS'
 }
 
-export const toolbarTypes = {
-  BUTTON: 'button',
-  SELECT: 'select'
-}
-
 export const textEditorToolbarConfig = {
-  display: Object.values(textToolTypes),
   [textToolTypes.INLINE_STYLE_BUTTONS]: {
     type: toolbarTypes.BUTTON,
     items: [
@@ -62,5 +63,19 @@ export const textEditorToolbarConfig = {
       {label: 'UL', style: 'unordered-list-item'},
       {label: 'OL', style: 'ordered-list-item'}
     ]
+  }
+}
+
+export const imageToolTypes = {
+  ROTATION: 'ROTATION',
+}
+
+export const imageEditorToolbarConfig = {
+  [imageToolTypes.ROTATION]: {
+    type: toolbarTypes.SLIDER,
+    item: {
+      min: 0,
+      max: 360,
+    }
   }
 }

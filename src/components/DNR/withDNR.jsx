@@ -18,8 +18,15 @@ export default (Component) => {
     object,
     ...props
   }) => {
+
+    const { attr } = object;
+
+    const style = attr.rotation ? {
+      transform: `rotate(${attr.rotation}deg)`
+    } : {};
+
     return (<Rnd
-      default={object.attr}
+      default={attr}
       bounds={bounds || 'parent'}
       onResizeStart={onResizeStart}
       onResize={onResize}
@@ -27,7 +34,10 @@ export default (Component) => {
       onDragStart={onDragStart}
       onDrag={onDrag}
       onDragStop={onDragStop}>
-      <Component {...object} {...props} />
+      <Component
+        style={style}
+        {...object}
+        {...props} />
     </Rnd>)
   }
 }

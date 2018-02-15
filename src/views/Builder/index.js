@@ -35,6 +35,11 @@ const NEW_SLIDE = {
 const DIALOG = {
   IMAGE_UPLOADER: 'imageUploader',
   TEXT_EDITOR: 'textEditor',
+  IMAGE_EDITOR: 'imageEditor',
+
+}
+
+const PANEL = {
   SIDE_TOOLS: 'sideTools'
 }
 
@@ -47,7 +52,10 @@ const DEFAULT_BUILDER_STATE = {
   dialogs: {
     [DIALOG.IMAGE_UPLOADER]: false,
     [DIALOG.TEXT_EDITOR]: false,
-    [DIALOG.SIDE_TOOLS]: true
+    [DIALOG.IMAGE_EDITOR]: false,
+  },
+  panels: {
+    [PANEL.SIDE_TOOLS]: true
   },
   status: {
     isTakingSnapshot: false
@@ -94,6 +102,7 @@ class Builder extends PureComponent {
     super(props);
     this.state = DEFAULT_BUILDER_STATE
     this.toggleDialog = this.toggleDialog.bind(this)
+    this.togglePanel = this.togglePanel.bind(this)
     this.showOneDialog = this.showOneDialog.bind(this)
     this.hideAllDialogs = this.hideAllDialogs.bind(this)
     this.addSlide = this.addSlide.bind(this)
@@ -107,6 +116,7 @@ class Builder extends PureComponent {
     this.handleModeSwitch = this.handleModeSwitch.bind(this)
     this.handleResizeEnd = this.handleResizeEnd.bind(this)
     this.handleDragEnd = this.handleDragEnd.bind(this)
+    this.handleObjectChange = this.handleObjectChange.bind(this)
     this.handleObjectClick = this.handleObjectClick.bind(this)
 
   }
@@ -115,12 +125,22 @@ class Builder extends PureComponent {
     this.updateSnapshot();
   }
 
-  toggleDialog(key) {
-    console.warn("toggleDialog");
+  toggleDialog(key, e) {
+    e.preventDefault();
     this.setState({
       dialogs: {
         ...this.state.dialogs,
         [key]: !this.state.dialogs[key]
+      }
+    });
+  }
+
+  togglePanel(key, e) {
+    e.preventDefault();
+    this.setState({
+      panels: {
+        ...this.state.panels,
+        [key]: !this.state.panels[key]
       }
     });
   }
@@ -341,6 +361,10 @@ class Builder extends PureComponent {
     })
   }
 
+  handleObjectChange(id, attr) {
+    this.updateObject(id, { attr })
+  }
+
   handleDragEnd(id, e, d) {
 
     /**
@@ -370,17 +394,18 @@ class Builder extends PureComponent {
       slides,
       currentObjectId,
       currentSlide,
-      dialogs
+      dialogs,
+      panels
     } = this.state
 
-    // console.warn(this.state);
+    console.warn(this.state);
 
     return (
       <div className="builder">
         <SideTools
-          visible={dialogs[DIALOG.SIDE_TOOLS]}
+          visible={panels[PANEL.SIDE_TOOLS]}
           onClick={this.toggleDialog.bind(null, DIALOG.IMAGE_UPLOADER)}
-          onToggle={this.toggleDialog.bind(null, DIALOG.SIDE_TOOLS)}
+          onToggle={this.togglePanel.bind(null, PANEL.SIDE_TOOLS)}
           onTextClick={this.addObject.bind(null, OBJECT_TYPES.TEXT)}
         />
         <div style={{marginLeft: 60}}>
@@ -404,7 +429,12 @@ class Builder extends PureComponent {
             onTextChange={this.handleTextChange}
             activeId={currentObjectId}
             />
-          <ImageEditor />
+          <ImageEditor
+            visible={dialogs[DIALOG.IMAGE_EDITOR]}
+            onToggle={this.toggleDialog.bind(null, DIALOG.IMAGE_EDITOR)}
+            onChange={this.handleObjectChange}
+            id={currentObjectId}
+          />
           <TextEditor
             visible={dialogs[DIALOG.TEXT_EDITOR]}
             onToggle={this.toggleDialog.bind(null, DIALOG.TEXT_EDITOR)}

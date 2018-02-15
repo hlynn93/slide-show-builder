@@ -9,6 +9,7 @@
 
   &_item {
     border-bottom: 2px solid white;
+    padding: 16px;
   }
 
   &_icon {
@@ -16,7 +17,5 @@
     font-size: 32px;
     display: block;
     margin: auto;
-    padding-top: 16px;
-    padding-bottom: 16px;
   }
 }

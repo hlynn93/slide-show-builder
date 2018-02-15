@@ -77,14 +77,14 @@ class TextEditor extends PureComponent {
 
     const { visible, onToggle } = this.props
 
-    const buttonGroups = Object.values(textToolTypes).map(tool => {
-      const toolItem = textEditorToolbarConfig[tool]
+    const controls = Object.values(textToolTypes).map(toolId => {
+      const toolItem = textEditorToolbarConfig[toolId]
       switch (toolItem.type) {
         case toolbarTypes.BUTTON:
-          return this.renderButtonGroup(tool, toolItem.items)
+          return this.renderButtonGroup(toolId, toolItem.items)
 
         case toolbarTypes.SELECT:
-          return this.renderDropdown(tool, toolItem.items)
+          return this.renderDropdown(toolId, toolItem.items)
 
         default: console.error("Invalid toolbar type");
       }
@@ -97,7 +97,7 @@ class TextEditor extends PureComponent {
         onToggle={onToggle}
         >
         <div className="text_editor_inner">
-          { buttonGroups }
+          { controls }
         </div>
       </Panel>
     );
