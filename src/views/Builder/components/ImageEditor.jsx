@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
-import { Slider } from 'element-react';
+import Slider from 'react-rangeslider'
 import PropTypes from 'prop-types';
 
 import Panel from '../../../components/Panel';
 import { imageToolTypes, imageEditorToolbarConfig, toolbarTypes } from '../../../constants/appConstants';
 
+import 'react-rangeslider/lib/index.css'
 import './ImageEditor.scss';
 
 class ImageEditor extends PureComponent {
@@ -13,30 +14,29 @@ class ImageEditor extends PureComponent {
     this.renderSlider = this.renderSlider.bind(this)
   }
 
-  renderSlider(id, item) {
+  renderSlider(objectId, toolId, item) {
+    const { attribute } = this.props;
     return (
       <Slider
+        key={toolId}
         className="editor_slider"
-        key={id}
         min={item.min}
         max={item.max}
-        value={this.props.attribute.rotate || 0}
-        showInput={true}
-        showInputControls={false}
-        onChange={value => this.props.onChange(this.props.id, { rotation: value })}
+        value={attribute[toolId] || 0}
+        onChange={value => this.props.onChange(objectId, { [toolId]: value })}
       />
     )
   }
 
   render() {
 
-    const { visible, onToggle } = this.props
+    const { visible, onToggle, id } = this.props
 
     const controls = Object.values(imageToolTypes).map(toolId => {
       const toolItem = imageEditorToolbarConfig[toolId]
       switch (toolItem.type) {
         case toolbarTypes.SLIDER:
-          return this.renderSlider(toolId, toolItem.item)
+          return this.renderSlider(id, toolId, toolItem.item)
 
         default:
           break;
@@ -44,6 +44,7 @@ class ImageEditor extends PureComponent {
     })
     return (
       <Panel
+        position={{ x: 0, y: 100 }}
         className="text_editor"
         minimize={!visible}
         onToggle={onToggle}

@@ -67,7 +67,7 @@ export const textEditorToolbarConfig = {
 }
 
 export const imageToolTypes = {
-  ROTATION: 'ROTATION',
+  ROTATION: 'rotation',
 }
 
 export const imageEditorToolbarConfig = {

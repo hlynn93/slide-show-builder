@@ -31,8 +31,9 @@ class App extends Component {
     if(this.props.language != language) {
       i18n.changeLanguage(language, err => {
         if (err)
-          return console.error('something went wrong loading', err);
-        this.forceUpdate()
+          throw `something went wrong loading: ${err}`;
+        else
+          this.forceUpdate()
       });
     }
   }

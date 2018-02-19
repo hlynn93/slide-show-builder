@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import './Panel.scss';
 
 const Panel = ({
+  position,
   onDrag,
   onDragStart,
   onDragStop,
@@ -17,6 +18,7 @@ const Panel = ({
 }) => {
   return (
     <Rnd
+      default={position}
       bounds={'.builder'}
       onDrag={onDrag}
       onDragStart={onDragStart}
@@ -55,6 +57,7 @@ Panel.propTypes = {
   onToggle: PropTypes.func,
   minimize: PropTypes.bool,
   disableMinimize: PropTypes.bool,
+  position: PropTypes.object,
   children: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.object,

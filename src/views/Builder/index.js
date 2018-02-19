@@ -46,7 +46,7 @@ const PANEL = {
 const DEFAULT_BUILDER_STATE = {
   objects: {},
   slides: [ cloneDeep(NEW_SLIDE) ],
-  currentObjectId: undefined,
+  activeObjectId: undefined,
   currentSlide: 0,
   mode: CANVAS_MODE.DESKTOP,
   dialogs: {
@@ -107,7 +107,7 @@ class Builder extends PureComponent {
     this.hideAllDialogs = this.hideAllDialogs.bind(this)
     this.addSlide = this.addSlide.bind(this)
     this.addObject = this.addObject.bind(this)
-    this.changeCurrentObjectId = this.changeCurrentObjectId.bind(this)
+    this.updateActiveObjectId = this.updateActiveObjectId.bind(this)
     this.changeCurrentSlideId = this.changeCurrentSlideId.bind(this)
     this.updateSnapshot = this.updateSnapshot.bind(this)
     this.updateObject = this.updateObject.bind(this)
@@ -248,13 +248,15 @@ class Builder extends PureComponent {
   /**
    * Update the attributes such as attr, content, src, etc.
    */
-  updateObject(id, attr) {
+  updateObject(id, attr, options = {
+    updateSnapshot: true // updateSnapshot by default
+  }) {
     this.setState({
       objects: {
         ...this.state.objects,
         [id]: merge({}, this.state.objects[id], attr)
       }
-    }, () => this.updateSnapshot());
+    }, () => options.updateSnapshot ? this.updateSnapshot() : null);
   }
 
   changeCurrentSlideId(id) {
@@ -316,13 +318,13 @@ class Builder extends PureComponent {
    * Set the current object as active
    * @param {String} id
    */
-  changeCurrentObjectId(id) {
-    const { currentObjectId, objects } = this.state
+  updateActiveObjectId(id) {
+    const { activeObjectId, objects } = this.state
 
-    if(currentObjectId === id)
+    if(activeObjectId === id)
       return
 
-    this.setState({ currentObjectId: id }, () => {
+    this.setState({ activeObjectId: id }, () => {
 
       // If the current object is undefined
       if(!objects[id])
@@ -347,7 +349,7 @@ class Builder extends PureComponent {
   }
 
   handleCanvasClick() {
-    this.changeCurrentObjectId()
+    this.updateActiveObjectId()
   }
 
   handleResizeEnd(id, event, direction, ref, delta, position) {
@@ -362,7 +364,8 @@ class Builder extends PureComponent {
   }
 
   handleObjectChange(id, attr) {
-    this.updateObject(id, { attr })
+    if(this.state.objects[id])
+      this.updateObject(id, { attr }, { updateSnapshot: false })
   }
 
   handleDragEnd(id, e, d) {
@@ -384,7 +387,7 @@ class Builder extends PureComponent {
 
   handleObjectClick(id, e) {
     e.stopPropagation();
-    this.changeCurrentObjectId(id)
+    this.updateActiveObjectId(id)
   }
 
   render() {
@@ -392,13 +395,11 @@ class Builder extends PureComponent {
       mode,
       objects,
       slides,
-      currentObjectId,
+      activeObjectId,
       currentSlide,
       dialogs,
       panels
     } = this.state
-
-    console.warn(this.state);
 
     return (
       <div className="builder">
@@ -427,23 +428,26 @@ class Builder extends PureComponent {
             objectIds={slides[currentSlide].modes[mode].objectIds}
             onObjectClick={this.handleObjectClick}
             onTextChange={this.handleTextChange}
-            activeId={currentObjectId}
+            activeId={activeObjectId}
             />
           <ImageEditor
             visible={dialogs[DIALOG.IMAGE_EDITOR]}
             onToggle={this.toggleDialog.bind(null, DIALOG.IMAGE_EDITOR)}
             onChange={this.handleObjectChange}
-            id={currentObjectId}
+            id={activeObjectId}
+            attribute={objects[activeObjectId] ?
+              objects[activeObjectId].attr : {}
+            }
           />
           <TextEditor
             visible={dialogs[DIALOG.TEXT_EDITOR]}
             onToggle={this.toggleDialog.bind(null, DIALOG.TEXT_EDITOR)}
             id={
               // Pass undefined if no object is selected or currently selected object is not text type
-              (objects[currentObjectId] && objects[currentObjectId].type === OBJECT_TYPES.TEXT)
-              ? currentObjectId : undefined
+              (objects[activeObjectId] && objects[activeObjectId].type === OBJECT_TYPES.TEXT)
+              ? activeObjectId : undefined
             }
-            editorState={objects[currentObjectId] ? objects[currentObjectId].content : undefined}
+            editorState={objects[activeObjectId] ? objects[activeObjectId].content : undefined}
             onClick={this.handleTextChange}
             />
           <BottomBar

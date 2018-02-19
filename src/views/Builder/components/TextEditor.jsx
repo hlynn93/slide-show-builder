@@ -86,7 +86,7 @@ class TextEditor extends PureComponent {
         case toolbarTypes.SELECT:
           return this.renderDropdown(toolId, toolItem.items)
 
-        default: console.error("Invalid toolbar type");
+        default: throw "Invalid toolbar type";
       }
     })
 
