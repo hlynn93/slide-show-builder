@@ -22,5 +22,10 @@ html, body, #root, .routes, .app {
   left: 0;
   right: 0;
   bottom: 0;
+
+  .builder_content {
+    margin-left: $sidebar-abs-width;
+    height: 100%;
+  }
 }
 

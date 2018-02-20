@@ -4,7 +4,7 @@
 import React from 'react';
 import Rnd from 'react-rnd';
 import { isUndefined } from 'lodash';
-import { imageToolTypes } from '../../constants/appConstants';
+import { IMAGE_TOOL_TYPES } from '../../constants/appConstants';
 
 /* eslint-disable */
 
@@ -23,7 +23,7 @@ export default (Component) => {
 
     const { attr } = object;
 
-    const style = !isUndefined(attr[imageToolTypes.ROTATION]) ? {
+    const style = !isUndefined(attr[IMAGE_TOOL_TYPES.ROTATION]) ? {
       transform: `rotate(${attr.rotation}deg)`
     } : {};
 

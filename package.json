@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "author": "Han Lynn",
+  "homepage": "http://vignets.com/vignetsnewversion",
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "enzyme": "^3.3.0",

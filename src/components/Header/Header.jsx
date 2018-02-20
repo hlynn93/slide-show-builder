@@ -1,13 +1,14 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { Link } from 'react-router-dom'
 
 import './Header.scss';
 
 class Header extends PureComponent {
   render() {
 
-    const { children, className } = this.props;
+    const { className } = this.props;
 
     const classes = cx(
       'header',
@@ -16,7 +17,7 @@ class Header extends PureComponent {
 
     return (
       <nav className={classes}>
-        {children}
+        <Link to="/builder">Builder</Link>
       </nav>
     );
   }

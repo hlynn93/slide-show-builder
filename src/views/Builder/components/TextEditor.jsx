@@ -4,7 +4,7 @@ import { RichUtils } from 'draft-js';
 import PropTypes from 'prop-types';
 
 import Panel from '../../../components/Panel';
-import { textToolTypes, textEditorToolbarConfig, toolbarTypes } from '../../../constants/appConstants';
+import { TEXT_TOOL_TYPES, EDITOR_TOOLBAR_CONFIG, TOOLBAR_TYPES } from '../../../constants/appConstants';
 
 
 import './TextEditor.scss'
@@ -23,9 +23,9 @@ class TextEditor extends PureComponent {
       return
 
     const typeMapping = {
-      [textToolTypes.INLINE_STYLE_BUTTONS]: RichUtils.toggleInlineStyle,
-      [textToolTypes.BLOCK_TYPE_BUTTONS]: RichUtils.toggleBlockType,
-      [textToolTypes.BLOCK_TYPE_DROPDOWN]: RichUtils.toggleBlockType,
+      [TEXT_TOOL_TYPES.INLINE_STYLE_BUTTONS]: RichUtils.toggleInlineStyle,
+      [TEXT_TOOL_TYPES.BLOCK_TYPE_BUTTONS]: RichUtils.toggleBlockType,
+      [TEXT_TOOL_TYPES.BLOCK_TYPE_DROPDOWN]: RichUtils.toggleBlockType,
     }
 
     onClick(
@@ -77,13 +77,13 @@ class TextEditor extends PureComponent {
 
     const { visible, onToggle } = this.props
 
-    const controls = Object.values(textToolTypes).map(toolId => {
-      const toolItem = textEditorToolbarConfig[toolId]
+    const controls = Object.values(TEXT_TOOL_TYPES).map(toolId => {
+      const toolItem = EDITOR_TOOLBAR_CONFIG[toolId]
       switch (toolItem.type) {
-        case toolbarTypes.BUTTON:
+        case TOOLBAR_TYPES.BUTTON:
           return this.renderButtonGroup(toolId, toolItem.items)
 
-        case toolbarTypes.SELECT:
+        case TOOLBAR_TYPES.SELECT:
           return this.renderDropdown(toolId, toolItem.items)
 
         default: throw "Invalid toolbar type";

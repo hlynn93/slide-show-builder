@@ -5,12 +5,14 @@ import { EditorState } from 'draft-js';
 
 import SideTools from './components/SideTools';
 import Canvas from './components/Canvas';
-import ImageEditor from './components/ImageEditor';
-import TextEditor from './components/TextEditor';
+// import ImageEditor from './components/ImageEditor';
+import EditorPanel from './components/EditorPanel';
+import Editor from './components/Editor';
+// import TextEditor from './components/TextEditor';
 import ImageUploader from './components/ImageUploader';
 import BottomBar from './components/BottomBar';
 import ModeSwitch from './components/ModeSwitch';
-import { OBJECT_TYPES, CANVAS_MODE } from '../../constants/appConstants';
+import { OBJECT_TYPES, CANVAS_MODE, IMAGE_TOOL_TYPES, TEXT_TOOL_TYPES } from '../../constants/appConstants';
 
 const DEFAULT_ATTRIBUTE = {
   width: 100,
@@ -34,9 +36,7 @@ const NEW_SLIDE = {
 
 const DIALOG = {
   IMAGE_UPLOADER: 'imageUploader',
-  TEXT_EDITOR: 'textEditor',
-  IMAGE_EDITOR: 'imageEditor',
-
+  EDITOR_PANEL: 'editorPanel',
 }
 
 const PANEL = {
@@ -51,8 +51,7 @@ const DEFAULT_BUILDER_STATE = {
   mode: CANVAS_MODE.DESKTOP,
   dialogs: {
     [DIALOG.IMAGE_UPLOADER]: false,
-    [DIALOG.TEXT_EDITOR]: false,
-    [DIALOG.IMAGE_EDITOR]: false,
+    [DIALOG.EDITOR_PANEL]: false,
   },
   panels: {
     [PANEL.SIDE_TOOLS]: true
@@ -326,15 +325,17 @@ class Builder extends PureComponent {
 
     this.setState({ activeObjectId: id }, () => {
 
-      // If the current object is undefined
+      /**
+       * Handle hide and show editor panel
+       * once an object is focused
+       */
+
+      /* If the current object is undefined */
       if(!objects[id])
         return this.hideAllDialogs();
 
-      if(objects[id].type === OBJECT_TYPES.TEXT)
-        return this.showOneDialog(DIALOG.TEXT_EDITOR)
       else
-        return this.hideAllDialogs()
-
+        return this.showOneDialog(DIALOG.EDITOR_PANEL)
     });
   }
 
@@ -365,7 +366,7 @@ class Builder extends PureComponent {
 
   handleObjectChange(id, attr) {
     if(this.state.objects[id])
-      this.updateObject(id, { attr }, { updateSnapshot: false })
+      this.updateObject(id, { attr })
   }
 
   handleDragEnd(id, e, d) {
@@ -401,6 +402,43 @@ class Builder extends PureComponent {
       panels
     } = this.state
 
+    const objectType = (objects[activeObjectId] && objects[activeObjectId].type) ?
+      objects[activeObjectId].type : undefined
+
+
+    /**
+     *  Construct editor configuration based on the object type
+     */
+    let editorConfig = {
+      id: activeObjectId,
+
+      attribute: objects[activeObjectId] ?
+        objects[activeObjectId].attr : {},
+
+      editorState: objects[activeObjectId] ?
+        objects[activeObjectId].content : undefined
+    }
+
+    switch (objectType) {
+      case OBJECT_TYPES.IMAGE:
+        editorConfig = {
+          ...editorConfig,
+          toolTypes: IMAGE_TOOL_TYPES,
+          onChange: this.handleObjectChange
+        }
+        break;
+
+      case OBJECT_TYPES.TEXT:
+        editorConfig = {
+          ...editorConfig,
+          toolTypes: TEXT_TOOL_TYPES,
+          onChange: this.handleTextChange
+        }
+        break;
+
+      default:
+    }
+
     return (
       <div className="builder">
         <SideTools
@@ -409,7 +447,7 @@ class Builder extends PureComponent {
           onToggle={this.togglePanel.bind(null, PANEL.SIDE_TOOLS)}
           onTextClick={this.addObject.bind(null, OBJECT_TYPES.TEXT)}
         />
-        <div style={{marginLeft: 60}}>
+        <div className="builder_content">
           <ImageUploader
             visible={dialogs[DIALOG.IMAGE_UPLOADER]}
             onCancel={this.toggleDialog.bind(null, DIALOG.IMAGE_UPLOADER)}
@@ -430,26 +468,12 @@ class Builder extends PureComponent {
             onTextChange={this.handleTextChange}
             activeId={activeObjectId}
             />
-          <ImageEditor
-            visible={dialogs[DIALOG.IMAGE_EDITOR]}
-            onToggle={this.toggleDialog.bind(null, DIALOG.IMAGE_EDITOR)}
-            onChange={this.handleObjectChange}
-            id={activeObjectId}
-            attribute={objects[activeObjectId] ?
-              objects[activeObjectId].attr : {}
-            }
-          />
-          <TextEditor
-            visible={dialogs[DIALOG.TEXT_EDITOR]}
-            onToggle={this.toggleDialog.bind(null, DIALOG.TEXT_EDITOR)}
-            id={
-              // Pass undefined if no object is selected or currently selected object is not text type
-              (objects[activeObjectId] && objects[activeObjectId].type === OBJECT_TYPES.TEXT)
-              ? activeObjectId : undefined
-            }
-            editorState={objects[activeObjectId] ? objects[activeObjectId].content : undefined}
-            onClick={this.handleTextChange}
-            />
+          <EditorPanel
+            visible={dialogs[DIALOG.EDITOR_PANEL]}
+            onToggle={this.toggleDialog.bind(null, DIALOG.EDITOR_PANEL)}
+            >
+            <Editor {...editorConfig} />
+          </EditorPanel>
           <BottomBar
             mode={mode}
             currentSlide={currentSlide}

@@ -1,5 +1,13 @@
 @import '../../../styles/import.scss';
 
+.editor {
+  z-index: 6;
+  padding: 12px 8px;
+  background-color: $app-grey-100;
+  border: 1px solid $app-grey;
+  border-radius: 2px;
+}
+
 .editor_slider_wrapper {
 
   //Override css
@@ -20,4 +28,18 @@
 .editor_slider_input {
   width: 50px;
   margin-left: 12px;
+}
+
+.button_group {
+
+  &:last-child {
+    margin-bottom: 4px;
+  }
+
+  margin-bottom: 8px;
+  display: block;
+}
+
+.button_icon {
+  padding: 8px;
 }

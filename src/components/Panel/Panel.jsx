@@ -9,6 +9,7 @@ const Panel = ({
   onDrag,
   onDragStart,
   onDragStop,
+  bounds,
   disableDragging,
   disableMinimize,
   onToggle,
@@ -19,7 +20,7 @@ const Panel = ({
   return (
     <Rnd
       default={position}
-      bounds={'.builder'}
+      bounds={bounds}
       onDrag={onDrag}
       onDragStart={onDragStart}
       onDragStop={onDragStop}
@@ -53,6 +54,7 @@ Panel.propTypes = {
   onDrag: PropTypes.func,
   onDragStart: PropTypes.func,
   onDragStop: PropTypes.func,
+  bounds: PropTypes.string,
   disableDragging: PropTypes.bool,
   onToggle: PropTypes.func,
   minimize: PropTypes.bool,
@@ -66,6 +68,7 @@ Panel.propTypes = {
 
 Panel.defaultProps = {
   disableDragging: false,
+  bounds: '.builder',
 }
 
 export default Panel;
