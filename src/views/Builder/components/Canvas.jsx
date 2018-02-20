@@ -13,6 +13,14 @@ class Canvas extends PureComponent {
     this.renderObjects = this.renderObjects.bind(this)
   }
 
+  componentWillMount() {
+    document.addEventListener("keydown", this.props.onKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.props.onKeyDown);
+  }
+
   renderObjects() {
     const {
       objectIds,
@@ -21,11 +29,16 @@ class Canvas extends PureComponent {
       onTextChange,
       onDragStop,
       onResizeStop,
+      onKeyDown,
+      onBlur,
+      onFocus,
       activeId
     } = this.props
     return objectIds.map(id => {
+
       const object = objects[id]
       const props = {
+        onKeyDown: onKeyDown,
         onDragStop: onDragStop.bind(null, id),
         onResizeStop: onResizeStop.bind(null, id),
         isActive: id === activeId,
@@ -35,6 +48,7 @@ class Canvas extends PureComponent {
         id: `canvas_object--${id}`,
         className: `canvas_object canvas_object--${id}`
       }
+
       switch (object.type) {
         case OBJECT_TYPES.IMAGE:
           return (
@@ -47,6 +61,8 @@ class Canvas extends PureComponent {
           return (
             <DNRText
               onTextChange={onTextChange.bind(null, id)}
+              onBlur={onBlur}
+              onFocus={onFocus}
               {...props}
             />
           )
@@ -76,8 +92,11 @@ Canvas.propTypes = {
   objects: PropTypes.object,
   onObjectClick: PropTypes.func,
   onTextChange: PropTypes.func,
+  onKeyDown: PropTypes.func,
   onCanvasClick: PropTypes.func,
   onDragStop: PropTypes.func,
+  onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
   onResizeStop: PropTypes.func,
   activeId: PropTypes.string,
   mode: PropTypes.string,

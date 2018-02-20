@@ -19,7 +19,6 @@ class Editor extends PureComponent {
 
   handleChange(format, value) {
     const { id, onChange, editorState } = this.props
-    console.warn(format, value);
     if(!id)
       return
 

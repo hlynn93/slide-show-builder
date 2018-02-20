@@ -31,10 +31,7 @@ class EditorPanel extends PureComponent {
 }
 
 EditorPanel.propTypes = {
-  position: PropTypes.objectOf({
-    x: PropTypes.number,
-    y: PropTypes.number,
-  }),
+  position: PropTypes.object,
   visible: PropTypes.bool,
   onToggle: PropTypes.func,
   children: PropTypes.any,

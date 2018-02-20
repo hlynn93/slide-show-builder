@@ -10,6 +10,7 @@ import { IMAGE_TOOL_TYPES } from '../../constants/appConstants';
 
 export default (Component) => {
   return ({
+    onKeyDown,
     onDrag,
     onDragStart,
     onDragStop,
@@ -37,6 +38,7 @@ export default (Component) => {
       onDrag={onDrag}
       onDragStop={onDragStop}>
       <Component
+        onKeyDown={onKeyDown}
         style={style}
         {...object}
         {...props} />

@@ -43,6 +43,11 @@ const PANEL = {
   SIDE_TOOLS: 'sideTools'
 }
 
+const STATUS = {
+  IS_TAKING_SNAPSHOT: 'isTakingSnapshot',
+  IS_EDITING_TEXT: 'isEditingText',
+}
+
 const DEFAULT_BUILDER_STATE = {
   objects: {},
   slides: [ cloneDeep(NEW_SLIDE) ],
@@ -57,7 +62,8 @@ const DEFAULT_BUILDER_STATE = {
     [PANEL.SIDE_TOOLS]: true
   },
   status: {
-    isTakingSnapshot: false
+    [STATUS.IS_TAKING_SNAPSHOT]: false,
+    [STATUS.IS_EDITING_TEXT]: false,
   }
 }
 
@@ -106,8 +112,10 @@ class Builder extends PureComponent {
     this.hideAllDialogs = this.hideAllDialogs.bind(this)
     this.addSlide = this.addSlide.bind(this)
     this.addObject = this.addObject.bind(this)
+    this.removeObject = this.removeObject.bind(this)
     this.updateActiveObjectId = this.updateActiveObjectId.bind(this)
     this.changeCurrentSlideId = this.changeCurrentSlideId.bind(this)
+    this.updateStatus = this.updateStatus.bind(this)
     this.updateSnapshot = this.updateSnapshot.bind(this)
     this.updateObject = this.updateObject.bind(this)
     this.handleCanvasClick = this.handleCanvasClick.bind(this)
@@ -117,7 +125,7 @@ class Builder extends PureComponent {
     this.handleDragEnd = this.handleDragEnd.bind(this)
     this.handleObjectChange = this.handleObjectChange.bind(this)
     this.handleObjectClick = this.handleObjectClick.bind(this)
-
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   componentDidMount() {
@@ -198,18 +206,20 @@ class Builder extends PureComponent {
     let createObject;
     switch (type) {
       case OBJECT_TYPES.IMAGE:
-        createObject = () => createObjectData(
+        createObject = (id) => createObjectData(
           data.content,
           data.src,
           OBJECT_TYPES.IMAGE,
+          id
         )
         break;
 
       case OBJECT_TYPES.TEXT:
-        createObject = () => createObjectData(
+        createObject = (id) => createObjectData(
           EditorState.createEmpty(),
           '',
           OBJECT_TYPES.TEXT,
+          id
         )
         break;
 
@@ -227,8 +237,9 @@ class Builder extends PureComponent {
     const newSlides = slides.slice(0);
     const newSlide = { ...slides[currentSlide] }
 
+    const baseId = generateId();
     Object.values(CANVAS_MODE).map(mode => {
-      const newObject = createObject()
+      const newObject = createObject(`${baseId}-${mode}`)
       newObjects[newObject.id] = newObject;
       newSlide.modes[mode].objectIds.push(newObject.id)
     })
@@ -242,6 +253,39 @@ class Builder extends PureComponent {
         objects: newObjects,
         slides: newSlides
     }, () => this.updateSnapshot());
+  }
+
+  removeObject(id) {
+    const { slides, objects, currentSlide } = this.state
+    const baseId = id.split('-')[0]
+    const newObjects = { ...objects }
+    const newSlides = slides.slice(0);
+    const newSlide = { ...slides[currentSlide] }
+
+    Object.values(CANVAS_MODE).map(mode => {
+      const id = `${baseId}-${mode}`
+      const objectIds = newSlide.modes[mode].objectIds
+      const index = objectIds.indexOf(id);
+
+      delete newObjects[id];
+      objectIds.splice(index, 1)
+    })
+
+    newSlides[currentSlide] = newSlide
+    this.setState({
+      activeObjectId: undefined,
+      objects: newObjects,
+      slides: newSlides
+    }, () => this.updateSnapshot());
+  }
+
+  updateStatus(key, status) {
+    this.setState({
+      status: {
+        ...this.state.status,
+        [key]: status
+      }
+    });
   }
 
   /**
@@ -269,7 +313,7 @@ class Builder extends PureComponent {
 
       const element = document.getElementById('canvas')
 
-      if(status.isTakingSnapshot)
+      if(status[STATUS.IS_TAKING_SNAPSHOT])
         return
 
       html2canvas(element, {
@@ -299,7 +343,7 @@ class Builder extends PureComponent {
           slides: newSlides,
           status: {
             ...status,
-            isTakingSnapshot: false
+            [STATUS.IS_TAKING_SNAPSHOT]: false
           }
         });
       });
@@ -308,7 +352,7 @@ class Builder extends PureComponent {
     this.setState({
       status: {
         ...status,
-        isTakingSnapshot: true
+        [STATUS.IS_TAKING_SNAPSHOT]: true
       }
     }, takeSnapshot());
   }
@@ -343,7 +387,8 @@ class Builder extends PureComponent {
     this.setState({ mode });
   }
 
-  handleTextChange(id, editorState) {
+  handleTextChange(id, editorState, e) {
+    console.warn("TextChange: ", e);
     this.updateObject(id, {
       content: editorState
     });
@@ -389,6 +434,21 @@ class Builder extends PureComponent {
   handleObjectClick(id, e) {
     e.stopPropagation();
     this.updateActiveObjectId(id)
+  }
+
+  handleKeyDown(e) {
+    const { status, activeObjectId } = this.state
+    /* Check whether the text is being edited or an object is selected */
+    if(status[STATUS.IS_EDITING_TEXT] || !activeObjectId)
+      return
+
+    switch (e.keyCode) {
+      case 8: // DELETE
+        this.removeObject(activeObjectId)
+        break;
+
+      default:
+    }
   }
 
   render() {
@@ -439,6 +499,8 @@ class Builder extends PureComponent {
       default:
     }
 
+    console.warn(this.state);
+
     return (
       <div className="builder">
         <SideTools
@@ -462,6 +524,9 @@ class Builder extends PureComponent {
             onCanvasClick={this.handleCanvasClick}
             onResizeStop={this.handleResizeEnd}
             onDragStop={this.handleDragEnd}
+            onKeyDown={this.handleKeyDown}
+            onBlur={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, false)}
+            onFocus={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, true)}
             objects={objects}
             objectIds={slides[currentSlide].modes[mode].objectIds}
             onObjectClick={this.handleObjectClick}
