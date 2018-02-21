@@ -63,6 +63,16 @@ class Canvas extends PureComponent {
               onTextChange={onTextChange.bind(null, id)}
               onBlur={onBlur}
               onFocus={onFocus}
+              enableResizing={{
+                top:true,
+                right:true,
+                bottom:false,
+                left:false,
+                topRight:false,
+                bottomRight:false,
+                bottomLeft:false,
+                topLeft:false
+              }}
               {...objectProps}
             />
           )

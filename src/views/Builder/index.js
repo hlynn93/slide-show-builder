@@ -1,7 +1,11 @@
 import React, { PureComponent } from 'react';
 import html2canvas from 'html2canvas';
-import { cloneDeep, merge, mapValues } from 'lodash';
 import { EditorState } from 'draft-js';
+import {
+  cloneDeep,
+  merge,
+  mapValues
+} from 'lodash';
 
 import SideTools from './components/SideTools';
 import Canvas from './components/Canvas';
@@ -12,7 +16,20 @@ import Editor from './components/Editor';
 import ImageUploader from './components/ImageUploader';
 import BottomBar from './components/BottomBar';
 import ModeSwitch from './components/ModeSwitch';
-import { OBJECT_TYPES, CANVAS_MODE, IMAGE_TOOL_TYPES, TEXT_TOOL_TYPES } from '../../constants/appConstants';
+
+import {
+  generateId,
+  removeSlide,
+  addSlide,
+  addObject,
+  removeObject,
+} from '../../utils/builderUtils';
+import {
+  OBJECT_TYPES,
+  CANVAS_MODE,
+  IMAGE_TOOL_TYPES,
+  TEXT_TOOL_TYPES
+} from '../../constants/appConstants';
 
 const DEFAULT_ATTRIBUTE = {
   width: 100,
@@ -66,41 +83,6 @@ const DEFAULT_BUILDER_STATE = {
     [STATUS.IS_EDITING_TEXT]: false,
   }
 }
-
-// HELPER FUNCTIONS START
-
-/**
- * Generate a unique value to be used as an ID for objects
- */
-const generateId = () => (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase()
-
-/**
- * Copy and insert the new element into the array
- */
-const insertElementIntoArray = (array, index, ele) => {
-  const newArray = array.slice(0)
-  newArray.splice(index, 0, ele)
-  return newArray
-}
-
-/**
- * Create an object data to be used in the canvas
- */
-const createObjectData = (
-  content,
-  src,
-  type,
-  id=generateId(),
-  attr=DEFAULT_ATTRIBUTE
-  ) => ({
-  content,
-  src,
-  type,
-  id,
-  attr,
-})
-
-// HELPER FUNCTIONS END
 
 class Builder extends PureComponent {
   constructor(props) {
@@ -185,12 +167,7 @@ class Builder extends PureComponent {
    */
   addSlide(index = 0) {
     const { slides } = this.state
-    const newSlide = cloneDeep(NEW_SLIDE)
-    const newSlides = insertElementIntoArray(
-      slides,
-      index,
-      newSlide
-    )
+    const newSlides = addSlide(slides, NEW_SLIDE, index)
 
     this.setState({
         currentSlide: index,
@@ -200,26 +177,11 @@ class Builder extends PureComponent {
 
   removeSlide(index) {
     const { slides, objects, currentSlide } = this.state
-
-    if(!index)
-      return
-
-    if(slides.length <= 1)
-      return
-
-    const newSlides = slides.slice(0);
-    const newObjects = { ...objects }
-    const slide = slides[index]
-
-    newSlides.splice(index, 1)
-    Object.keys(slide.modes).map(mode => {
-      const objectIds = slide.modes[mode].objectIds
-      objectIds.map(id => delete newObjects[id])
-    })
+    const result = removeSlide(objects, slides, index);
 
     this.setState({
-      objects: newObjects,
-      slides: newSlides,
+      objects: result.objects,
+      slides: result.slides,
       currentSlide: index > currentSlide ? currentSlide : currentSlide - 1
     });
   }
@@ -230,25 +192,28 @@ class Builder extends PureComponent {
    * @param {Object} data
    */
   addObject(type, data) {
-    let createObject;
+
+    let newObject = {
+      id: generateId(),
+      type,
+      attr: DEFAULT_ATTRIBUTE
+    };
+
     switch (type) {
       case OBJECT_TYPES.IMAGE:
-        createObject = (id) => createObjectData(
-          data.content,
-          data.src,
-          OBJECT_TYPES.IMAGE,
-          id
-        )
+        newObject = {
+          ...newObject,
+          content: data.content,
+          src: data.src,
+        }
         break;
 
       case OBJECT_TYPES.TEXT:
-        createObject = (id) => createObjectData(
-          EditorState.createEmpty(),
-          '',
-          OBJECT_TYPES.TEXT,
-          id
-        )
-        break;
+        newObject = {
+          ...newObject,
+          content: EditorState.createEmpty(),
+        };
+      break;
 
       default:
         break;
@@ -260,49 +225,27 @@ class Builder extends PureComponent {
      * Then, add their IDs to the respective screen mode of the current slide
      */
     const { objects, slides, currentSlide } = this.state;
-    const newObjects = { ...objects }
-    const newSlides = slides.slice(0);
-    const newSlide = { ...slides[currentSlide] }
-
-    const baseId = generateId();
-    Object.values(CANVAS_MODE).map(mode => {
-      const newObject = createObject(`${baseId}-${mode}`)
-      newObjects[newObject.id] = newObject;
-      newSlide.modes[mode].objectIds.push(newObject.id)
-    })
-    newSlides[currentSlide] = newSlide
+    const result = addObject(objects, slides, currentSlide, newObject)
 
     /**
      * Update with the new slides and objects to the state
      * and update the snapshot of the slide
     */
     this.setState({
-        objects: newObjects,
-        slides: newSlides
+        objects: result.objects,
+        slides: result.slides
     }, () => this.updateSnapshot());
   }
 
   removeObject(id) {
     const { slides, objects, currentSlide } = this.state
-    const baseId = id.split('-')[0]
-    const newObjects = { ...objects }
-    const newSlides = slides.slice(0);
-    const newSlide = { ...slides[currentSlide] }
 
-    Object.values(CANVAS_MODE).map(mode => {
-      const id = `${baseId}-${mode}`
-      const objectIds = newSlide.modes[mode].objectIds
-      const index = objectIds.indexOf(id);
+    const result = removeObject(objects, slides, id, currentSlide)
 
-      delete newObjects[id];
-      objectIds.splice(index, 1)
-    })
-
-    newSlides[currentSlide] = newSlide
     this.setState({
       activeObjectId: undefined,
-      objects: newObjects,
-      slides: newSlides
+      objects: result.objects,
+      slides: result.slides
     }, () => this.updateSnapshot());
   }
 
@@ -344,7 +287,8 @@ class Builder extends PureComponent {
         return
 
       html2canvas(element, {
-        scale: 0.2
+        scale: 0.2,
+        logging: false,
       })
       .then(canvas => {
         // Export the canvas to its data URI representation
@@ -414,7 +358,7 @@ class Builder extends PureComponent {
     this.setState({ mode });
   }
 
-  handleTextChange(id, editorState, e) {
+  handleTextChange(id, editorState) {
     this.updateObject(id, {
       content: editorState
     });
@@ -525,7 +469,7 @@ class Builder extends PureComponent {
       default:
     }
 
-    console.warn(this.state);
+    // console.warn(this.state);
 
     return (
       <div className="builder">

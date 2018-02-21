@@ -18,6 +18,7 @@ export default (Component) => {
     onResizeStart,
     onResizeStop,
     bounds,
+    enableResizing,
     object,
     ...props
   }) => {
@@ -36,7 +37,8 @@ export default (Component) => {
       onResizeStop={onResizeStop}
       onDragStart={onDragStart}
       onDrag={onDrag}
-      onDragStop={onDragStop}>
+      onDragStop={onDragStop}
+      enableResizing={enableResizing}>
       <Component
         onKeyDown={onKeyDown}
         style={style}
