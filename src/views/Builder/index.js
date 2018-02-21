@@ -111,6 +111,7 @@ class Builder extends PureComponent {
     this.showOneDialog = this.showOneDialog.bind(this)
     this.hideAllDialogs = this.hideAllDialogs.bind(this)
     this.addSlide = this.addSlide.bind(this)
+    this.removeSlide = this.removeSlide.bind(this)
     this.addObject = this.addObject.bind(this)
     this.removeObject = this.removeObject.bind(this)
     this.updateActiveObjectId = this.updateActiveObjectId.bind(this)
@@ -195,6 +196,32 @@ class Builder extends PureComponent {
         currentSlide: index,
         slides: newSlides
     }, ()=> this.updateSnapshot());
+  }
+
+  removeSlide(index) {
+    const { slides, objects, currentSlide } = this.state
+
+    if(!index)
+      return
+
+    if(slides.length <= 1)
+      return
+
+    const newSlides = slides.slice(0);
+    const newObjects = { ...objects }
+    const slide = slides[index]
+
+    newSlides.splice(index, 1)
+    Object.keys(slide.modes).map(mode => {
+      const objectIds = slide.modes[mode].objectIds
+      objectIds.map(id => delete newObjects[id])
+    })
+
+    this.setState({
+      objects: newObjects,
+      slides: newSlides,
+      currentSlide: index > currentSlide ? currentSlide : currentSlide - 1
+    });
   }
 
   /**
@@ -388,7 +415,6 @@ class Builder extends PureComponent {
   }
 
   handleTextChange(id, editorState, e) {
-    console.warn("TextChange: ", e);
     this.updateObject(id, {
       content: editorState
     });
@@ -476,7 +502,7 @@ class Builder extends PureComponent {
         objects[activeObjectId].attr : {},
 
       editorState: objects[activeObjectId] ?
-        objects[activeObjectId].content : undefined
+        objects[activeObjectId].content : undefined,
     }
 
     switch (objectType) {
@@ -537,12 +563,17 @@ class Builder extends PureComponent {
             visible={dialogs[DIALOG.EDITOR_PANEL]}
             onToggle={this.toggleDialog.bind(null, DIALOG.EDITOR_PANEL)}
             >
-            <Editor {...editorConfig} />
+            <Editor
+              {...editorConfig}
+              onBlur={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, false)}
+              onFocus={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, true)}
+              />
           </EditorPanel>
           <BottomBar
             mode={mode}
             currentSlide={currentSlide}
             onClick={this.changeCurrentSlideId}
+            onDelete={this.removeSlide}
             onAdd={this.addSlide}
             slides={slides}
             />

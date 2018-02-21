@@ -4,14 +4,15 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import MdAddBox from 'react-icons/lib/md/add-box';
-import { ASPECT_RATIO } from '../../../constants/appConstants';
-import cx from 'classnames';
+// import { ASPECT_RATIO } from '../../../constants/appConstants';
+import Slide from './Slide';
+// import cx from 'classnames';
 
 import Panel from '../../../components/Panel';
 
 import './BottomBar.scss';
 
-const calculateWidth = ( mode ) => (ASPECT_RATIO[mode].width / ASPECT_RATIO[mode].height) * 88;
+// const calculateWidth = ( mode ) => (ASPECT_RATIO[mode].width / ASPECT_RATIO[mode].height) * 88;
 
 class BottomBar extends PureComponent {
   render() {
@@ -19,30 +20,46 @@ class BottomBar extends PureComponent {
       slides,
       onClick,
       onAdd,
+      onDelete,
       mode,
       currentSlide
     } = this.props
 
-    const baseClass = 'slide_snapshot'
+
+    // const baseClass = 'slide_snapshot'
 
     /**
      * Create a snapshot image if the value exists
      * Otherwise, create a div placeholder
      */
     const slideSnapshots = slides.map((slide, i) =>
-    React.createElement(
-      slide.modes[mode].snapshot ? 'img' : 'div',
-      {
-        key: i,
-        src: slide.modes[mode].snapshot,
-        className: cx(
-          baseClass,
-          { [`${baseClass}--active`]:  i === currentSlide }
-        ),
-        onClick: onClick.bind(null, i),
-        style: slide.modes[mode].snapshot ? undefined : { width: calculateWidth(mode) }
-      }
-    ))
+      <Slide
+        key={i}
+        src={slide.modes[mode].snapshot}
+        onClick={onClick.bind(null, i)}
+        onDelete={onDelete.bind(null, i)}
+        mode={mode}
+        isActive={i === currentSlide}
+        />
+    )
+    // const slideSnapshots = slides.map((slide, i) =>
+    // React.createElement(
+    //   slide.modes[mode].snapshot ? 'img' : 'div',
+    //   {
+    //     key: i,
+    //     src: slide.modes[mode].snapshot,
+    //     className: cx(
+    //       baseClass,
+    //       { [`${baseClass}--active`]:  i === currentSlide }
+    //     ),
+    //     onClick: onClick.bind(null, i),
+    //     style: slide.modes[mode].snapshot ? undefined : { width: calculateWidth(mode) }
+    //   },
+    //   React.createElement('div', {
+    //     className: 'snapshot_delete',
+    //     onClick: onDelete
+    //   })
+    // ))
 
     return (
       <Panel disableDragging disableMinimize className="bottom_bar">
@@ -65,6 +82,7 @@ BottomBar.propTypes = {
   slides: PropTypes.array,
   onClick: PropTypes.func,
   onAdd: PropTypes.func,
+  onDelete: PropTypes.func,
   mode: PropTypes.string,
 };
 
@@ -73,6 +91,7 @@ BottomBar.defaultProps = {
   slides: [],
   onClick: () => {},
   onAdd: () => {},
+  onDelete: () => {}
 };
 
 export default BottomBar;

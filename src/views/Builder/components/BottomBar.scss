@@ -1,17 +1,5 @@
 @import '../../../styles/import.scss';
 
-.slide_snapshot {
-  width: auto;
-  height: $bottom-bar-height - (2*$standard-padding);
-  border: 1px solid gray;
-  margin: 16px;
-  background-color: white;
-
-  &--active {
-    outline: 1px solid black;
-  }
-}
-
 .bottom_bar {
   position: fixed !important; // to override react-dnr library default styles
   width: 100% !important;

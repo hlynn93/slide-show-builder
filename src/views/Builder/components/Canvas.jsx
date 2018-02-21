@@ -37,7 +37,7 @@ class Canvas extends PureComponent {
     return objectIds.map(id => {
 
       const object = objects[id]
-      const props = {
+      const objectProps = {
         onKeyDown: onKeyDown,
         onDragStop: onDragStop.bind(null, id),
         onResizeStop: onResizeStop.bind(null, id),
@@ -53,7 +53,7 @@ class Canvas extends PureComponent {
         case OBJECT_TYPES.IMAGE:
           return (
             <DNRImage
-              {...props }
+              {...objectProps }
               />
           )
 
@@ -63,7 +63,7 @@ class Canvas extends PureComponent {
               onTextChange={onTextChange.bind(null, id)}
               onBlur={onBlur}
               onFocus={onFocus}
-              {...props}
+              {...objectProps}
             />
           )
 
@@ -75,11 +75,11 @@ class Canvas extends PureComponent {
   render() {
     const { mode, onCanvasClick } = this.props
 
-    const style = ASPECT_RATIO[mode]
+    const canvasStyle = ASPECT_RATIO[mode]
 
     return (
       <div className="canvas_wrapper" onClick={onCanvasClick}>
-        <div id="canvas" className="canvas" style={style}>
+        <div id="canvas" className="canvas" style={canvasStyle}>
           { this.renderObjects() }
         </div>
       </div>

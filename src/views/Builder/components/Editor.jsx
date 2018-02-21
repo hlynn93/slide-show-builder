@@ -26,7 +26,7 @@ class Editor extends PureComponent {
   }
 
   renderSlider(toolId, tool) {
-    const { attribute } = this.props;
+    const { attribute, onFocus, onBlur } = this.props;
     const { item, format } = tool
     const value = attribute[toolId] || 0
     return (
@@ -42,6 +42,8 @@ class Editor extends PureComponent {
           className="editor_slider_input"
           value={value || undefined}
           onChange={this.handleChange.bind(null, format)}
+          onFocus={onFocus}
+          onBlur={onBlur}
         />
       </div>
     )
@@ -116,6 +118,8 @@ class Editor extends PureComponent {
 
 Editor.propTypes = {
   onChange: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
   attribute: PropTypes.object,
   id: PropTypes.string,
   toolTypes: PropTypes.object,

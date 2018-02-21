@@ -1,0 +1,35 @@
+@import '../../../styles/import';
+
+.snapshot {
+  width: auto;
+  height: $bottom-bar-height - (2*$standard-padding);
+  border: 1px solid gray;
+  margin: 16px;
+  background-color: white;
+  position: relative;
+
+  &--active {
+    outline: 1px solid black;
+  }
+
+  &:hover {
+
+    .snapshot_delete {
+      display: block;
+    }
+  }
+
+}
+
+.snapshot_image {
+  height: 100%;
+}
+
+.snapshot_delete {
+  padding: 0 8px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none;
+  cursor: pointer;
+}
