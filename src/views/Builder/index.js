@@ -25,17 +25,24 @@ import {
   removeObject,
 } from '../../utils/builderUtils';
 import {
-  OBJECT_TYPES,
+  OBJECT_TYPE,
   CANVAS_MODE,
-  IMAGE_TOOL_TYPES,
-  TEXT_TOOL_TYPES
-} from '../../constants/appConstants';
+  IMAGE_TOOL_TYPE,
+  TEXT_TOOL_TYPE
+} from '../../constants/builderConstants';
 
-const DEFAULT_ATTRIBUTE = {
-  width: 100,
-  height: undefined,
-  x: 0,
-  y: 0
+const DIALOG = {
+  IMAGE_UPLOADER: 'imageUploader',
+  EDITOR_PANEL: 'editorPanel',
+}
+
+const PANEL = {
+  SIDE_TOOLS: 'sideTools'
+}
+
+const STATUS = {
+  IS_TAKING_SNAPSHOT: 'isTakingSnapshot',
+  IS_EDITING_TEXT: 'isEditingText',
 }
 
 const NEW_SLIDE = {
@@ -51,18 +58,11 @@ const NEW_SLIDE = {
   }
 }
 
-const DIALOG = {
-  IMAGE_UPLOADER: 'imageUploader',
-  EDITOR_PANEL: 'editorPanel',
-}
-
-const PANEL = {
-  SIDE_TOOLS: 'sideTools'
-}
-
-const STATUS = {
-  IS_TAKING_SNAPSHOT: 'isTakingSnapshot',
-  IS_EDITING_TEXT: 'isEditingText',
+const DEFAULT_ATTRIBUTE = {
+  width: 100,
+  height: undefined,
+  x: 0,
+  y: 0
 }
 
 const DEFAULT_BUILDER_STATE = {
@@ -200,7 +200,7 @@ class Builder extends PureComponent {
     };
 
     switch (type) {
-      case OBJECT_TYPES.IMAGE:
+      case OBJECT_TYPE.IMAGE:
         newObject = {
           ...newObject,
           content: data.content,
@@ -208,7 +208,7 @@ class Builder extends PureComponent {
         }
         break;
 
-      case OBJECT_TYPES.TEXT:
+      case OBJECT_TYPE.TEXT:
         newObject = {
           ...newObject,
           content: EditorState.createEmpty(),
@@ -219,18 +219,9 @@ class Builder extends PureComponent {
         break;
     }
 
-    /**
-     * Create different objects for each screen mode
-     * And add them to the object list
-     * Then, add their IDs to the respective screen mode of the current slide
-     */
     const { objects, slides, currentSlide } = this.state;
     const result = addObject(objects, slides, currentSlide, newObject)
 
-    /**
-     * Update with the new slides and objects to the state
-     * and update the snapshot of the slide
-    */
     this.setState({
         objects: result.objects,
         slides: result.slides
@@ -320,12 +311,19 @@ class Builder extends PureComponent {
       });
     }
 
-    this.setState({
-      status: {
-        ...status,
-        [STATUS.IS_TAKING_SNAPSHOT]: true
-      }
-    }, takeSnapshot());
+    if(this.snapshotTimer) {
+      clearTimeout(this.snapshotTimer);
+      this.snapshotTimer = undefined;
+    }
+
+    this.snapshotTimer = setTimeout(() => {
+      this.setState({
+        status: {
+          ...status,
+          [STATUS.IS_TAKING_SNAPSHOT]: true
+        }
+      }, takeSnapshot());
+    }, 2000);
   }
 
   /**
@@ -450,18 +448,18 @@ class Builder extends PureComponent {
     }
 
     switch (objectType) {
-      case OBJECT_TYPES.IMAGE:
+      case OBJECT_TYPE.IMAGE:
         editorConfig = {
           ...editorConfig,
-          toolTypes: IMAGE_TOOL_TYPES,
+          toolTypes: IMAGE_TOOL_TYPE,
           onChange: this.handleObjectChange
         }
         break;
 
-      case OBJECT_TYPES.TEXT:
+      case OBJECT_TYPE.TEXT:
         editorConfig = {
           ...editorConfig,
-          toolTypes: TEXT_TOOL_TYPES,
+          toolTypes: TEXT_TOOL_TYPE,
           onChange: this.handleTextChange
         }
         break;
@@ -477,7 +475,7 @@ class Builder extends PureComponent {
           visible={panels[PANEL.SIDE_TOOLS]}
           onClick={this.toggleDialog.bind(null, DIALOG.IMAGE_UPLOADER)}
           onToggle={this.togglePanel.bind(null, PANEL.SIDE_TOOLS)}
-          onTextClick={this.addObject.bind(null, OBJECT_TYPES.TEXT)}
+          onTextClick={this.addObject.bind(null, OBJECT_TYPE.TEXT)}
         />
         <div className="builder_content">
           <ImageUploader

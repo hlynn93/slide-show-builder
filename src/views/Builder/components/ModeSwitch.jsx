@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { CANVAS_MODE } from '../../../constants/appConstants';
+import { CANVAS_MODE } from '../../../constants/builderConstants';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 

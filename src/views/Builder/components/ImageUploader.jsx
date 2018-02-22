@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Dialog } from 'element-react';
 import PropTypes from 'prop-types';
-import { OBJECT_TYPES } from '../../../constants/appConstants';
+import { OBJECT_TYPE } from '../../../constants/builderConstants';
 
 class ImageUploader extends PureComponent {
   constructor(props) {
@@ -18,7 +18,7 @@ class ImageUploader extends PureComponent {
 
     reader.onloadend = () => {
       this.props.onImageChange(
-        OBJECT_TYPES.IMAGE,
+        OBJECT_TYPE.IMAGE,
         {
           content: file,
           src: reader.result

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ASPECT_RATIO } from '../../../constants/appConstants';
+import { ASPECT_RATIO } from '../../../constants/builderConstants';
 import cx from 'classnames';
 
 import './Slide.scss'

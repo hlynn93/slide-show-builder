@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DNRImage, DNRText } from '../../../components/DNR';
-import { ASPECT_RATIO, OBJECT_TYPES } from '../../../constants/appConstants';
+import { ASPECT_RATIO, OBJECT_TYPE } from '../../../constants/builderConstants';
 
 
 import './Canvas.scss';
@@ -50,14 +50,14 @@ class Canvas extends PureComponent {
       }
 
       switch (object.type) {
-        case OBJECT_TYPES.IMAGE:
+        case OBJECT_TYPE.IMAGE:
           return (
             <DNRImage
               {...objectProps }
               />
           )
 
-        case OBJECT_TYPES.TEXT:
+        case OBJECT_TYPE.TEXT:
           return (
             <DNRText
               onTextChange={onTextChange.bind(null, id)}

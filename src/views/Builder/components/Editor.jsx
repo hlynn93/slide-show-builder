@@ -3,7 +3,7 @@ import Slider from 'react-rangeslider'
 import { Input, Button, Select } from 'element-react'
 import PropTypes from 'prop-types';
 
-import { EDITOR_TOOLBAR_CONFIG, TOOLBAR_TYPES } from '../../../constants/appConstants';
+import { EDITOR_TOOLBAR_CONFIG, TOOLBAR_TYPE } from '../../../constants/builderConstants';
 
 import 'react-rangeslider/lib/index.css'
 import './Editor.scss';
@@ -95,13 +95,13 @@ class Editor extends PureComponent {
     const controls = Object.values(toolTypes).map(toolId => {
       const toolItem = EDITOR_TOOLBAR_CONFIG[toolId]
       switch (toolItem.type) {
-        case TOOLBAR_TYPES.SLIDER:
+        case TOOLBAR_TYPE.SLIDER:
           return this.renderSlider(toolId, toolItem)
 
-        case TOOLBAR_TYPES.BUTTON:
+        case TOOLBAR_TYPE.BUTTON:
           return this.renderButtonGroup(toolId, toolItem)
 
-        case TOOLBAR_TYPES.SELECT:
+        case TOOLBAR_TYPE.SELECT:
           return this.renderDropdown(toolId, toolItem)
 
         default:

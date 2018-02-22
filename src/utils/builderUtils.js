@@ -1,4 +1,4 @@
-import { CANVAS_MODE } from '../constants/appConstants';
+import { CANVAS_MODE } from '../constants/builderConstants';
 import { cloneDeep } from 'lodash';
 
 const ID_SEPARATOR = '--'
