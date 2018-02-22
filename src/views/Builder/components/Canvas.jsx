@@ -32,8 +32,10 @@ class Canvas extends PureComponent {
       onKeyDown,
       onBlur,
       onFocus,
-      activeId
+      activeId,
+      isPreview,
     } = this.props
+
     return objectIds.map(id => {
 
       const object = objects[id]
@@ -46,7 +48,18 @@ class Canvas extends PureComponent {
         object,
         key: id,
         id: `canvas_object--${id}`,
-        className: `canvas_object canvas_object--${id}`
+        className: `canvas_object canvas_object--${id}`,
+        disableDragging: isPreview,
+        enableResizing: isPreview ? {
+          top:false,
+          right:false,
+          bottom:false,
+          left:false,
+          topRight:false,
+          bottomRight:false,
+          bottomLeft:false,
+          topLeft:false
+        } : undefined
       }
 
       switch (object.type) {
@@ -63,6 +76,7 @@ class Canvas extends PureComponent {
               onTextChange={onTextChange.bind(null, id)}
               onBlur={onBlur}
               onFocus={onFocus}
+              readOnly={isPreview}
               enableResizing={{
                 top:true,
                 right:true,
@@ -83,12 +97,18 @@ class Canvas extends PureComponent {
   }
 
   render() {
-    const { mode, onCanvasClick } = this.props
+    const { mode, scale, onCanvasClick } = this.props
 
-    const canvasStyle = ASPECT_RATIO[mode]
+    const canvasStyle = {
+      ...ASPECT_RATIO[mode],
+      zoom: scale,
+      transform: `scale(${scale})`
+    }
 
     return (
-      <div className="canvas_wrapper" onClick={onCanvasClick}>
+      <div
+        className="canvas_wrapper"
+        onClick={onCanvasClick}>
         <div id="canvas" className="canvas" style={canvasStyle}>
           { this.renderObjects() }
         </div>
@@ -110,6 +130,22 @@ Canvas.propTypes = {
   onResizeStop: PropTypes.func,
   activeId: PropTypes.string,
   mode: PropTypes.string,
+  scale: PropTypes.number,
+  isPreview: PropTypes.bool,
 };
+
+Canvas.defaultProps = {
+  objectIds: [],
+  objects: {},
+  isPreview: false,
+  onObjectClick: () => {},
+  onTextChange: () => {},
+  onKeyDown: () => {},
+  onCanvasClick: () => {},
+  onDragStop: () => {},
+  onBlur: () => {},
+  onFocus: () => {},
+  onResizeStop: () => {},
+}
 
 export default Canvas;

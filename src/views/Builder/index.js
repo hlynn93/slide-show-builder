@@ -9,13 +9,13 @@ import {
 
 import SideTools from './components/SideTools';
 import Canvas from './components/Canvas';
-// import ImageEditor from './components/ImageEditor';
 import EditorPanel from './components/EditorPanel';
 import Editor from './components/Editor';
-// import TextEditor from './components/TextEditor';
+import Preview from './components/Preview';
 import ImageUploader from './components/ImageUploader';
 import BottomBar from './components/BottomBar';
 import ModeSwitch from './components/ModeSwitch';
+import './Builder.scss';
 
 import {
   generateId,
@@ -23,6 +23,7 @@ import {
   addSlide,
   addObject,
   removeObject,
+  getScale,
 } from '../../utils/builderUtils';
 import {
   OBJECT_TYPE,
@@ -33,6 +34,7 @@ import {
 
 const DIALOG = {
   IMAGE_UPLOADER: 'imageUploader',
+  PREVIEW: 'preview',
   EDITOR_PANEL: 'editorPanel',
 }
 
@@ -74,6 +76,7 @@ const DEFAULT_BUILDER_STATE = {
   dialogs: {
     [DIALOG.IMAGE_UPLOADER]: false,
     [DIALOG.EDITOR_PANEL]: false,
+    [DIALOG.PREVIEW]: false
   },
   panels: {
     [PANEL.SIDE_TOOLS]: true
@@ -81,7 +84,8 @@ const DEFAULT_BUILDER_STATE = {
   status: {
     [STATUS.IS_TAKING_SNAPSHOT]: false,
     [STATUS.IS_EDITING_TEXT]: false,
-  }
+  },
+  scale: 1,
 }
 
 class Builder extends PureComponent {
@@ -116,7 +120,8 @@ class Builder extends PureComponent {
   }
 
   toggleDialog(key, e) {
-    e.preventDefault();
+    if(e) e.preventDefault();
+
     this.setState({
       dialogs: {
         ...this.state.dialogs,
@@ -467,6 +472,8 @@ class Builder extends PureComponent {
       default:
     }
 
+    const previewScale = getScale()
+
     // console.warn(this.state);
 
     return (
@@ -476,6 +483,7 @@ class Builder extends PureComponent {
           onClick={this.toggleDialog.bind(null, DIALOG.IMAGE_UPLOADER)}
           onToggle={this.togglePanel.bind(null, PANEL.SIDE_TOOLS)}
           onTextClick={this.addObject.bind(null, OBJECT_TYPE.TEXT)}
+          onPreview={this.toggleDialog.bind(null, DIALOG.PREVIEW)}
         />
         <div className="builder_content">
           <ImageUploader
@@ -518,6 +526,14 @@ class Builder extends PureComponent {
             onDelete={this.removeSlide}
             onAdd={this.addSlide}
             slides={slides}
+            />
+          <Preview
+            visible={dialogs[DIALOG.PREVIEW]}
+            onCancel={this.toggleDialog.bind(null, DIALOG.PREVIEW)}
+            mode={mode}
+            scale={previewScale}
+            objects={objects}
+            objectIds={slides[currentSlide].modes[mode].objectIds}
             />
         </div>
       </div>

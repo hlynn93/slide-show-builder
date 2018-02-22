@@ -1,0 +1,19 @@
+@import '../../styles/import.scss';
+
+.builder {
+  position: absolute;
+  padding-top: $header-height;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  .builder_content {
+    margin-left: $sidebar-abs-width;
+    height: 100%;
+  }
+
+  .preview_dialog {
+    width: fit-content;
+  }
+}

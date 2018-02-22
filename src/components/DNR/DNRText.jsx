@@ -10,7 +10,6 @@ const Text = ({
   isActive,
   onTextChange,
   content,
-  placeholder,
   onClick,
   ...props
 }) => {
@@ -38,7 +37,6 @@ const Text = ({
         handleKeyCommand={handleTextKeyCommand}
         editorState={content}
         onChange={onTextChange}
-        placeholder={ placeholder || "Write something..."}
       />
     </div>
   );
@@ -50,10 +48,13 @@ Text.propTypes = {
   onTextChange: PropTypes.func,
   content: PropTypes.any,
   placeholder: PropTypes.string,
+  readOnly: PropTypes.bool,
   onClick: PropTypes.func,
 };
 
 Text.defaultProps = {
+  placeholder: "Write something...",
+  readOnly: false,
   isActive: false,
   onChange: () => {}
 };
