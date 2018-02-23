@@ -19,8 +19,8 @@ class Canvas extends PureComponent {
       objects,
       onObjectClick,
       onTextChange,
-      onDragStop,
-      onResizeStop,
+      onDrag,
+      onResize,
       onBlur,
       onFocus,
       activeId,
@@ -30,9 +30,19 @@ class Canvas extends PureComponent {
     return objectIds.map(id => {
 
       const object = objects[id]
+      const resizeState = isPreview ? {
+        top:false,
+        right:false,
+        bottom:false,
+        left:false,
+        topRight:false,
+        bottomRight:false,
+        bottomLeft:false,
+        topLeft:false
+      } : undefined
       const objectProps = {
-        onDragStop: onDragStop.bind(null, id),
-        onResizeStop: onResizeStop.bind(null, id),
+        onDrag: onDrag.bind(null, id),
+        onResize: onResize.bind(null, id),
         isActive: id === activeId,
         onClick: onObjectClick.bind(null, id),
         object,
@@ -40,16 +50,7 @@ class Canvas extends PureComponent {
         id: `canvas_object--${id}`,
         className: `canvas_object canvas_object--${id}`,
         disableDragging: isPreview,
-        enableResizing: isPreview ? {
-          top:false,
-          right:false,
-          bottom:false,
-          left:false,
-          topRight:false,
-          bottomRight:false,
-          bottomLeft:false,
-          topLeft:false
-        } : undefined
+        enableResizing: resizeState
       }
 
       switch (object.type) {
@@ -67,17 +68,9 @@ class Canvas extends PureComponent {
               onBlur={onBlur}
               onFocus={onFocus}
               readOnly={isPreview}
-              enableResizing={{
-                top:true,
-                right:true,
-                bottom:false,
-                left:false,
-                topRight:false,
-                bottomRight:false,
-                bottomLeft:false,
-                topLeft:false
-              }}
               {...objectProps}
+              enableResizing={resizeState}
+
             />
           )
 
@@ -113,10 +106,10 @@ Canvas.propTypes = {
   onObjectClick: PropTypes.func,
   onTextChange: PropTypes.func,
   onCanvasClick: PropTypes.func,
-  onDragStop: PropTypes.func,
+  onDrag: PropTypes.func,
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,
-  onResizeStop: PropTypes.func,
+  onResize: PropTypes.func,
   activeId: PropTypes.string,
   mode: PropTypes.string,
   scale: PropTypes.number,
@@ -130,10 +123,10 @@ Canvas.defaultProps = {
   onObjectClick: () => {},
   onTextChange: () => {},
   onCanvasClick: () => {},
-  onDragStop: () => {},
+  onDrag: () => {},
   onBlur: () => {},
   onFocus: () => {},
-  onResizeStop: () => {},
+  onResize: () => {},
 }
 
 export default Canvas;

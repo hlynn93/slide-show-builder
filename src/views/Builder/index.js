@@ -60,7 +60,7 @@ const NEW_SLIDE = {
 }
 
 const DEFAULT_ATTRIBUTE = {
-  width: 100,
+  width: 200,
   height: undefined,
   x: 0,
   y: 0
@@ -106,8 +106,8 @@ class Builder extends PureComponent {
     this.handleCanvasClick = this.handleCanvasClick.bind(this)
     this.handleTextChange = this.handleTextChange.bind(this)
     this.handleModeSwitch = this.handleModeSwitch.bind(this)
-    this.handleResizeEnd = this.handleResizeEnd.bind(this)
-    this.handleDragEnd = this.handleDragEnd.bind(this)
+    this.handleResize = this.handleResize.bind(this)
+    this.handleDrag = this.handleDrag.bind(this)
     this.handleObjectChange = this.handleObjectChange.bind(this)
     this.handleObjectClick = this.handleObjectClick.bind(this)
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -368,7 +368,7 @@ class Builder extends PureComponent {
     this.updateActiveObjectId()
   }
 
-  handleResizeEnd(id, event, direction, ref, delta, position) {
+  handleResize(id, event, direction, ref, delta, position) {
     this.updateObject(id, {
       attr: {
         width: ref.offsetWidth,
@@ -384,7 +384,7 @@ class Builder extends PureComponent {
       this.updateObject(id, { attr })
   }
 
-  handleDragEnd(id, e, d) {
+  handleDrag(id, e, d) {
 
     /**
      * To avoid getting trigger upon clicking without dragging
@@ -560,8 +560,8 @@ class Builder extends PureComponent {
           <Canvas
             mode={mode}
             onCanvasClick={this.handleCanvasClick}
-            onResizeStop={this.handleResizeEnd}
-            onDragStop={this.handleDragEnd}
+            onResize={this.handleResize}
+            onDrag={this.handleDrag}
             onBlur={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, false)}
             onFocus={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, true)}
             objects={objects}
