@@ -25,13 +25,13 @@ const Slide = ({
     <div
       className={classes}
       style={src ? undefined : { width: calculateWidth(mode) }}
+      onClick={onClick}
       >
       {
         src &&
         <img
           src={src}
           className='snapshot_image'
-          onClick={onClick}
           />
       }
       <span

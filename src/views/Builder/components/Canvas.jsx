@@ -13,14 +13,6 @@ class Canvas extends PureComponent {
     this.renderObjects = this.renderObjects.bind(this)
   }
 
-  componentWillMount() {
-    document.addEventListener("keydown", this.props.onKeyDown);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.props.onKeyDown);
-  }
-
   renderObjects() {
     const {
       objectIds,
@@ -29,7 +21,6 @@ class Canvas extends PureComponent {
       onTextChange,
       onDragStop,
       onResizeStop,
-      onKeyDown,
       onBlur,
       onFocus,
       activeId,
@@ -40,7 +31,6 @@ class Canvas extends PureComponent {
 
       const object = objects[id]
       const objectProps = {
-        onKeyDown: onKeyDown,
         onDragStop: onDragStop.bind(null, id),
         onResizeStop: onResizeStop.bind(null, id),
         isActive: id === activeId,
@@ -122,7 +112,6 @@ Canvas.propTypes = {
   objects: PropTypes.object,
   onObjectClick: PropTypes.func,
   onTextChange: PropTypes.func,
-  onKeyDown: PropTypes.func,
   onCanvasClick: PropTypes.func,
   onDragStop: PropTypes.func,
   onBlur: PropTypes.func,
@@ -140,7 +129,6 @@ Canvas.defaultProps = {
   isPreview: false,
   onObjectClick: () => {},
   onTextChange: () => {},
-  onKeyDown: () => {},
   onCanvasClick: () => {},
   onDragStop: () => {},
   onBlur: () => {},

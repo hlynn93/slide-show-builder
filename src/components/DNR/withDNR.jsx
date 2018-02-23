@@ -32,6 +32,7 @@ export default (Component) => {
 
     return (<Rnd
       default={attr}
+      position={attr}
       bounds={bounds || 'parent'}
       onResizeStart={onResizeStart}
       onResize={onResize}

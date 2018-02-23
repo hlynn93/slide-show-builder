@@ -43,7 +43,6 @@ const PANEL = {
 }
 
 const STATUS = {
-  IS_TAKING_SNAPSHOT: 'isTakingSnapshot',
   IS_EDITING_TEXT: 'isEditingText',
 }
 
@@ -82,7 +81,6 @@ const DEFAULT_BUILDER_STATE = {
     [PANEL.SIDE_TOOLS]: true
   },
   status: {
-    [STATUS.IS_TAKING_SNAPSHOT]: false,
     [STATUS.IS_EDITING_TEXT]: false,
   },
   scale: 1,
@@ -115,8 +113,13 @@ class Builder extends PureComponent {
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.handleKeyDown);
+  }
+
   componentDidMount() {
     this.updateSnapshot();
+    document.addEventListener("keydown", this.handleKeyDown);
   }
 
   toggleDialog(key, e) {
@@ -180,7 +183,10 @@ class Builder extends PureComponent {
     }, ()=> this.updateSnapshot());
   }
 
-  removeSlide(index) {
+  removeSlide(index, e) {
+    if(e)
+      e.stopPropagation();
+
     const { slides, objects, currentSlide } = this.state
     const result = removeSlide(objects, slides, index);
 
@@ -273,45 +279,41 @@ class Builder extends PureComponent {
   }
 
   updateSnapshot() {
-    const { slides, currentSlide, mode, status } = this.state
+    const { slides, currentSlide, mode } = this.state
+    const slideIndex = currentSlide;
 
     const takeSnapshot = () => {
-
       const element = document.getElementById('canvas')
-
-      if(status[STATUS.IS_TAKING_SNAPSHOT])
-        return
 
       html2canvas(element, {
         scale: 0.2,
         logging: false,
       })
       .then(canvas => {
-        // Export the canvas to its data URI representation
+        /* Export the canvas to its data URI representation */
         const base64image = canvas.toDataURL("image/png");
 
-        /**
-         * Create a new slide object with the updated snapshot value
-         */
+        /* Check if the slide still exists in the deck */
+        if(slideIndex !== this.state.currentSlide) {
+          return;
+        }
+
+        /** Create a new slide object with the updated snapshot value */
         const newSlide = {
-          ...slides[currentSlide],
+          ...slides[slideIndex],
           modes: {
-            ...slides[currentSlide].modes,
+            ...slides[slideIndex].modes,
             [mode]: {
-              ...slides[currentSlide].modes[mode],
+              ...slides[slideIndex].modes[mode],
               snapshot: base64image
             }
           }
         }
         const newSlides = slides.slice(0);
-        newSlides[currentSlide] = newSlide;
+        newSlides[slideIndex] = newSlide;
 
         this.setState({
           slides: newSlides,
-          status: {
-            ...status,
-            [STATUS.IS_TAKING_SNAPSHOT]: false
-          }
         });
       });
     }
@@ -322,13 +324,8 @@ class Builder extends PureComponent {
     }
 
     this.snapshotTimer = setTimeout(() => {
-      this.setState({
-        status: {
-          ...status,
-          [STATUS.IS_TAKING_SNAPSHOT]: true
-        }
-      }, takeSnapshot());
-    }, 2000);
+      takeSnapshot();
+    }, 1000);
   }
 
   /**
@@ -410,17 +407,81 @@ class Builder extends PureComponent {
   }
 
   handleKeyDown(e) {
-    const { status, activeObjectId } = this.state
+    const { status, activeObjectId, currentSlide, slides, objects } = this.state
     /* Check whether the text is being edited or an object is selected */
-    if(status[STATUS.IS_EDITING_TEXT] || !activeObjectId)
+    if(status[STATUS.IS_EDITING_TEXT])
       return
 
-    switch (e.keyCode) {
-      case 8: // DELETE
-        this.removeObject(activeObjectId)
-        break;
+    if(objects[activeObjectId]) {
+      switch (e.keyCode) {
+        case 8: // DELETE
+          if (activeObjectId)
+            this.removeObject(activeObjectId)
+          break;
 
-      default:
+        case 37: { // Left arrow
+          const objectAttr = this.state.objects[activeObjectId].attr
+          this.updateObject(activeObjectId, {
+            attr: {
+              x: objectAttr.x - 1,
+            }
+          })
+          break;
+        }
+
+        case 38: { // Down arrow
+          const objectAttr = this.state.objects[activeObjectId].attr
+          this.updateObject(activeObjectId, {
+            attr: {
+              y: objectAttr.y - 1,
+            }
+          })
+          break;
+        }
+
+        case 39: { // Right arrow
+          const objectAttr = this.state.objects[activeObjectId].attr
+          this.updateObject(activeObjectId, {
+            attr: {
+              x: objectAttr.x + 1,
+            }
+          })
+          break;
+        }
+
+        case 40: { // Up arrow
+          const objectAttr = this.state.objects[activeObjectId].attr
+          this.updateObject(activeObjectId, {
+            attr: {
+              y: objectAttr.y + 1,
+            }
+          })
+          break;
+        }
+
+        default:
+      }
+    }
+    else if(slides[currentSlide]) {
+      switch (e.keyCode) {
+        case 8: // DELETE
+          this.removeSlide(currentSlide)
+          break;
+
+        case 39: // Right arrow
+          this.setState({
+            currentSlide: Math.min(slides.length - 1, currentSlide + 1)
+          });
+          break;
+
+        case 37: // Left arrow
+          this.setState({
+            currentSlide: Math.max(0, currentSlide - 1)
+          });
+          break;
+
+        default:
+      }
     }
   }
 
@@ -473,6 +534,7 @@ class Builder extends PureComponent {
     }
 
     const previewScale = getScale()
+    const objectIds = slides[currentSlide] ? slides[currentSlide].modes[mode].objectIds : []
 
     // console.warn(this.state);
 
@@ -500,11 +562,10 @@ class Builder extends PureComponent {
             onCanvasClick={this.handleCanvasClick}
             onResizeStop={this.handleResizeEnd}
             onDragStop={this.handleDragEnd}
-            onKeyDown={this.handleKeyDown}
             onBlur={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, false)}
             onFocus={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, true)}
             objects={objects}
-            objectIds={slides[currentSlide].modes[mode].objectIds}
+            objectIds={objectIds}
             onObjectClick={this.handleObjectClick}
             onTextChange={this.handleTextChange}
             activeId={activeObjectId}
@@ -533,7 +594,7 @@ class Builder extends PureComponent {
             mode={mode}
             scale={previewScale}
             objects={objects}
-            objectIds={slides[currentSlide].modes[mode].objectIds}
+            objectIds={objectIds}
             />
         </div>
       </div>

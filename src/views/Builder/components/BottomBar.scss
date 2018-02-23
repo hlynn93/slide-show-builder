@@ -12,7 +12,11 @@
   &_inner {
     margin-right: 60px;
     overflow-x: scroll;
+    display: -webkit-flex;
     display: flex;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
   }
 }
 
