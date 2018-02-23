@@ -1,25 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import withDNR from './withDNR';
-import cx from 'classnames';
 import { Editor, RichUtils } from 'draft-js';
 import './DNR.scss';
 
 const Text = ({
-  className,
-  isActive,
   onTextChange,
   content,
   onClick,
   ...props
 }) => {
-
-  const baseClass = "canvas_text"
-  const classes = cx(
-    className,
-    baseClass,
-    { [`${baseClass}--active`]: isActive }
-  )
 
   const handleTextKeyCommand = (command, editorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -31,7 +21,7 @@ const Text = ({
   }
 
   return (
-    <div className={classes} onClick={onClick}>
+    <div className={"canvas_text"} onClick={onClick}>
       <Editor
         { ...props }
         handleKeyCommand={handleTextKeyCommand}

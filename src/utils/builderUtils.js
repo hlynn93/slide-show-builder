@@ -83,11 +83,11 @@ export const removeSlide = (objects, slides, index) => {
 
   /* Returns if no index is specified */
   if(!index)
-    return
+    return { objects, slides}
 
   /* Returns if there is only one slide in the deck */
   if(slides.length <= 1)
-    return
+    return { objects, slides }
 
   const newSlides = slides.slice(0);
   const newObjects = { ...objects }

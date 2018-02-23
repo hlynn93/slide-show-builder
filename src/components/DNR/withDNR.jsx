@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import Rnd from 'react-rnd';
+import cx from 'classnames';
 import { isUndefined } from 'lodash';
 import { IMAGE_TOOL_TYPE } from '../../constants/builderConstants';
 
@@ -10,6 +11,9 @@ import { IMAGE_TOOL_TYPE } from '../../constants/builderConstants';
 
 export default (Component) => {
   return ({
+    className,
+    id,
+    isActive,
     onKeyDown,
     onDrag,
     onDragStart,
@@ -30,6 +34,12 @@ export default (Component) => {
       transform: `rotate(${attr.rotation}deg)`
     } : {};
 
+    const baseClass = "dnr_object"
+    const classes = cx(
+      baseClass,
+      { [`${baseClass}--active`]: isActive }
+    )
+
     return (<Rnd
       default={attr}
       position={attr}
@@ -42,6 +52,7 @@ export default (Component) => {
       onDragStop={onDragStop}
       enableResizing={enableResizing}
       disableDragging={disableDragging}
+      className={classes}
       >
       <Component
         onKeyDown={onKeyDown}
