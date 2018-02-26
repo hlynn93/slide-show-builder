@@ -2,23 +2,9 @@ import React, { PureComponent } from 'react';
 import { Dialog } from 'element-react';
 import PropTypes from 'prop-types';
 import Canvas from './Canvas'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import { Fade, TransitionGroup } from '../../../components/Transition'
 
 import './Preview.scss'
-
-const Fade = ({ children, ...props }) => (
-  <CSSTransition
-    {...props}
-    timeout={1000}
-    classNames="fade"
-  >
-    {children}
-  </CSSTransition>
-);
-
-Fade.propTypes = {
-  children: PropTypes.any
-}
 
 class Preview extends PureComponent {
   constructor(props) {
