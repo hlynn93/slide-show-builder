@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import 'element-theme-default';
+import 'draft-js/dist/Draft.css';
 
 import i18n from '../utils/i18n'
 import LanguageSwitcher from './LanguageSwitcher'
