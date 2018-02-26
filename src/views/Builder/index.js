@@ -594,7 +594,9 @@ class Builder extends PureComponent {
             mode={mode}
             scale={previewScale}
             objects={objects}
+            currentSlide={currentSlide}
             objectIds={objectIds}
+            slides={slides}
             />
         </div>
       </div>
