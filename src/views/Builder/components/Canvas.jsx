@@ -27,13 +27,13 @@ class Canvas extends PureComponent {
       onBlur,
       onFocus,
       activeId,
-      fullScreen,
+      presenterMode,
     } = this.props
 
     return objectIds.map(id => {
 
       const object = objects[id]
-      const resizeState = fullScreen ? {
+      const resizeState = presenterMode ? {
         top:false,
         right:false,
         bottom:false,
@@ -52,7 +52,7 @@ class Canvas extends PureComponent {
         key: id,
         id: `canvas_object--${id}`,
         className: `canvas_object canvas_object--${id}`,
-        disableDragging: fullScreen,
+        disableDragging: presenterMode,
         enableResizing: resizeState
       }
 
@@ -70,7 +70,7 @@ class Canvas extends PureComponent {
               onTextChange={onTextChange.bind(null, id)}
               onBlur={onBlur}
               onFocus={onFocus}
-              readOnly={fullScreen}
+              readOnly={presenterMode}
               {...objectProps}
               enableResizing={resizeState}
 
@@ -83,7 +83,7 @@ class Canvas extends PureComponent {
   }
 
   render() {
-    const { mode, scale, onCanvasClick, fullScreen } = this.props
+    const { mode, scale, onCanvasClick, presenterMode } = this.props
 
     /*  Firefox does not support `zoom` css property  */
     const scaleStyle = isFirefox ? {
@@ -96,11 +96,9 @@ class Canvas extends PureComponent {
       ...scaleStyle
     }
 
-    console.warn(scale, getMarginScale(scale, mode));
-
     return (
       <div
-        className={`canvas_wrapper ${fullScreen ? 'canvas_wrapper--fullscreen' : ''}`}
+        className={`canvas_wrapper ${presenterMode ? 'canvas_wrapper--present' : ''}`}
         onClick={onCanvasClick}>
         <div id="canvas" className="canvas" style={canvasStyle}>
           { this.renderObjects() }
@@ -123,13 +121,13 @@ Canvas.propTypes = {
   activeId: PropTypes.string,
   mode: PropTypes.string,
   scale: PropTypes.number,
-  fullScreen: PropTypes.bool,
+  presenterMode: PropTypes.bool,
 };
 
 Canvas.defaultProps = {
   objectIds: [],
   objects: {},
-  fullScreen: false,
+  presenterMode: false,
   onObjectClick: () => {},
   onTextChange: () => {},
   onCanvasClick: () => {},

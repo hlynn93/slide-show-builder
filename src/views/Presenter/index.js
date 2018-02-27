@@ -3,6 +3,8 @@ import PresenterScreen from './components/PresenterScreen';
 import initialState from './data.json';
 import { ASPECT_RATIO } from '../../constants/builderConstants';
 
+const CONTROL_HEIGHT = 60;
+
 class Presenter extends PureComponent {
   constructor(props) {
     super(props);
@@ -70,7 +72,7 @@ Presenter.propTypes = {
 
 const calculateScale = (mode) => {
   const windowsWidth = window.innerWidth
-  const windowsHeight = window.innerHeight
+  const windowsHeight = (window.innerHeight - CONTROL_HEIGHT)
   const scaleWidth = windowsWidth / ASPECT_RATIO[mode].width
   const scaleHeight = windowsHeight / ASPECT_RATIO[mode].height
   return Math.min(scaleWidth, scaleHeight)
