@@ -1,15 +1,20 @@
 import React, { PureComponent } from 'react';
 import PresenterScreen from './components/PresenterScreen';
+import Controls from './components/Controls';
 import initialState from './data.json';
 import { ASPECT_RATIO } from '../../constants/builderConstants';
 
-const CONTROL_HEIGHT = 60;
+import './Presenter.scss';
+
+const CONTROL_HEIGHT = 37;
 
 class Presenter extends PureComponent {
   constructor(props) {
     super(props);
     this.state = initialState
     this.handleKeyDown = this.handleKeyDown.bind(this)
+    this.handleNext = this.handleNext.bind(this)
+    this.handlePrev = this.handlePrev.bind(this)
   }
 
   componentWillUnmount() {
@@ -21,25 +26,24 @@ class Presenter extends PureComponent {
   }
 
   handleKeyDown(e) {
-    const {
-      currentSlide,
-      slides,
-    } = this.state
     switch (e.keyCode) {
       case 39: // Right arrow
-        this.setState({
-          currentSlide: Math.min(slides.length - 1, currentSlide + 1)
-        });
-        break;
+        this.handleNext(); break;
 
       case 37: // Left arrow
-        this.setState({
-          currentSlide: Math.max(0, currentSlide - 1)
-        });
-        break;
+        this.handlePrev(); break;
 
       default:
     }
+  }
+
+  handleNext() {
+    const { slides, currentSlide } = this.state
+    this.setState({ currentSlide: Math.min(slides.length - 1, currentSlide + 1)});
+  }
+
+  handlePrev() {
+    this.setState({ currentSlide: Math.max(0, this.state.currentSlide - 1) });
   }
 
   render() {
@@ -53,13 +57,19 @@ class Presenter extends PureComponent {
     const scale = calculateScale(mode)
 
     return (
-      <div>
+      <div className="presenter">
         <PresenterScreen
           mode={mode}
           scale={scale}
           objects={objects}
           currentSlide={currentSlide}
           slides={slides}
+          />
+        <Controls
+          index={currentSlide}
+          length={slides.length}
+          onPrev={this.handlePrev}
+          onNext={this.handleNext}
           />
       </div>
     );

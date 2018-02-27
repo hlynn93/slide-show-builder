@@ -1,2 +1,15 @@
 @import '../../../styles/import.scss';
 
+.controls {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+
+}
+
+.controls_progress {
+  width: 200px;
+  padding: 8px 16px;
+}

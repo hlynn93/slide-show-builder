@@ -29,7 +29,7 @@ class PresenterScreen extends PureComponent {
     ))
 
     return (
-      <TransitionGroup className="presenter_screen_container">
+      <TransitionGroup className="presenter_screen">
           { presentSlides[currentSlide] }
       </TransitionGroup>
     );

@@ -1,11 +1,11 @@
-@import '../../../styles/import.scss';
+@import '../../styles/import.scss';
 
-.presenter_screen {
+.presenter {
   display: flex;
   position: absolute;
   z-index: 100;
   top: 0;
-  bottom: $presenter-controls-height;
+  bottom: 0;
   left: 0;
   right: 0;
   background: white;
