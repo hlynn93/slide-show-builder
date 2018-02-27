@@ -12,14 +12,15 @@ class EditorPanel extends PureComponent {
 
   render() {
 
-    const { visible, onToggle, position, children } = this.props
+    const { hide, minimize, onToggle, position, children } = this.props
 
     return (
       <Panel
+        style={hide ? { display: "none" } : {}}
         position={position}
         bounds={".builder_content"}
         className="panel_editor"
-        minimize={!visible}
+        minimize={!minimize}
         onToggle={onToggle}
         >
         <div className="panel_editor_inner">
@@ -31,14 +32,16 @@ class EditorPanel extends PureComponent {
 }
 
 EditorPanel.propTypes = {
+  hide: PropTypes.bool,
   position: PropTypes.object,
-  visible: PropTypes.bool,
+  minimize: PropTypes.bool,
   onToggle: PropTypes.func,
   children: PropTypes.any,
 };
 
 EditorPanel.defaultProps = {
-  visible: false,
+  hide: false,
+  minimize: false,
   onToggle: () => {},
   position: { x: 0, y: 0 }
 };

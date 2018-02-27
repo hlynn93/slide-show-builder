@@ -16,8 +16,8 @@
       "id": "1-mobile",
       "type": "image",
       "attr": {
-        "height": 300,
-        "width": 400,
+        "height": 200,
+        "width": 300,
         "x": 0,
         "y": 0
       },
@@ -40,8 +40,8 @@
       "id": "2-mobile",
       "type": "image",
       "attr": {
-        "height": 300,
-        "width": 400,
+        "height": 200,
+        "width": 300,
         "x": 0,
         "y": 0
       },
@@ -64,8 +64,8 @@
       "id": "3-mobile",
       "type": "image",
       "attr": {
-        "height": 300,
-        "width": 400,
+        "height": 200,
+        "width": 300,
         "x": 0,
         "y": 0
       },
@@ -122,5 +122,5 @@
     }
   ],
   "currentSlide": 0,
-  "mode": "mobile"
+  "mode": "desktop"
 }

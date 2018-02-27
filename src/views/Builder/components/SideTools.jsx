@@ -15,13 +15,13 @@ class SideTools extends PureComponent {
       onToggle,
       onTextClick,
       onPreview,
-      visible
+      minimize
     } = this.props
     return (
       <Panel
         className="sidetools"
         onToggle={onToggle}
-        minimize={!visible}>
+        minimize={!minimize}>
         <div className="sidetools_item">
           <MdImage
             onClick={onClick}
@@ -50,7 +50,7 @@ SideTools.propTypes = {
   onToggle: PropTypes.func,
   onTextClick: PropTypes.func,
   onPreview: PropTypes.func,
-  visible: PropTypes.bool,
+  minimize: PropTypes.bool,
 };
 
 export default SideTools;

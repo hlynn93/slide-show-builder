@@ -23,7 +23,7 @@ class PresenterScreen extends PureComponent {
           key={i}
           {...this.props}
           objectIds={slides[currentSlide].modes[mode].objectIds || []}
-          isPreview={true}
+          fullScreen
           />
       </Transition>
     ))

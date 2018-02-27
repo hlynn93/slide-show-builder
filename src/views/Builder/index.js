@@ -34,24 +34,6 @@ import {
   EASING
 } from '../../constants/builderConstants';
 
-
-const writeTextFile = (jsonVal) => {
-  var fs = require('fs');
-  fs.writeFile("/Users/hanlynn/Development/logicalSteps/vignets/vignets-starter/test.json",
-    JSON.stringify(jsonVal),
-    function(err) {
-      if(err) {
-          return console.log(err);
-      }
-
-      console.log("The file was saved!");
-  });
-  // var txtFile = new File([], );
-	// txtFile.open("w"); //
-	// txtFile.writeln();
-	// txtFile.close();
-}
-
 const DIALOG = {
   IMAGE_UPLOADER: 'imageUploader',
   PREVIEW: 'preview',
@@ -217,7 +199,7 @@ class Builder extends PureComponent {
     this.setState({
       objects: result.objects,
       slides: result.slides,
-      currentSlide: index > currentSlide ? currentSlide : currentSlide - 1
+      currentSlide: index > currentSlide ? currentSlide : Math.max(0, currentSlide - 1)
     });
   }
 
@@ -565,14 +547,13 @@ class Builder extends PureComponent {
     return (
       <div className="builder">
         <SideTools
-          visible={panels[PANEL.SIDE_TOOLS]}
+          minimize={panels[PANEL.SIDE_TOOLS]}
           onClick={this.toggleDialog.bind(null, DIALOG.IMAGE_UPLOADER)}
           onToggle={this.togglePanel.bind(null, PANEL.SIDE_TOOLS)}
           onTextClick={this.addObject.bind(null, OBJECT_TYPE.TEXT)}
           onPreview={this.toggleDialog.bind(null, DIALOG.PREVIEW)}
         />
         <div className="builder_content">
-          <span onClick={() => writeTextFile(this.state)}> WRITE </span>
           <ImageUploader
             visible={dialogs[DIALOG.IMAGE_UPLOADER]}
             onCancel={this.toggleDialog.bind(null, DIALOG.IMAGE_UPLOADER)}
@@ -596,7 +577,8 @@ class Builder extends PureComponent {
             activeId={activeObjectId}
             />
           <EditorPanel
-            visible={dialogs[DIALOG.EDITOR_PANEL]}
+            hide={!activeObjectId}
+            minimize={dialogs[DIALOG.EDITOR_PANEL]}
             onToggle={this.toggleDialog.bind(null, DIALOG.EDITOR_PANEL)}
             >
             <Editor

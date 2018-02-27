@@ -2,9 +2,12 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DNRImage, DNRText } from '../../../components/DNR';
 import { ASPECT_RATIO, OBJECT_TYPE } from '../../../constants/builderConstants';
+import { isFirefox } from '../../../utils/commonUtils';
 
 
 import './Canvas.scss';
+
+const getMarginScale = (scale, mode) => (ASPECT_RATIO[mode].height * (scale - 1)) / 2
 
 class Canvas extends PureComponent {
 
@@ -24,13 +27,13 @@ class Canvas extends PureComponent {
       onBlur,
       onFocus,
       activeId,
-      isPreview,
+      fullScreen,
     } = this.props
 
     return objectIds.map(id => {
 
       const object = objects[id]
-      const resizeState = isPreview ? {
+      const resizeState = fullScreen ? {
         top:false,
         right:false,
         bottom:false,
@@ -49,7 +52,7 @@ class Canvas extends PureComponent {
         key: id,
         id: `canvas_object--${id}`,
         className: `canvas_object canvas_object--${id}`,
-        disableDragging: isPreview,
+        disableDragging: fullScreen,
         enableResizing: resizeState
       }
 
@@ -67,7 +70,7 @@ class Canvas extends PureComponent {
               onTextChange={onTextChange.bind(null, id)}
               onBlur={onBlur}
               onFocus={onFocus}
-              readOnly={isPreview}
+              readOnly={fullScreen}
               {...objectProps}
               enableResizing={resizeState}
 
@@ -80,16 +83,24 @@ class Canvas extends PureComponent {
   }
 
   render() {
-    const { mode, scale, onCanvasClick, isPreview } = this.props
+    const { mode, scale, onCanvasClick, fullScreen } = this.props
+
+    /*  Firefox does not support `zoom` css property  */
+    const scaleStyle = isFirefox ? {
+      transform: `scale(${scale})`,
+      marginTop: getMarginScale()
+    } : { zoom: scale }
 
     const canvasStyle = {
       ...ASPECT_RATIO[mode],
-      transform: `scale(${scale})`
+      ...scaleStyle
     }
+
+    console.warn(scale, getMarginScale(scale, mode));
 
     return (
       <div
-        className={`canvas_wrapper ${isPreview ? 'canvas_wrapper--preview' : ''}`}
+        className={`canvas_wrapper ${fullScreen ? 'canvas_wrapper--fullscreen' : ''}`}
         onClick={onCanvasClick}>
         <div id="canvas" className="canvas" style={canvasStyle}>
           { this.renderObjects() }
@@ -112,13 +123,13 @@ Canvas.propTypes = {
   activeId: PropTypes.string,
   mode: PropTypes.string,
   scale: PropTypes.number,
-  isPreview: PropTypes.bool,
+  fullScreen: PropTypes.bool,
 };
 
 Canvas.defaultProps = {
   objectIds: [],
   objects: {},
-  isPreview: false,
+  fullScreen: false,
   onObjectClick: () => {},
   onTextChange: () => {},
   onCanvasClick: () => {},

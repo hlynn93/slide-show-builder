@@ -18,6 +18,7 @@ class Header extends PureComponent {
     return (
       <nav className={classes}>
         <Link to="/builder">Builder</Link>
+        <Link to="/present">Present</Link>
       </nav>
     );
   }

@@ -50,7 +50,6 @@ class Presenter extends PureComponent {
 
     const scale = calculateScale(mode)
 
-    console.warn(initialState);
     return (
       <div>
         <PresenterScreen
@@ -74,7 +73,6 @@ const calculateScale = (mode) => {
   const windowsHeight = window.innerHeight
   const scaleWidth = windowsWidth / ASPECT_RATIO[mode].width
   const scaleHeight = windowsHeight / ASPECT_RATIO[mode].height
-  console.warn(windowsWidth, windowsHeight, scaleWidth, scaleHeight);
   return Math.min(scaleWidth, scaleHeight)
 }
 
