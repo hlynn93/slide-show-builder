@@ -29,7 +29,9 @@ import {
   OBJECT_TYPE,
   CANVAS_MODE,
   IMAGE_TOOL_TYPE,
-  TEXT_TOOL_TYPE
+  TEXT_TOOL_TYPE,
+  TRANSITION,
+  EASING
 } from '../../constants/builderConstants';
 
 const DIALOG = {
@@ -56,6 +58,10 @@ const NEW_SLIDE = {
       objectIds: [],
       snapshot: undefined,
     },
+  },
+  transition: {
+    type: TRANSITION.FADE_LEFT,
+    easing: EASING.EASE_IN
   }
 }
 

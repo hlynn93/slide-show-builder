@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Dialog } from 'element-react';
 import PropTypes from 'prop-types';
 import Canvas from './Canvas'
-import { Fade, TransitionGroup } from '../../../components/Transition'
+import { Transition, TransitionGroup } from '../../../components/Transition'
 
 import './Preview.scss'
 
@@ -21,13 +21,13 @@ class Preview extends PureComponent {
     } = this.props
 
     const previewSlides = slides.map((s,i) => (
-      <Fade key={i}>
+      <Transition key={i} {...s.transition}>
         <Canvas
           key={i}
           {...this.props}
           objectIds={slides[currentSlide].modes[mode].objectIds || []}
           />
-      </Fade>
+      </Transition>
     ))
 
     return (

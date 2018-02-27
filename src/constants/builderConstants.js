@@ -46,6 +46,15 @@ export const IMAGE_TOOL_TYPE = {
   ROTATION: 'rotation',
 }
 
+export const TRANSITION = {
+  FADE_LEFT: 'fadeLeft',
+  SLIDE_LEFT: 'slideLeft'
+}
+
+export const EASING = {
+  EASE_IN: 'ease-in',
+}
+
 export const EDITOR_TOOLBAR_CONFIG = {
   [IMAGE_TOOL_TYPE.ROTATION]: {
     type: TOOLBAR_TYPE.SLIDER,

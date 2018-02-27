@@ -1,24 +1,84 @@
-.fade-enter {
-  opacity: 0;
-  transform: translateX(-15%);
+/* Slide Left */
+@keyframes slideInLeft {
+  from {
+    transform: translate3d(-15%, 0, 0);
+  }
+
+  to {
+    transform: none;
+  }
+}
+@keyframes slideOutLeft {
+  from {
+    transform: none;
+  }
+
+  to {
+    transform: translate3d(-15%, 0, 0);
+  }
 }
 
-.fade-enter.fade-enter-active {
-  opacity: 1;
-  transform: translateX(-0%);
-  transition: 100ms ease-in;
-  transition-property: opacity, transform;
+.slideLeft-enter {
+  animation-name: slideInLeft;
+  animation-duration: 400ms;
 }
 
-.fade-exit {
-  opacity: 1;
-  transform: translateX(0%);
+.slideLeft-enter.slideLeft-enter-active {
+  animation-name: slideInLeft;
+  animation-duration: 400ms;
 }
 
-.fade-exit.fade-exit-active {
+.slideLeft-exit {
+  animation-name: slideOutLeft;
+  animation-duration: 400ms;
+}
+
+.slideLeft-exit.slideLeft-exit-active {
   position: absolute;
-  opacity: 0;
-  transform: translateX(15%);
-  transition: 100ms ease-in;
-  transition-property: opacity, transform;
+  animation-name: slideOutLeft;
+  animation-duration: 400ms;
+}
+
+/* Fade Left */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fadeOutLeft {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.fadeLeft-enter {
+  animation-name: fadeInLeft;
+  animation-duration: 400ms;
+}
+
+.fadeLeft-enter.fadeLeft-enter-active {
+  animation-name: fadeInLeft;
+  animation-duration: 400ms;
+}
+
+.fadeLeft-exit {
+  animation-name: fadeOutLeft;
+  animation-duration: 400ms;
+}
+
+.fadeLeft-exit.fadeLeft-exit-active {
+  position: absolute;
+  animation-name: fadeOutLeft;
+  animation-duration: 400ms;
 }
