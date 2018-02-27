@@ -1,0 +1,126 @@
+{
+  "objects": {
+    "1-desktop": {
+      "id": "1-desktop",
+      "type": "image",
+      "attr": {
+        "height": 300,
+        "width": 400,
+        "x": 300,
+        "y": 240
+      },
+      "content": "",
+      "src": "https://i1.wp.com/digital-photography-school.com/wp-content/uploads/2011/07/outdoor-portraits-1.jpg?resize=2000%2C1160&ssl=1"
+    },
+    "1-mobile": {
+      "id": "1-mobile",
+      "type": "image",
+      "attr": {
+        "height": 300,
+        "width": 400,
+        "x": 0,
+        "y": 0
+      },
+      "content": "",
+      "src": "https://i1.wp.com/digital-photography-school.com/wp-content/uploads/2011/07/outdoor-portraits-1.jpg?resize=2000%2C1160&ssl=1"
+    },
+    "2-desktop": {
+      "id": "2-desktop",
+      "type": "image",
+      "attr": {
+        "height": 300,
+        "width": 400,
+        "x": 300,
+        "y": 240
+      },
+      "content": "",
+      "src": "http://www.keatleyphoto.com/wp-content/uploads/2016/05/IMG_2589.jpg"
+    },
+    "2-mobile": {
+      "id": "2-mobile",
+      "type": "image",
+      "attr": {
+        "height": 300,
+        "width": 400,
+        "x": 0,
+        "y": 0
+      },
+      "content": "",
+      "src": "http://www.keatleyphoto.com/wp-content/uploads/2016/05/IMG_2589.jpg"
+    },
+    "3-desktop": {
+      "id": "3-desktop",
+      "type": "image",
+      "attr": {
+        "height": 300,
+        "width": 400,
+        "x": 300,
+        "y": 240
+      },
+      "content": "",
+      "src": "http://www.dannyst.com/blogimg/gallery-portraits-of-strangers-18.jpg"
+    },
+    "3-mobile": {
+      "id": "3-mobile",
+      "type": "image",
+      "attr": {
+        "height": 300,
+        "width": 400,
+        "x": 0,
+        "y": 0
+      },
+      "content": "",
+      "src": "http://www.dannyst.com/blogimg/gallery-portraits-of-strangers-18.jpg"
+    }
+  },
+
+  "slides": [
+    {
+      "modes": {
+        "desktop": {
+          "objectIds": ["1-desktop"],
+          "snapshot": "https://cdn.slidemodel.com/wp-content/uploads/FF0074-01-free-wearable-tech-powerpoint-slides-16x9-2.jpg"
+        },
+        "mobile": {
+          "objectIds": ["1-mobile"]
+        }
+      },
+      "transition": {
+        "type": "fadeLeft",
+        "easing": "ease-in"
+      }
+    },
+    {
+      "modes": {
+        "desktop": {
+          "objectIds": ["2-desktop"],
+          "snapshot": "https://cdn.slidemodel.com/wp-content/uploads/FF0074-01-free-wearable-tech-powerpoint-slides-16x9-2.jpg"
+        },
+        "mobile": {
+          "objectIds": ["2-mobile"]
+        }
+      },
+      "transition": {
+        "type": "fadeLeft",
+        "easing": "ease-in"
+      }
+    },
+    {
+      "modes": {
+        "desktop": {
+          "objectIds": ["3-desktop"],
+          "snapshot": "https://cdn.slidemodel.com/wp-content/uploads/FF0074-01-free-wearable-tech-powerpoint-slides-16x9-2.jpg"
+        },
+        "mobile": {
+          "objectIds": ["3-mobile"]
+        }
+      },
+      "transition": {
+        "type": "fadeLeft",
+        "easing": "ease-in"
+      }
+    }
+  ],
+  "currentSlide": 0,
+  "mode": "mobile"
+}

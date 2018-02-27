@@ -34,6 +34,24 @@ import {
   EASING
 } from '../../constants/builderConstants';
 
+
+const writeTextFile = (jsonVal) => {
+  var fs = require('fs');
+  fs.writeFile("/Users/hanlynn/Development/logicalSteps/vignets/vignets-starter/test.json",
+    JSON.stringify(jsonVal),
+    function(err) {
+      if(err) {
+          return console.log(err);
+      }
+
+      console.log("The file was saved!");
+  });
+  // var txtFile = new File([], );
+	// txtFile.open("w"); //
+	// txtFile.writeln();
+	// txtFile.close();
+}
+
 const DIALOG = {
   IMAGE_UPLOADER: 'imageUploader',
   PREVIEW: 'preview',
@@ -542,7 +560,7 @@ class Builder extends PureComponent {
     const previewScale = getScale()
     const objectIds = slides[currentSlide] ? slides[currentSlide].modes[mode].objectIds : []
 
-    // console.warn(this.state);
+    console.warn(this.state);
 
     return (
       <div className="builder">
@@ -554,6 +572,7 @@ class Builder extends PureComponent {
           onPreview={this.toggleDialog.bind(null, DIALOG.PREVIEW)}
         />
         <div className="builder_content">
+          <span onClick={() => writeTextFile(this.state)}> WRITE </span>
           <ImageUploader
             visible={dialogs[DIALOG.IMAGE_UPLOADER]}
             onCancel={this.toggleDialog.bind(null, DIALOG.IMAGE_UPLOADER)}

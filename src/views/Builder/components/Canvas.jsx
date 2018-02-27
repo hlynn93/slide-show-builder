@@ -80,17 +80,16 @@ class Canvas extends PureComponent {
   }
 
   render() {
-    const { mode, scale, onCanvasClick } = this.props
+    const { mode, scale, onCanvasClick, isPreview } = this.props
 
     const canvasStyle = {
       ...ASPECT_RATIO[mode],
-      zoom: scale,
       transform: `scale(${scale})`
     }
 
     return (
       <div
-        className="canvas_wrapper"
+        className={`canvas_wrapper ${isPreview ? 'canvas_wrapper--preview' : ''}`}
         onClick={onCanvasClick}>
         <div id="canvas" className="canvas" style={canvasStyle}>
           { this.renderObjects() }

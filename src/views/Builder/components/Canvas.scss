@@ -2,6 +2,11 @@
 
 .canvas_wrapper {
   overflow: scroll;
+
+  &--preview {
+    overflow: initial;
+    margin: 0 auto;
+  }
 }
 
 .canvas {

@@ -6,6 +6,7 @@ import App from './App'
 import Header from './../components/Header'
 import Sidebar from './../components/Sidebar'
 import Builder from './Builder'
+import Presenter from './Presenter'
 
 const Root = ({ store }) => (
   <Provider store={store}>
@@ -16,6 +17,7 @@ const Root = ({ store }) => (
         <Switch>
           <Route exact path="/" component={App} />
           <Route path="/builder" component={Builder} />
+          <Route path="/present" component={Presenter} />
         </Switch>
       </div>
     </BrowserRouter>
