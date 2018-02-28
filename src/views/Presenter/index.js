@@ -40,12 +40,42 @@ class Presenter extends PureComponent {
   }
 
   handleNext() {
-    const { slides, currentSlide } = this.state
-    this.setState({ currentSlide: Math.min(slides.length - 1, currentSlide + 1)});
+    const { slides, currentSlide, animatedIds, mode } = this.state
+    const objectIds = slides[currentSlide] ? slides[currentSlide].modes[mode].objectIds : []
+
+    if(animatedIds.length >= objectIds.length)
+      this.setState({
+        currentSlide: Math.min(slides.length - 1, currentSlide + 1),
+        animatedIds: []
+      });
+    else {
+      const newAnimatedIds = animatedIds.slice(0)
+      const newId = objectIds[animatedIds.length]
+      newAnimatedIds.push(newId);
+      this.setState({
+        animatedIds: newAnimatedIds
+      });
+    }
   }
 
   handlePrev() {
-    this.setState({ currentSlide: Math.max(0, this.state.currentSlide - 1) });
+    const { animatedIds, slides, currentSlide, mode } = this.state
+    if(animatedIds.length <= 0) {
+      const nextSlide = Math.max(0, currentSlide - 1)
+      const objectIds = slides[nextSlide] ? slides[nextSlide].modes[mode].objectIds : []
+
+      this.setState({
+        currentSlide: nextSlide,
+        animatedIds: objectIds.slice(0)
+      });
+    } else {
+      const newAnimatedIds = animatedIds.slice(0)
+      newAnimatedIds.pop()
+      this.setState({
+        animatedIds: newAnimatedIds
+      });
+    }
+
   }
 
   render() {
@@ -54,6 +84,7 @@ class Presenter extends PureComponent {
       objects,
       currentSlide,
       slides,
+      animatedIds
     } = this.state;
 
     const scale = calculateScale(mode)
@@ -65,6 +96,7 @@ class Presenter extends PureComponent {
           scale={scale}
           objects={objects}
           currentSlide={currentSlide}
+          animatedIds={animatedIds}
           slides={slides}
           />
         <Controls

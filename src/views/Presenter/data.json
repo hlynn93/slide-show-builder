@@ -46,7 +46,7 @@
       "transition": {
         "type": "fade",
         "easing": "ease-in",
-        "duration": 200
+        "duration": 1000
       },
       "content": "",
       "src": "http://www.keatleyphoto.com/wp-content/uploads/2016/05/IMG_2589.jpg"
@@ -63,7 +63,7 @@
       "transition": {
         "type": "fade",
         "easing": "ease-in",
-        "duration": 200
+        "duration": 1000
       },
       "content": "",
       "src": "http://www.keatleyphoto.com/wp-content/uploads/2016/05/IMG_2589.jpg"
@@ -80,7 +80,7 @@
       "transition": {
         "type": "fade",
         "easing": "ease-in",
-        "duration": 200
+        "duration": 1000
       },
       "content": "",
       "src": "http://www.dannyst.com/blogimg/gallery-portraits-of-strangers-18.jpg"
@@ -97,7 +97,7 @@
       "transition": {
         "type": "fade",
         "easing": "ease-in",
-        "duration": 200
+        "duration": 1000
       },
       "content": "",
       "src": "http://www.dannyst.com/blogimg/gallery-portraits-of-strangers-18.jpg"
@@ -118,7 +118,7 @@
       "transition": {
         "type": "fadeLeft",
         "easing": "ease-in",
-        "duration": 300
+        "duration": 1000
       }
     },
     {
@@ -134,7 +134,7 @@
       "transition": {
         "type": "fadeLeft",
         "easing": "ease-in",
-        "duration": 300
+        "duration": 1000
       }
     },
     {
@@ -150,10 +150,11 @@
       "transition": {
         "type": "fadeLeft",
         "easing": "ease-in",
-        "duration": 300
+        "duration": 1000
       }
     }
   ],
   "currentSlide": 0,
-  "mode": "desktop"
+  "mode": "desktop",
+  "animatedIds": []
 }

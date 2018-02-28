@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { TRANSITION, EASING } from '../../constants/builderConstants';
 import './Transition.scss';
 
-const DEFAULT_DURATION = 200;
+const DEFAULT_DURATION = 400;
 
 export const Transition = ({
   type,
@@ -15,20 +15,31 @@ export const Transition = ({
   children,
   duration,
   className,
+  style,
   ...props
-}) => (
-  <CSSTransition
+}) => {
+
+  // This passes the style prop to the children
+  // const childrenWithStyle = React.Children.map(children, child =>
+  const childWithStyle = React.cloneElement(children, {
+    style: {
+      ...style,
+      animationDuration: duration ? `${duration}ms` : `${DEFAULT_DRUATION}ms`
+    }
+  });
+
+  return (<CSSTransition
     {...props}
     timeout={duration}
+    unmountOnExit
     classNames={cx(
       type,
       className,
     )}
   >
-    {children}
-  </CSSTransition>
-);
-
+    {childWithStyle}
+  </CSSTransition>)
+}
 Transition.propTypes = {
   type: PropTypes.string,
   easing: PropTypes.string,

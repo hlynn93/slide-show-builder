@@ -4,6 +4,7 @@ import { DNRImage, DNRText } from '../../../components/DNR';
 import { ASPECT_RATIO, OBJECT_TYPE } from '../../../constants/builderConstants';
 import { isFirefox } from '../../../utils/commonUtils';
 import { Transition, TransitionGroup } from '../../../components/Transition'
+import { intersection } from 'lodash';
 
 
 import './Canvas.scss';
@@ -32,9 +33,13 @@ class Canvas extends PureComponent {
       onFocus,
       activeId,
       presenterMode,
+      animatedIds
     } = this.props
 
-    return objectIds.map(id => {
+    const displayObjs = !presenterMode ? objectIds : intersection(objectIds, animatedIds)
+    console.warn(displayObjs);
+
+    return displayObjs.map(id => {
 
       const object = objects[id]
       const resizeState = presenterMode ? {
@@ -60,47 +65,38 @@ class Canvas extends PureComponent {
         enableResizing: resizeState
       }
 
-
-      let child = ''
+      let child = ""
       switch (object.type) {
         case OBJECT_TYPE.IMAGE:
-          child = (
-            <DNRImage
+          child = <DNRImage
               {...objectProps }
               />
-          )
         break;
 
         case OBJECT_TYPE.TEXT:
-          child =
-            <DNRText
+          child = <DNRText
+              {...objectProps}
               onTextChange={onTextChange.bind(null, id)}
               onBlur={onBlur}
               onFocus={onFocus}
               readOnly={presenterMode}
-              {...objectProps}
-              enableResizing={resizeState}
-
-            />
+              enableResizing={resizeState} />
         break;
 
         default: return null;
       }
 
-      console.warn(object.transition);
-
       return object.transition ?
-        <Transition
-          key={id}
-          {...object.transition}>
+        <Transition key={id} {...object.transition}>
           {child}
         </Transition>
-        : child
+        :
+        child
     })
   }
 
   render() {
-    const { mode, scale, onCanvasClick, presenterMode } = this.props
+    const { mode, scale, onCanvasClick, presenterMode, style } = this.props
 
     /*  Firefox does not support `zoom` css property  */
     const scaleStyle = isFirefox ? {
@@ -116,9 +112,9 @@ class Canvas extends PureComponent {
     return (
       <div
         className={`canvas_wrapper ${presenterMode ? 'canvas_wrapper--present' : ''}`}
+        style={style}
         onClick={onCanvasClick}>
         <div id="canvas" className="canvas" style={canvasStyle}>
-          <span onClick={() => this.setState({ visible: !this.state.visible })}>Toggle</span>
           <TransitionGroup>
             { this.renderObjects() }
           </TransitionGroup>
@@ -129,6 +125,7 @@ class Canvas extends PureComponent {
 }
 
 Canvas.propTypes = {
+  style: PropTypes.object,
   objectIds: PropTypes.array,
   objects: PropTypes.object,
   onObjectClick: PropTypes.func,
@@ -142,10 +139,13 @@ Canvas.propTypes = {
   mode: PropTypes.string,
   scale: PropTypes.number,
   presenterMode: PropTypes.bool,
+  animatedIds: PropTypes.array,
 };
 
 Canvas.defaultProps = {
+  style: {},
   objectIds: [],
+  animatedIds: [],
   objects: {},
   presenterMode: false,
   onObjectClick: () => {},

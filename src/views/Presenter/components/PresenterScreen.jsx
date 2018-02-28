@@ -13,6 +13,7 @@ class PresenterScreen extends PureComponent {
   render() {
     const {
       slides,
+      animatedIds,
       currentSlide,
       mode,
     } = this.props
@@ -24,6 +25,7 @@ class PresenterScreen extends PureComponent {
           {...this.props}
           objectIds={slides[currentSlide].modes[mode].objectIds || []}
           presenterMode
+          animatedIds={animatedIds}
           />
       </Transition>
     ))
@@ -41,9 +43,11 @@ PresenterScreen.propTypes = {
   objects: PropTypes.object,
   currentSlide: PropTypes.number,
   mode: PropTypes.string,
+  animatedIds: PropTypes.array,
 };
 
 PresenterScreen.defaultProps = {
+  animatedIds: [],
   slides: [],
   objects: {},
   currentSlide: 0,
