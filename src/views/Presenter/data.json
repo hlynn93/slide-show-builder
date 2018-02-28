@@ -87,7 +87,8 @@
       },
       "transition": {
         "type": "fadeLeft",
-        "easing": "ease-in"
+        "easing": "ease-in",
+        "duration": 1000
       }
     },
     {
@@ -102,7 +103,8 @@
       },
       "transition": {
         "type": "fadeLeft",
-        "easing": "ease-in"
+        "easing": "ease-in",
+        "duration": 1000
       }
     },
     {
@@ -117,7 +119,8 @@
       },
       "transition": {
         "type": "fadeLeft",
-        "easing": "ease-in"
+        "easing": "ease-in",
+        "duration": 1000
       }
     }
   ],

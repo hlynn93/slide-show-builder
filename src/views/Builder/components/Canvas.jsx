@@ -83,7 +83,7 @@ class Canvas extends PureComponent {
   }
 
   render() {
-    const { mode, scale, onCanvasClick, presenterMode } = this.props
+    const { mode, scale, onCanvasClick, presenterMode, style } = this.props
 
     /*  Firefox does not support `zoom` css property  */
     const scaleStyle = isFirefox ? {
@@ -99,6 +99,7 @@ class Canvas extends PureComponent {
     return (
       <div
         className={`canvas_wrapper ${presenterMode ? 'canvas_wrapper--present' : ''}`}
+        style={style}
         onClick={onCanvasClick}>
         <div id="canvas" className="canvas" style={canvasStyle}>
           { this.renderObjects() }
@@ -109,6 +110,7 @@ class Canvas extends PureComponent {
 }
 
 Canvas.propTypes = {
+  style: PropTypes.object,
   objectIds: PropTypes.array,
   objects: PropTypes.object,
   onObjectClick: PropTypes.func,
@@ -125,6 +127,7 @@ Canvas.propTypes = {
 };
 
 Canvas.defaultProps = {
+  style: {},
   objectIds: [],
   objects: {},
   presenterMode: false,

@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import PresenterScreen from './components/PresenterScreen';
 import Controls from './components/Controls';
 import initialState from './data.json';
 import { ASPECT_RATIO } from '../../constants/builderConstants';
+import { withRouter } from "react-router-dom";
 
 import './Presenter.scss';
 
@@ -70,6 +72,7 @@ class Presenter extends PureComponent {
           length={slides.length}
           onPrev={this.handlePrev}
           onNext={this.handleNext}
+          onExit={() => this.props.history.push('/builder')}
           />
       </div>
     );
@@ -77,7 +80,7 @@ class Presenter extends PureComponent {
 }
 
 Presenter.propTypes = {
-
+  history: PropTypes.object,
 };
 
 const calculateScale = (mode) => {
@@ -88,4 +91,4 @@ const calculateScale = (mode) => {
   return Math.min(scaleWidth, scaleHeight)
 }
 
-export default Presenter;
+export default withRouter(Presenter);

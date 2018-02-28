@@ -20,6 +20,7 @@ class PresenterScreen extends PureComponent {
     const presentSlides = slides.map((s,i) => (
       <Transition key={i} {...s.transition}>
         <Canvas
+          style={s.duration ? { animationDuration: `${s.duration}ms` } : {}} // Important if you want to change the duration
           key={i}
           {...this.props}
           objectIds={slides[currentSlide].modes[mode].objectIds || []}
