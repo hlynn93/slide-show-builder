@@ -25,12 +25,14 @@ export default (Component) => {
     disableDragging,
     enableResizing,
     object,
+    style,
+    inProp,
     ...props
   }) => {
 
     const { attr } = object;
 
-    const style = !isUndefined(attr[IMAGE_TOOL_TYPE.ROTATION]) ? {
+    const componentStyle = !isUndefined(attr[IMAGE_TOOL_TYPE.ROTATION]) ? {
       transform: `rotate(${attr.rotation}deg)`
     } : {};
 
@@ -41,6 +43,8 @@ export default (Component) => {
     )
 
     return (<Rnd
+      in={inProp ? 1 : 0}
+      style={style}
       default={attr}
       position={attr}
       bounds={bounds || 'parent'}
@@ -56,7 +60,7 @@ export default (Component) => {
       >
       <Component
         onKeyDown={onKeyDown}
-        style={style}
+        style={componentStyle}
         {...object}
         {...props} />
     </Rnd>)

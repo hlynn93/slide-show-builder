@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { DNRImage, DNRText } from '../../../components/DNR';
 import { ASPECT_RATIO, OBJECT_TYPE } from '../../../constants/builderConstants';
 import { isFirefox } from '../../../utils/commonUtils';
+import { Transition, TransitionGroup } from '../../../components/Transition'
+import { intersection } from 'lodash';
 
 
 import './Canvas.scss';
@@ -28,9 +30,13 @@ class Canvas extends PureComponent {
       onFocus,
       activeId,
       presenterMode,
+      animatedIds
     } = this.props
 
-    return objectIds.map(id => {
+    const displayObjs = !presenterMode ? objectIds : intersection(objectIds, animatedIds)
+    console.warn(displayObjs);
+
+    return displayObjs.map(id => {
 
       const object = objects[id]
       const resizeState = presenterMode ? {
@@ -56,29 +62,33 @@ class Canvas extends PureComponent {
         enableResizing: resizeState
       }
 
+      let child = ""
       switch (object.type) {
         case OBJECT_TYPE.IMAGE:
-          return (
-            <DNRImage
+          child = <DNRImage
               {...objectProps }
               />
-          )
+        break;
 
         case OBJECT_TYPE.TEXT:
-          return (
-            <DNRText
+          child = <DNRText
+              {...objectProps}
               onTextChange={onTextChange.bind(null, id)}
               onBlur={onBlur}
               onFocus={onFocus}
               readOnly={presenterMode}
-              {...objectProps}
-              enableResizing={resizeState}
-
-            />
-          )
+              enableResizing={resizeState} />
+        break;
 
         default: return null;
       }
+
+      return object.transition ?
+        <Transition key={id} {...object.transition}>
+          {child}
+        </Transition>
+        :
+        child
     })
   }
 
@@ -102,7 +112,9 @@ class Canvas extends PureComponent {
         style={style}
         onClick={onCanvasClick}>
         <div id="canvas" className="canvas" style={canvasStyle}>
-          { this.renderObjects() }
+          <TransitionGroup>
+            { this.renderObjects() }
+          </TransitionGroup>
         </div>
       </div>
     );
@@ -124,11 +136,13 @@ Canvas.propTypes = {
   mode: PropTypes.string,
   scale: PropTypes.number,
   presenterMode: PropTypes.bool,
+  animatedIds: PropTypes.array,
 };
 
 Canvas.defaultProps = {
   style: {},
   objectIds: [],
+  animatedIds: [],
   objects: {},
   presenterMode: false,
   onObjectClick: () => {},
