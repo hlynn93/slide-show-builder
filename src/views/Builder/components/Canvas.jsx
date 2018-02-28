@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { DNRImage, DNRText } from '../../../components/DNR';
 import { ASPECT_RATIO, OBJECT_TYPE } from '../../../constants/builderConstants';
 import { isFirefox } from '../../../utils/commonUtils';
+import { Transition, TransitionGroup } from '../../../components/Transition'
 
 
 import './Canvas.scss';
@@ -14,6 +15,9 @@ class Canvas extends PureComponent {
   constructor(props) {
     super(props);
     this.renderObjects = this.renderObjects.bind(this)
+    this.state = {
+      visible: false
+    }
   }
 
   renderObjects() {
@@ -56,16 +60,19 @@ class Canvas extends PureComponent {
         enableResizing: resizeState
       }
 
+
+      let child = ''
       switch (object.type) {
         case OBJECT_TYPE.IMAGE:
-          return (
+          child = (
             <DNRImage
               {...objectProps }
               />
           )
+        break;
 
         case OBJECT_TYPE.TEXT:
-          return (
+          child =
             <DNRText
               onTextChange={onTextChange.bind(null, id)}
               onBlur={onBlur}
@@ -75,10 +82,20 @@ class Canvas extends PureComponent {
               enableResizing={resizeState}
 
             />
-          )
+        break;
 
         default: return null;
       }
+
+      console.warn(object.transition);
+
+      return object.transition ?
+        <Transition
+          key={id}
+          {...object.transition}>
+          {child}
+        </Transition>
+        : child
     })
   }
 
@@ -101,7 +118,10 @@ class Canvas extends PureComponent {
         className={`canvas_wrapper ${presenterMode ? 'canvas_wrapper--present' : ''}`}
         onClick={onCanvasClick}>
         <div id="canvas" className="canvas" style={canvasStyle}>
-          { this.renderObjects() }
+          <span onClick={() => this.setState({ visible: !this.state.visible })}>Toggle</span>
+          <TransitionGroup>
+            { this.renderObjects() }
+          </TransitionGroup>
         </div>
       </div>
     );
