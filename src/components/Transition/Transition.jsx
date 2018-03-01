@@ -30,7 +30,7 @@ export const Transition = ({
 
   return (<CSSTransition
     {...props}
-    timeout={duration}
+    timeout={0}
     unmountOnExit
     classNames={cx(
       type,

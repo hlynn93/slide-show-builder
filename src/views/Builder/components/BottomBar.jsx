@@ -19,7 +19,7 @@ class BottomBar extends PureComponent {
       onAdd,
       onDelete,
       mode,
-      currentSlide
+      curSlideIndex
     } = this.props
 
     const slideSnapshots = slides.map((slide, i) =>
@@ -29,7 +29,7 @@ class BottomBar extends PureComponent {
         onClick={onClick.bind(null, i)}
         onDelete={onDelete.bind(null, i)}
         mode={mode}
-        isActive={i === currentSlide}
+        isActive={i === curSlideIndex}
         />
     )
 
@@ -50,7 +50,7 @@ class BottomBar extends PureComponent {
 }
 
 BottomBar.propTypes = {
-  currentSlide: PropTypes.number,
+  curSlideIndex: PropTypes.number,
   slides: PropTypes.array,
   onClick: PropTypes.func,
   onAdd: PropTypes.func,
@@ -59,7 +59,7 @@ BottomBar.propTypes = {
 };
 
 BottomBar.defaultProps = {
-  currentSlide: 0,
+  curSlideIndex: 0,
   slides: [],
   onClick: () => {},
   onAdd: () => {},

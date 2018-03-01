@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { DNRImage, DNRText } from '../../../components/DNR';
 import { ASPECT_RATIO, OBJECT_TYPE } from '../../../constants/builderConstants';
@@ -11,14 +11,11 @@ import './Canvas.scss';
 
 const getMarginScale = (scale, mode) => (ASPECT_RATIO[mode].height * (scale - 1)) / 2
 
-class Canvas extends PureComponent {
+class Canvas extends Component {
 
   constructor(props) {
     super(props);
     this.renderObjects = this.renderObjects.bind(this)
-    this.state = {
-      visible: false
-    }
   }
 
   renderObjects() {

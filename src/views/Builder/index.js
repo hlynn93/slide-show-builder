@@ -23,7 +23,6 @@ import {
   addSlide,
   addObject,
   removeObject,
-  getScale,
 } from '../../utils/builderUtils';
 import {
   OBJECT_TYPE,
@@ -76,7 +75,7 @@ const DEFAULT_BUILDER_STATE = {
   objects: {},
   slides: [ cloneDeep(NEW_SLIDE) ],
   activeObjectId: undefined,
-  currentSlide: 0,
+  curSlideIndex: 0,
   mode: CANVAS_MODE.DESKTOP,
   dialogs: {
     [DIALOG.IMAGE_UPLOADER]: false,
@@ -105,7 +104,7 @@ class Builder extends PureComponent {
     this.addObject = this.addObject.bind(this)
     this.removeObject = this.removeObject.bind(this)
     this.updateActiveObjectId = this.updateActiveObjectId.bind(this)
-    this.changeCurrentSlideId = this.changeCurrentSlideId.bind(this)
+    this.changecurSlideIndexId = this.changecurSlideIndexId.bind(this)
     this.updateStatus = this.updateStatus.bind(this)
     this.updateSnapshot = this.updateSnapshot.bind(this)
     this.updateObject = this.updateObject.bind(this)
@@ -184,7 +183,7 @@ class Builder extends PureComponent {
     const newSlides = addSlide(slides, NEW_SLIDE, index)
 
     this.setState({
-        currentSlide: index,
+        curSlideIndex: index,
         slides: newSlides
     }, ()=> this.updateSnapshot());
   }
@@ -193,13 +192,13 @@ class Builder extends PureComponent {
     if(e)
       e.stopPropagation();
 
-    const { slides, objects, currentSlide } = this.state
+    const { slides, objects, curSlideIndex } = this.state
     const result = removeSlide(objects, slides, index);
 
     this.setState({
       objects: result.objects,
       slides: result.slides,
-      currentSlide: index > currentSlide ? currentSlide : Math.max(0, currentSlide - 1)
+      curSlideIndex: index > curSlideIndex ? curSlideIndex : Math.max(0, curSlideIndex - 1)
     });
   }
 
@@ -236,8 +235,8 @@ class Builder extends PureComponent {
         break;
     }
 
-    const { objects, slides, currentSlide } = this.state;
-    const result = addObject(objects, slides, currentSlide, newObject)
+    const { objects, slides, curSlideIndex } = this.state;
+    const result = addObject(objects, slides, curSlideIndex, newObject)
 
     this.setState({
         objects: result.objects,
@@ -246,9 +245,9 @@ class Builder extends PureComponent {
   }
 
   removeObject(id) {
-    const { slides, objects, currentSlide } = this.state
+    const { slides, objects, curSlideIndex } = this.state
 
-    const result = removeObject(objects, slides, id, currentSlide)
+    const result = removeObject(objects, slides, id, curSlideIndex)
 
     this.setState({
       activeObjectId: undefined,
@@ -280,13 +279,13 @@ class Builder extends PureComponent {
     }, () => options.updateSnapshot ? this.updateSnapshot() : null);
   }
 
-  changeCurrentSlideId(id) {
-    this.setState({ currentSlide: id });
+  changecurSlideIndexId(id) {
+    this.setState({ curSlideIndex: id });
   }
 
   updateSnapshot() {
-    const { slides, currentSlide, mode } = this.state
-    const slideIndex = currentSlide;
+    const { slides, curSlideIndex, mode } = this.state
+    const slideIndex = curSlideIndex;
 
     const takeSnapshot = () => {
       const element = document.getElementById('canvas')
@@ -300,7 +299,7 @@ class Builder extends PureComponent {
         const base64image = canvas.toDataURL("image/png");
 
         /* Check if the slide still exists in the deck */
-        if(slideIndex !== this.state.currentSlide) {
+        if(slideIndex !== this.state.curSlideIndex) {
           return;
         }
 
@@ -413,7 +412,7 @@ class Builder extends PureComponent {
   }
 
   handleKeyDown(e) {
-    const { status, activeObjectId, currentSlide, slides, objects } = this.state
+    const { status, activeObjectId, curSlideIndex, slides, objects } = this.state
     /* Check whether the text is being edited or an object is selected */
     if(status[STATUS.IS_EDITING_TEXT])
       return
@@ -468,21 +467,21 @@ class Builder extends PureComponent {
         default:
       }
     }
-    else if(slides[currentSlide]) {
+    else if(slides[curSlideIndex]) {
       switch (e.keyCode) {
         case 8: // DELETE
-          this.removeSlide(currentSlide)
+          this.removeSlide(curSlideIndex)
           break;
 
         case 39: // Right arrow
           this.setState({
-            currentSlide: Math.min(slides.length - 1, currentSlide + 1)
+            curSlideIndex: Math.min(slides.length - 1, curSlideIndex + 1)
           });
           break;
 
         case 37: // Left arrow
           this.setState({
-            currentSlide: Math.max(0, currentSlide - 1)
+            curSlideIndex: Math.max(0, curSlideIndex - 1)
           });
           break;
 
@@ -497,7 +496,7 @@ class Builder extends PureComponent {
       objects,
       slides,
       activeObjectId,
-      currentSlide,
+      curSlideIndex,
       dialogs,
       panels
     } = this.state
@@ -539,10 +538,10 @@ class Builder extends PureComponent {
       default:
     }
 
-    const previewScale = getScale()
-    const objectIds = slides[currentSlide] ? slides[currentSlide].modes[mode].objectIds : []
+    const previewScale = 0.7
+    const objectIds = slides[curSlideIndex] ? slides[curSlideIndex].modes[mode].objectIds : []
 
-    console.warn(this.state);
+    // console.warn(this.state);
 
     return (
       <div className="builder">
@@ -589,8 +588,8 @@ class Builder extends PureComponent {
           </EditorPanel>
           <BottomBar
             mode={mode}
-            currentSlide={currentSlide}
-            onClick={this.changeCurrentSlideId}
+            curSlideIndex={curSlideIndex}
+            onClick={this.changecurSlideIndexId}
             onDelete={this.removeSlide}
             onAdd={this.addSlide}
             slides={slides}
@@ -601,7 +600,7 @@ class Builder extends PureComponent {
             mode={mode}
             scale={previewScale}
             objects={objects}
-            currentSlide={currentSlide}
+            curSlideIndex={curSlideIndex}
             objectIds={objectIds}
             slides={slides}
             />

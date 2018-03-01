@@ -14,16 +14,18 @@ class PresenterScreen extends PureComponent {
     const {
       slides,
       animatedIds,
-      currentSlide,
+      curSlideIndex,
       mode,
     } = this.props
+
+    const objectIds = slides[curSlideIndex] ? slides[curSlideIndex].modes[mode].objectIds : []
 
     const presentSlides = slides.map((s,i) => (
       <Transition key={i} {...s.transition}>
         <Canvas
           key={i}
           {...this.props}
-          objectIds={slides[currentSlide].modes[mode].objectIds || []}
+          objectIds={objectIds}
           presenterMode
           animatedIds={animatedIds}
           />
@@ -32,7 +34,7 @@ class PresenterScreen extends PureComponent {
 
     return (
       <TransitionGroup className="presenter_screen">
-          { presentSlides[currentSlide] }
+          { presentSlides[curSlideIndex] }
       </TransitionGroup>
     );
   }
@@ -41,7 +43,7 @@ class PresenterScreen extends PureComponent {
 PresenterScreen.propTypes = {
   slides: PropTypes.array,
   objects: PropTypes.object,
-  currentSlide: PropTypes.number,
+  curSlideIndex: PropTypes.number,
   mode: PropTypes.string,
   animatedIds: PropTypes.array,
 };
@@ -50,7 +52,7 @@ PresenterScreen.defaultProps = {
   animatedIds: [],
   slides: [],
   objects: {},
-  currentSlide: 0,
+  curSlideIndex: 0,
 };
 
 export default PresenterScreen;

@@ -104,7 +104,3 @@ export const removeSlide = (objects, slides, index) => {
     objects: newObjects
   }
 }
-
-export const getScale = () => {
-  return 0.7
-}

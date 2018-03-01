@@ -16,7 +16,7 @@ class Preview extends PureComponent {
       onCancel,
       visible,
       slides,
-      currentSlide,
+      curSlideIndex,
       mode,
     } = this.props
 
@@ -25,7 +25,7 @@ class Preview extends PureComponent {
         <Canvas
           key={i}
           {...this.props}
-          objectIds={slides[currentSlide].modes[mode].objectIds || []}
+          objectIds={slides[curSlideIndex].modes[mode].objectIds || []}
           />
       </Transition>
     ))
@@ -40,7 +40,7 @@ class Preview extends PureComponent {
         <Dialog.Body>
           { visible &&
             <TransitionGroup className="preview_container">
-                { previewSlides[currentSlide] }
+                { previewSlides[curSlideIndex] }
             </TransitionGroup>
           }
         </Dialog.Body>
@@ -54,7 +54,7 @@ Preview.propTypes = {
   visible: PropTypes.bool,
   slides: PropTypes.array,
   objects: PropTypes.object,
-  currentSlide: PropTypes.number,
+  curSlideIndex: PropTypes.number,
   mode: PropTypes.string,
 };
 
@@ -63,7 +63,7 @@ Preview.defaultProps = {
   onClose: () => {},
   slides: [],
   objects: {},
-  currentSlide: 0,
+  curSlideIndex: 0,
 };
 
 export default Preview;
