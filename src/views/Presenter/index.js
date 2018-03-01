@@ -116,10 +116,10 @@ class Presenter extends PureComponent {
 
     /* If no more animations left on this slide */
     if(!transitions[nextTransitionIndex]) {
-      this.nextSlide()
+      return this.nextSlide()
     } else {
       const newAnimatedIds = union(animatedIds, transitions[nextTransitionIndex].objectIds)
-      this.setState({
+      return this.setState({
         curTransitionIndex: nextTransitionIndex,
         animatedIds: newAnimatedIds
       });
@@ -134,19 +134,19 @@ class Presenter extends PureComponent {
     const nextTransitionIndex = curTransitionIndex - 1
 
     /* If there is no animation left to be reverted */
-    if(!isNumber(transitions[curTransitionIndex])) {
-      this.prevSlide()
+    if(!isNumber(curTransitionIndex)) {
+      return this.prevSlide()
     }
 
     /* If this is the first transition (index = 0) */
     if(!transitions[nextTransitionIndex]) {
-      this.setState({
+      return this.setState({
         animatedIds: [],
         curTransitionIndex: undefined
       });
     } else {
       const newAnimatedIds = difference(animatedIds, transitions[nextTransitionIndex].objectIds)
-      this.setState({
+      return this.setState({
         curTransitionIndex: nextTransitionIndex,
         animatedIds: newAnimatedIds
       });

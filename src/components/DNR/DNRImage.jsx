@@ -9,7 +9,6 @@ import './DNR.scss';
 const Image = ({
   ...props
 }) => {
-
   return <img
     {...props}
     className={"canvas_image"}
@@ -20,6 +19,7 @@ const Image = ({
 Image.propTypes = {
   isActive: PropTypes.bool,
   className: PropTypes.string,
+  props: PropTypes.object,
 }
 
 export default withDNR(Image)

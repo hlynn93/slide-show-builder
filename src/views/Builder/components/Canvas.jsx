@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { DNRImage, DNRText } from '../../../components/DNR';
 import { ASPECT_RATIO, OBJECT_TYPE } from '../../../constants/builderConstants';
 import { isFirefox } from '../../../utils/commonUtils';
-import { Transition, TransitionGroup } from '../../../components/Transition'
 import { intersection } from 'lodash';
 
 
@@ -83,12 +82,13 @@ class Canvas extends Component {
         default: return null;
       }
 
-      return object.transition ?
-        <Transition key={id} {...object.transition}>
-          {child}
-        </Transition>
-        :
-        child
+      // object.transition ?
+      //   <Transition key={id} {...object.transition}>
+      //     {child}
+      //   </Transition>
+      //   :
+
+      return child
     })
   }
 
@@ -112,9 +112,7 @@ class Canvas extends Component {
         style={style}
         onClick={onCanvasClick}>
         <div id="canvas" className="canvas" style={canvasStyle}>
-          <TransitionGroup>
-            { this.renderObjects() }
-          </TransitionGroup>
+          { this.renderObjects() }
         </div>
       </div>
     );
