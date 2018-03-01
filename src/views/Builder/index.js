@@ -541,8 +541,6 @@ class Builder extends PureComponent {
     const previewScale = 0.7
     const objectIds = slides[curSlideIndex] ? slides[curSlideIndex].modes[mode].objectIds : []
 
-    // console.warn(this.state);
-
     return (
       <div className="builder">
         <SideTools

@@ -33,11 +33,14 @@ class Presenter extends PureComponent {
     this.initSlide();
   }
 
+  /*  Initialized the slide at the starting state */
   initSlide() {
     const { slides, curSlideIndex, mode } = this.state
     const curSlideState = slides[curSlideIndex] ? slides[curSlideIndex].modes[mode] : {}
     const objectIds = curSlideState.objectIds || []
     const transitions = curSlideState.transitions || []
+
+    /* Take out all the objects that animations are being applied from the list */
     let newAnimatedIds = objectIds.slice(0)
     transitions.map(t => {
       newAnimatedIds = difference(newAnimatedIds, t.objectIds)
@@ -49,6 +52,8 @@ class Presenter extends PureComponent {
     });
   }
 
+
+  /* Initialized the slide with all the objects being animated */
   initFullSlide() {
     const { slides, curSlideIndex, mode } = this.state
     const curSlideState = slides[curSlideIndex] ? slides[curSlideIndex].modes[mode] : {}
@@ -61,9 +66,11 @@ class Presenter extends PureComponent {
     });
   }
 
+  /** Goes to next slide */
   nextSlide() {
     const { slides, curSlideIndex } = this.state
 
+    /* Do nothing if the current slide is the last slide */
     if(curSlideIndex + 1 >= slides.length)
       return
 
@@ -73,9 +80,11 @@ class Presenter extends PureComponent {
     }, () => this.initSlide());
   }
 
+  /** Goes to previous slide */
   prevSlide() {
     const { curSlideIndex } = this.state
 
+    /* Do nothing if the current slide is the first slide */
     if(curSlideIndex <= 0)
       return
 
@@ -105,7 +114,7 @@ class Presenter extends PureComponent {
     const transitions = curSlideState.transitions || []
     const nextTransitionIndex = isNumber(curTransitionIndex) ? curTransitionIndex + 1 : 0
 
-    console.warn(transitions[nextTransitionIndex]);
+    /* If no more animations left on this slide */
     if(!transitions[nextTransitionIndex]) {
       this.nextSlide()
     } else {
@@ -115,27 +124,6 @@ class Presenter extends PureComponent {
         animatedIds: newAnimatedIds
       });
     }
-
-
-    // if(animatedIds.length >= objectIds.length)
-    //   this.setState({
-    //     curSlideIndex: Math.min(slides.length - 1, curSlideIndex + 1),
-    //     animatedIds: []
-    //   });
-    // else {
-    //   const newAnimatedIds = animatedIds.slice(0)
-    //   let newId = objectIds[newAnimatedIds.length]
-    //   console.warn(newId, objects[newId].transition);
-
-    //   while(!newId && !objects[newId].transition) {
-    //     newAnimatedIds.push(newId)
-    //     newId = objectIds[newAnimatedIds.length]
-    //   }
-
-    //   this.setState({
-    //     animatedIds: newAnimatedIds
-    //   });
-    // }
   }
 
   handlePrev() {
@@ -145,10 +133,12 @@ class Presenter extends PureComponent {
     const transitions = curSlideState.transitions || []
     const nextTransitionIndex = curTransitionIndex - 1
 
+    /* If there is no animation left to be reverted */
     if(!isNumber(transitions[curTransitionIndex])) {
       this.prevSlide()
     }
 
+    /* If this is the first transition (index = 0) */
     if(!transitions[nextTransitionIndex]) {
       this.setState({
         animatedIds: [],
@@ -161,34 +151,6 @@ class Presenter extends PureComponent {
         animatedIds: newAnimatedIds
       });
     }
-
-    // const { transitions, slides, curSlideIndex, }
-
-    // const { animatedIds, slides, curSlideIndex, mode, objects } = this.state
-    // const objectIds = slides[curSlideIndex] ? slides[curSlideIndex].modes[mode].objectIds : []
-
-    // if(animatedIds.length <= 0) {
-    //   const nextSlide = Math.max(0, curSlideIndex - 1)
-    //   const objectIds = slides[nextSlide] ? slides[nextSlide].modes[mode].objectIds : []
-
-    //   this.setState({
-    //     curSlideIndex: nextSlide,
-    //     animatedIds: objectIds.slice(0)
-    //   });
-    // } else {
-    //   const newAnimatedIds = animatedIds.slice(0)
-    //   let newId = objectIds[newAnimatedIds.length - 1]
-
-    //   while(!newId && !objects[newId].transition) {
-    //     newAnimatedIds.pop()
-    //     newId = objectIds[newAnimatedIds.length - 1]
-    //   }
-
-    //   this.setState({
-    //     animatedIds: newAnimatedIds
-    //   });
-    // }
-
   }
 
   render() {
@@ -201,7 +163,6 @@ class Presenter extends PureComponent {
     } = this.state;
 
     const scale = calculateScale(mode)
-    console.warn(this.state);
 
     return (
       <div className="presenter">
@@ -236,19 +197,5 @@ const calculateScale = (mode) => {
   const scaleHeight = windowsHeight / ASPECT_RATIO[mode].height
   return Math.min(scaleWidth, scaleHeight)
 }
-
-// // add an item to the end of the array and return the shallow copy of the array
-// const shallowPush = (array, item) => {
-//   const newArray = array.slice(0)
-//   newArray.push(item);
-//   return newArray
-// }
-
-// // remove the last item of the array and return the shallow copy of the array
-// const shallowPop = (array) => {
-//   const newArray = array.slice(0)
-//   newArray.pop();
-//   return newArray
-// }
 
 export default withRouter(Presenter);
