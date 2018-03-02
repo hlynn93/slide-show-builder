@@ -5,6 +5,11 @@
   &--active {
     outline: 3px solid $app-orange;
   }
+
+  .react-reveal {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .public-DraftEditorPlaceholder-inner {

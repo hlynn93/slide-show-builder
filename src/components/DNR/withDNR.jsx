@@ -6,6 +6,7 @@ import Rnd from 'react-rnd';
 import cx from 'classnames';
 import { isUndefined } from 'lodash';
 import { IMAGE_TOOL_TYPE } from '../../constants/builderConstants';
+import Transition from '../../components/Transition';
 
 /* eslint-disable */
 
@@ -27,10 +28,13 @@ export default (Component) => {
     object,
     style,
     inProp,
+    transition,
     ...props
   }) => {
 
     const { attr } = object;
+
+    console.warn(transition, id);
 
     const componentStyle = !isUndefined(attr[IMAGE_TOOL_TYPE.ROTATION]) ? {
       transform: `rotate(${attr.rotation}deg)`
@@ -42,27 +46,29 @@ export default (Component) => {
       { [`${baseClass}--active`]: isActive }
     )
 
-    return (<Rnd
-      in={inProp ? 1 : 0}
-      style={style}
-      default={attr}
-      position={attr}
-      bounds={bounds || 'parent'}
-      onResizeStart={onResizeStart}
-      onResize={onResize}
-      onResizeStop={onResizeStop}
-      onDragStart={onDragStart}
-      onDrag={onDrag}
-      onDragStop={onDragStop}
-      enableResizing={enableResizing}
-      disableDragging={disableDragging}
-      className={classes}
-      >
-      <Component
-        onKeyDown={onKeyDown}
-        style={componentStyle}
-        {...object}
-        {...props} />
-    </Rnd>)
+    return (
+      <Rnd
+        style={style}
+        default={attr}
+        position={attr}
+        bounds={bounds || 'parent'}
+        onResizeStart={onResizeStart}
+        onResize={onResize}
+        onResizeStop={onResizeStop}
+        onDragStart={onDragStart}
+        onDrag={onDrag}
+        onDragStop={onDragStop}
+        enableResizing={enableResizing}
+        disableDragging={disableDragging}
+        className={classes}
+        >
+        <Transition {...transition}>
+          <Component
+            onKeyDown={onKeyDown}
+            style={componentStyle}
+            {...object}
+            {...props} />
+        </Transition>
+      </Rnd>)
   }
 }

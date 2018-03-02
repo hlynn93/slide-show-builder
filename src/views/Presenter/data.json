@@ -84,8 +84,7 @@
             {
               "objectIds": ["1-desktop", "2-desktop"],
               "transition": {
-                "type": "fade",
-                "easing": "ease-in",
+                "type": "zoom",
                 "duration": 500
               }
             }
@@ -96,8 +95,7 @@
         }
       },
       "transition": {
-        "type": "fadeLeft",
-        "easing": "ease-in",
+        "type": "rotate",
         "duration": 1000
       }
     },
@@ -110,8 +108,7 @@
             {
               "objectIds": ["2-desktop"],
               "transition": {
-                "type": "fade",
-                "easing": "ease-in",
+                "type": "bounce",
                 "duration": 500
               }
             },
@@ -119,7 +116,6 @@
               "objectIds": ["3-desktop"],
               "transition": {
                 "type": "fade",
-                "easing": "ease-in",
                 "duration": 500
               }
             }
@@ -130,8 +126,7 @@
         }
       },
       "transition": {
-        "type": "fadeLeft",
-        "easing": "ease-in",
+        "type": "rotate",
         "duration": 1000
       }
     },
@@ -146,8 +141,7 @@
         }
       },
       "transition": {
-        "type": "fadeLeft",
-        "easing": "ease-in",
+        "type": "rotate",
         "duration": 1000
       }
     }

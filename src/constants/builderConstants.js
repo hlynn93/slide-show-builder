@@ -47,8 +47,15 @@ export const IMAGE_TOOL_TYPE = {
 }
 
 export const TRANSITION = {
-  FADE_LEFT: 'fadeLeft',
-  SLIDE_LEFT: 'slideLeft'
+  FADE: 'fade',
+  BOUNCE: 'bounce',
+  ROLL: 'roll',
+  SLIDE: 'slide',
+  FLIP: 'flip',
+  REVEAL: 'reveal',
+  ROTATE: 'rotate',
+  LIGHTSPEED: 'lightspeed',
+  ZOOM: 'zoom'
 }
 
 export const EASING = {

@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Canvas from '../../Builder/components/Canvas'
-import { Transition, TransitionGroup } from '../../../components/Transition'
+import Transition from '../../../components/Transition';
+import { isEmpty } from 'lodash';
+// import { Transition, TransitionGroup } from '../../../components/Transition'
 
 import './PresenterScreen.scss'
 
@@ -15,27 +17,34 @@ class PresenterScreen extends PureComponent {
       slides,
       animatedIds,
       curSlideIndex,
+      curTransitionIndex,
       mode,
     } = this.props
 
-    const objectIds = slides[curSlideIndex] ? slides[curSlideIndex].modes[mode].objectIds : []
+    const slide = slides[curSlideIndex] || {}
+    const slideTransition = slide.transition
+    const curSlideState = !isEmpty(slide) ? slide.modes[mode] : {}
+    const objectIds = curSlideState.objectIds || []
+    const objTransitions = curSlideState.transitions || []
 
     const presentSlides = slides.map((s,i) => (
-      <Transition key={i} {...s.transition}>
+      <Transition key={i} {...slideTransition}>
         <Canvas
           key={i}
           {...this.props}
           objectIds={objectIds}
-          presenterMode
           animatedIds={animatedIds}
+          transitions={objTransitions}
+          curTransitionIndex={curTransitionIndex}
+          presenterMode
           />
       </Transition>
     ))
 
     return (
-      <TransitionGroup className="presenter_screen">
+      <div className="presenter_screen">
           { presentSlides[curSlideIndex] }
-      </TransitionGroup>
+      </div>
     );
   }
 }
@@ -46,6 +55,7 @@ PresenterScreen.propTypes = {
   curSlideIndex: PropTypes.number,
   mode: PropTypes.string,
   animatedIds: PropTypes.array,
+  curTransitionIndex: PropTypes.number,
 };
 
 PresenterScreen.defaultProps = {

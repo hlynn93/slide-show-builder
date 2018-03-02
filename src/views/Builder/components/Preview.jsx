@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Dialog } from 'element-react';
 import PropTypes from 'prop-types';
 import Canvas from './Canvas'
-import { Transition, TransitionGroup } from '../../../components/Transition'
+import Transition from '../../../components/Transition'
 
 import './Preview.scss'
 
@@ -39,9 +39,9 @@ class Preview extends PureComponent {
         >
         <Dialog.Body>
           { visible &&
-            <TransitionGroup className="preview_container">
+            <div className="preview_container">
                 { previewSlides[curSlideIndex] }
-            </TransitionGroup>
+            </div>
           }
         </Dialog.Body>
       </Dialog>

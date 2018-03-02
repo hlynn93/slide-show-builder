@@ -1,54 +1,46 @@
 /* eslint-disable */
 import React, { PureComponent } from 'react';
-// import { CSSTransition } from 'react-transition-group'
-import Transition from 'react-transition-group/Transition';
+import { CSSTransition } from 'react-transition-group'
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 
 import { TRANSITION, EASING } from '../../constants/builderConstants';
 import './Transition.scss';
 
-const DEFAULT_DURATION = 200;
+const DEFAULT_DURATION = 400;
 
-const getBaseStyle = (duration, easing) => ({
-  transition: `opacity ${duration}ms ${easing}`,
-  opacity: 0,
-  position: 'absolute',
-})
-
-const transitionStyles = {
-  entering: {
-    opacity: 0,
-  },
-  entered:  {
-    opacity: 1
-  },
-};
-
-export const BaseTransition = ({
+export const Transition = ({
   type,
   easing,
   children,
   duration,
   className,
-  inProp,
+  style,
   ...props
-}) => (
-  <Transition
-    in={inProp}
-    timeout={duration}>
-    {(state) => (
-      <div style={{
-        ...getBaseStyle(duration, easing),
-        ...transitionStyles[state]
-      }}>
-        {children}
-      </div>
-    )}
-  </Transition>
-);
+}) => {
 
-BaseTransition.propTypes = {
+  // This passes the style prop to the children
+  // const childrenWithStyle = React.Children.map(children, child =>
+  const childWithStyle = React.cloneElement(children, {
+    style: {
+      ...style,
+      animationDuration: duration ? `${duration}ms` : `${DEFAULT_DRUATION}ms`
+    }
+  });
+
+  return (<CSSTransition
+    {...props}
+    timeout={400}
+    unmountOnExit
+    classNames={cx(
+      type,
+      className,
+    )}
+  >
+    {childWithStyle}
+  </CSSTransition>)
+}
+Transition.propTypes = {
   type: PropTypes.string,
   easing: PropTypes.string,
   duration: PropTypes.number,
@@ -56,8 +48,11 @@ BaseTransition.propTypes = {
   children: PropTypes.any
 }
 
-BaseTransition.defaultProps = {
+Transition.defaultProps = {
   type: TRANSITION.FADE_LEFT,
   easing: EASING.EASE_IN,
   duration: DEFAULT_DURATION,
 }
+
+export const Slide = props => <Transition {...props} transition='slide' />
+export const Fade = props => <Transition {...props} transition='fade' />

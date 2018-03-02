@@ -145,9 +145,9 @@ class Presenter extends PureComponent {
         curTransitionIndex: undefined
       });
     } else {
-      const newAnimatedIds = difference(animatedIds, transitions[nextTransitionIndex].objectIds)
+      const newAnimatedIds = difference(animatedIds, transitions[curTransitionIndex].objectIds)
       return this.setState({
-        curTransitionIndex: nextTransitionIndex,
+        curTransitionIndex: curTransitionIndex - 1,
         animatedIds: newAnimatedIds
       });
     }
@@ -159,7 +159,8 @@ class Presenter extends PureComponent {
       objects,
       curSlideIndex,
       slides,
-      animatedIds
+      animatedIds,
+      curTransitionIndex
     } = this.state;
 
     const scale = calculateScale(mode)
@@ -171,6 +172,7 @@ class Presenter extends PureComponent {
           scale={scale}
           objects={objects}
           curSlideIndex={curSlideIndex}
+          curTransitionIndex={curTransitionIndex}
           animatedIds={animatedIds}
           slides={slides}
           />

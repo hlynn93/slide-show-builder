@@ -6,53 +6,73 @@ import PropTypes from 'prop-types';
 
 import { TRANSITION, EASING } from '../../constants/builderConstants';
 import './Transition.scss';
+import { Fade, Bounce, Roll, Slide, Flip, Reveal, Rotate, LightSpeed, Zoom  } from "react-reveal";
 
-const DEFAULT_DURATION = 400;
+const applyTransition = (type, props, children) => {
+  switch (type) {
 
-export const Transition = ({
+    case TRANSITION.FADE:
+      return <Fade {...props}>{children}</Fade>
+
+    case TRANSITION.BOUNCE:
+      return <Bounce {...props}>{children}</Bounce>
+
+    case TRANSITION.ROLL:
+      return <Roll {...props}>{children}</Roll>
+
+    case TRANSITION.SLIDE:
+      return <Slide {...props}>{children}</Slide>
+
+    case TRANSITION.FLIP:
+      return <Flip {...props}>{children}</Flip>
+
+    case TRANSITION.REVEAL:
+      return <Reveal {...props}>{children}</Reveal>
+
+    case TRANSITION.ROTATE:
+      return <Rotate {...props}>{children}</Rotate>
+
+    case TRANSITION.LIGHTSPEED:
+      return <LightSpeed {...props}>{children}</LightSpeed>
+
+    case TRANSITION.ZOOM:
+      return <Zoom {...props}>{children}</Zoom>
+
+    default:
+      return children;
+  }
+}
+
+// const DEFAULT_DURATION = 400;
+
+const Transition = ({
   type,
-  easing,
+  direction,
   children,
-  duration,
-  className,
-  style,
   ...props
 }) => {
 
-  // This passes the style prop to the children
-  // const childrenWithStyle = React.Children.map(children, child =>
-  const childWithStyle = React.cloneElement(children, {
-    style: {
-      ...style,
-      animationDuration: duration ? `${duration}ms` : `${DEFAULT_DRUATION}ms`
-    }
-  });
+  const directionProp = direction ? { [direction]: true } : {}
 
-  return (<CSSTransition
-    {...props}
-    timeout={400}
-    unmountOnExit
-    classNames={cx(
-      type,
-      className,
-    )}
-  >
-    {childWithStyle}
-  </CSSTransition>)
+  const processedProps = {
+    ...props,
+    ...directionProp,
+  }
+
+  if(!type)
+    return children
+
+  return applyTransition(type, processedProps, children)
 }
+
 Transition.propTypes = {
   type: PropTypes.string,
-  easing: PropTypes.string,
-  duration: PropTypes.number,
-  className: PropTypes.string,
+  direction: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
   children: PropTypes.any
 }
 
 Transition.defaultProps = {
-  type: TRANSITION.FADE_LEFT,
-  easing: EASING.EASE_IN,
-  duration: DEFAULT_DURATION,
+
 }
 
-export const Slide = props => <Transition {...props} transition='slide' />
-export const Fade = props => <Transition {...props} transition='fade' />
+export default Transition;

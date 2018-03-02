@@ -29,15 +29,18 @@ class Canvas extends Component {
       onFocus,
       activeId,
       presenterMode,
-      animatedIds
+      animatedIds,
+      transitions,
+      curTransitionIndex
     } = this.props
 
     const displayObjs = !presenterMode ? objectIds : intersection(objectIds, animatedIds)
-    console.warn(displayObjs);
 
     return displayObjs.map(id => {
 
       const object = objects[id]
+
+      /* disable resizing if it's in presenter mode */
       const resizeState = presenterMode ? {
         top:false,
         right:false,
@@ -48,6 +51,14 @@ class Canvas extends Component {
         bottomLeft:false,
         topLeft:false
       } : undefined
+
+      const transitionState = transitions[curTransitionIndex] || {}
+      const transitionObjIds = transitionState.objectIds || []
+      const transition = transitionState.transition || {}
+      const transitionProp = {
+        transition: transitionObjIds.indexOf(id) > -1 && transition
+      }
+
       const objectProps = {
         onDrag: onDrag.bind(null, id),
         onResize: onResize.bind(null, id),
@@ -58,37 +69,27 @@ class Canvas extends Component {
         id: `canvas_object--${id}`,
         className: `canvas_object canvas_object--${id}`,
         disableDragging: presenterMode,
-        enableResizing: resizeState
+        enableResizing: resizeState,
+        ...transitionProp,
       }
 
-      let child = ""
       switch (object.type) {
         case OBJECT_TYPE.IMAGE:
-          child = <DNRImage
-              {...objectProps }
-              />
-        break;
+          return <DNRImage
+            {...objectProps }
+            />
 
         case OBJECT_TYPE.TEXT:
-          child = <DNRText
+          return <DNRText
               {...objectProps}
               onTextChange={onTextChange.bind(null, id)}
               onBlur={onBlur}
               onFocus={onFocus}
               readOnly={presenterMode}
               enableResizing={resizeState} />
-        break;
 
         default: return null;
       }
-
-      // object.transition ?
-      //   <Transition key={id} {...object.transition}>
-      //     {child}
-      //   </Transition>
-      //   :
-
-      return child
     })
   }
 
@@ -135,6 +136,8 @@ Canvas.propTypes = {
   scale: PropTypes.number,
   presenterMode: PropTypes.bool,
   animatedIds: PropTypes.array,
+  transitions: PropTypes.array,
+  curTransitionIndex: PropTypes.number,
 };
 
 Canvas.defaultProps = {

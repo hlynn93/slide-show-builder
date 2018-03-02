@@ -1,12 +1,3 @@
-import {
-  Transition,
-  Fade,
-  Slide } from './Transition';
-import { TransitionGroup } from 'react-transition-group'
+import Transition from './Transition';
 
-export {
-  Transition,
-  Fade,
-  Slide,
-  TransitionGroup
-}
+export default Transition
