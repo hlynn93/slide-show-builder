@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { DNRImage, DNRText } from '../../../components/DNR';
 import { ASPECT_RATIO, OBJECT_TYPE } from '../../../constants/builderConstants';
 import { isFirefox } from '../../../utils/commonUtils';
-import { intersection } from 'lodash';
-
+import Transition from '../../../components/Transition';
 
 import './Canvas.scss';
 
@@ -29,14 +28,10 @@ class Canvas extends Component {
       onFocus,
       activeId,
       presenterMode,
-      animatedIds,
-      transitions,
-      curTransitionIndex
+      objectTransition,
     } = this.props
 
-    const displayObjs = !presenterMode ? objectIds : intersection(objectIds, animatedIds)
-
-    return displayObjs.map(id => {
+    return objectIds.map(id => {
 
       const object = objects[id]
 
@@ -52,11 +47,12 @@ class Canvas extends Component {
         topLeft:false
       } : undefined
 
-      const transitionState = transitions[curTransitionIndex] || {}
-      const transitionObjIds = transitionState.objectIds || []
-      const transition = transitionState.transition || {}
+      /* attach transition props if the canvas is in presenter mode */
+      const transitionObjIds = objectTransition.objectIds || []
+      const transition = objectTransition.transition || {}
+      const isAnimatable = transitionObjIds.indexOf(id) > -1 && (presenterMode)
       const transitionProp = {
-        transition: transitionObjIds.indexOf(id) > -1 && transition
+        transition: isAnimatable ? transition : undefined
       }
 
       const objectProps = {
@@ -72,6 +68,8 @@ class Canvas extends Component {
         enableResizing: resizeState,
         ...transitionProp,
       }
+
+      console.warn(transitionProp);
 
       switch (object.type) {
         case OBJECT_TYPE.IMAGE:
@@ -94,7 +92,14 @@ class Canvas extends Component {
   }
 
   render() {
-    const { mode, scale, onCanvasClick, presenterMode, style } = this.props
+    const {
+      mode,
+      scale,
+      onCanvasClick,
+      presenterMode,
+      style,
+      slideTransition
+    } = this.props
 
     /*  Firefox does not support `zoom` css property  */
     const scaleStyle = isFirefox ? {
@@ -112,9 +117,11 @@ class Canvas extends Component {
         className={`canvas_wrapper ${presenterMode ? 'canvas_wrapper--present' : ''}`}
         style={style}
         onClick={onCanvasClick}>
-        <div id="canvas" className="canvas" style={canvasStyle}>
-          { this.renderObjects() }
-        </div>
+        <Transition {...slideTransition}>
+          <div id="canvas" className="canvas" style={canvasStyle}>
+              { this.renderObjects() }
+          </div>
+        </Transition>
       </div>
     );
   }
@@ -135,9 +142,8 @@ Canvas.propTypes = {
   mode: PropTypes.string,
   scale: PropTypes.number,
   presenterMode: PropTypes.bool,
-  animatedIds: PropTypes.array,
-  transitions: PropTypes.array,
-  curTransitionIndex: PropTypes.number,
+  objectTransition: PropTypes.object,
+  slideTransition: PropTypes.object,
 };
 
 Canvas.defaultProps = {
@@ -146,6 +152,8 @@ Canvas.defaultProps = {
   animatedIds: [],
   objects: {},
   presenterMode: false,
+  objectTransition: {},
+  slideTransition: {},
   onObjectClick: () => {},
   onTextChange: () => {},
   onCanvasClick: () => {},

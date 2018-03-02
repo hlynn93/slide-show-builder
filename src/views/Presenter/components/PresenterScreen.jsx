@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Canvas from '../../Builder/components/Canvas'
-import Transition from '../../../components/Transition';
 import { isEmpty } from 'lodash';
 // import { Transition, TransitionGroup } from '../../../components/Transition'
 
@@ -24,22 +23,22 @@ class PresenterScreen extends PureComponent {
     const slide = slides[curSlideIndex] || {}
     const slideTransition = slide.transition
     const curSlideState = !isEmpty(slide) ? slide.modes[mode] : {}
-    const objectIds = curSlideState.objectIds || []
+    // const objectIds = curSlideState.objectIds || []
     const objTransitions = curSlideState.transitions || []
 
-    const presentSlides = slides.map((s,i) => (
-      <Transition key={i} {...slideTransition}>
+    const presentSlides = slides.map((s,i) => {
+      const transition = objTransitions[curTransitionIndex]
+      return (
         <Canvas
           key={i}
           {...this.props}
-          objectIds={objectIds}
-          animatedIds={animatedIds}
-          transitions={objTransitions}
-          curTransitionIndex={curTransitionIndex}
+          objectIds={animatedIds}
+          objectTransition={transition}
+          slideTransition={slideTransition}
           presenterMode
           />
-      </Transition>
-    ))
+      )
+    })
 
     return (
       <div className="presenter_screen">

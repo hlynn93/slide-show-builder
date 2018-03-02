@@ -34,8 +34,6 @@ export default (Component) => {
 
     const { attr } = object;
 
-    console.warn(transition, id);
-
     const componentStyle = !isUndefined(attr[IMAGE_TOOL_TYPE.ROTATION]) ? {
       transform: `rotate(${attr.rotation}deg)`
     } : {};
