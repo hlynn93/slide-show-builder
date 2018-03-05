@@ -505,6 +505,9 @@ class Builder extends PureComponent {
       objects[activeObjectId].type : undefined
 
 
+      // console.warn(this.state);
+
+
     /**
      *  Construct editor configuration based on the object type
      */

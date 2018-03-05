@@ -2,12 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import withDNR from './withDNR';
 import { Editor, RichUtils } from 'draft-js';
+import { getCustomStyleMap } from 'draftjs-utils';
+
 import './DNR.scss';
+
+const blockStyleFn = contentBlock => {
+  const type = contentBlock.getType();
+  switch (type) {
+    case 'blockquote': return 'dnr_blockquote'
+    case 'code-block': return 'dnr_precode'
+
+    /* Text alignment */
+    case 'left': return 'align-left';
+    case 'center': return 'align-center';
+    case 'right': return 'align-right';
+
+    default:
+      break;
+  }
+}
 
 const Text = ({
   onTextChange,
   content,
-  onClick,
   ...props
 }) => {
 
@@ -21,12 +38,14 @@ const Text = ({
   }
 
   return (
-    <div className={"canvas_text"} onClick={onClick}>
+    <div className={"canvas_text"}>
       <Editor
         { ...props }
         handleKeyCommand={handleTextKeyCommand}
         editorState={content}
         onChange={onTextChange}
+        customStyleMap={getCustomStyleMap()}
+        blockStyleFn={blockStyleFn}
       />
     </div>
   );
@@ -39,7 +58,6 @@ Text.propTypes = {
   content: PropTypes.any,
   placeholder: PropTypes.string,
   readOnly: PropTypes.bool,
-  onClick: PropTypes.func,
 };
 
 Text.defaultProps = {

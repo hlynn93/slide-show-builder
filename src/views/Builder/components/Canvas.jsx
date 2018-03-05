@@ -69,8 +69,6 @@ class Canvas extends Component {
         ...transitionProp,
       }
 
-      console.warn(transitionProp);
-
       switch (object.type) {
         case OBJECT_TYPE.IMAGE:
           return <DNRImage
@@ -83,8 +81,7 @@ class Canvas extends Component {
               onTextChange={onTextChange.bind(null, id)}
               onBlur={onBlur}
               onFocus={onFocus}
-              readOnly={presenterMode}
-              enableResizing={resizeState} />
+              readOnly={presenterMode}/>
 
         default: return null;
       }

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import Slider from 'react-rangeslider'
 import { Input, Button, Select } from 'element-react'
 import PropTypes from 'prop-types';
+import Link from '../../../components/EditorTools/Link';
 
 import { EDITOR_TOOLBAR_CONFIG, TOOLBAR_TYPE } from '../../../constants/builderConstants';
 
@@ -23,6 +24,18 @@ class Editor extends PureComponent {
       return
 
     onChange(id, format(value, editorState))
+  }
+
+  renderButtonDropdown(toolId, tool) {
+    const { format } = tool
+    return (
+      <Link
+        key={toolId}
+        tool={tool}
+        toolId={toolId}
+        onAdd={this.handleChange.bind(null, format)}
+        />
+    )
   }
 
   renderSlider(toolId, tool) {
@@ -103,6 +116,9 @@ class Editor extends PureComponent {
 
         case TOOLBAR_TYPE.SELECT:
           return this.renderDropdown(toolId, toolItem)
+
+        case TOOLBAR_TYPE.BUTTON_DROPDOWN:
+          return this.renderButtonDropdown(toolId, toolItem)
 
         default:
           break;

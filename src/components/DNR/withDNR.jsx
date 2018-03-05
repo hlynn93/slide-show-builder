@@ -6,7 +6,8 @@ import Rnd from 'react-rnd';
 import cx from 'classnames';
 import { isUndefined } from 'lodash';
 import { IMAGE_TOOL_TYPE } from '../../constants/builderConstants';
-import Transition from '../../components/Transition';
+import Transition from '../Transition';
+// import CursorWrapper from './CursorWrapper';
 
 /* eslint-disable */
 
@@ -28,6 +29,7 @@ export default (Component) => {
     object,
     style,
     inProp,
+    onClick,
     transition,
     ...props
   }) => {
@@ -61,12 +63,22 @@ export default (Component) => {
         className={classes}
         >
         <Transition {...transition}>
-          <Component
-            onKeyDown={onKeyDown}
-            style={componentStyle}
-            {...object}
-            {...props} />
+          <div
+            className="dnr_inner"
+            onClick={onClick}
+            >
+            <Component
+              onKeyDown={onKeyDown}
+              style={componentStyle}
+              {...object}
+              {...props} />
+            {/* <CursorWrapper
+              style={componentStyle}
+              onClick={onClick}
+              /> */}
+          </div>
         </Transition>
-      </Rnd>)
+      </Rnd>
+        )
   }
 }

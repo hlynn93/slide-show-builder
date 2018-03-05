@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Canvas from '../../Builder/components/Canvas'
 import { isEmpty } from 'lodash';
-// import { Transition, TransitionGroup } from '../../../components/Transition'
 
 import './PresenterScreen.scss'
 

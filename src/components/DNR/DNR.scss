@@ -12,12 +12,26 @@
   }
 }
 
+.dnr_inner {
+  width: 100%;
+  height: 100%;
+}
+
+.dnr_cursor {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  outline: 2px solid $app-cyan;
+}
+
 .public-DraftEditorPlaceholder-inner {
   color: $app-grey;
 }
 
-.DraftEditor-root {
-  padding: 8px;
+.public-DraftStyleDefault-block {
+  margin: 1em 0;
 }
 
 .canvas_text {
@@ -27,4 +41,31 @@
 .canvas_image {
   height: 100%;
   width: 100%;
+}
+
+.dnr_blockquote {
+  border-left: 5px solid #f1f1f1;
+  padding-left: 5px;
+}
+
+.dnr_precode {
+  background: #f1f1f1;
+  border-radius: 3px;
+  padding: 1px 10px;
+}
+
+.align-left {
+  text-align: left !important;
+}
+
+.align-right {
+  text-align: right !important;
+}
+
+.align-center {
+  text-align: center !important;
+}
+
+.align-justify {
+  text-align: justify !important;
 }
