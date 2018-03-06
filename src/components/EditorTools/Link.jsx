@@ -1,8 +1,14 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Popover, Form, Button, Switch } from 'element-react'
-import linkifyIt from 'linkify-it';
-const linkify = linkifyIt();
+// import linkifyIt from 'linkify-it';
+import { EditorState , Modifier } from 'draft-js';
+import {
+  getEntityRange,
+  getSelectionText,
+  getSelectionEntity,
+} from 'draftjs-utils';
+// const linkify = linkifyIt();
 
 class Link extends PureComponent {
   constructor(props) {
@@ -14,33 +20,97 @@ class Link extends PureComponent {
         newTab: false,
       }
     }
-    this.onChange = this.onChange.bind(this)
-    this.onAdd = this.onAdd.bind(this)
+
+    this.handleChange = this.handleChange.bind(this)
+    this.handleAdd = this.handleAdd.bind(this)
+    this.onPromptPopover = this.onPromptPopover.bind(this)
+    this.getCurrentValues = this.getCurrentValues.bind(this)
   }
 
-  onChange(key, value) {
+  getCurrentValues = () => {
+    const { editorState } = this.props;
+    const currentEntity = getSelectionEntity(editorState)
+    const contentState = editorState.getCurrentContent();
+    const currentValues = {};
+    if (currentEntity && (contentState.getEntity(currentEntity).get('type') === 'LINK')) {
+      currentValues.link = {};
+      const entityRange = currentEntity && getEntityRange(editorState, currentEntity);
+      currentValues.link.target = currentEntity && contentState.getEntity(currentEntity).get('data').url;
+      currentValues.link.targetOption = currentEntity && contentState.getEntity(currentEntity).get('data').targetOption;
+      currentValues.link.title = (entityRange && entityRange.text);
+    }
+    currentValues.selectionText = getSelectionText(editorState);
+    return currentValues;
+  }
+
+  handleChange(key, value) {
     this.setState({
       form: {
         ...this.state.form,
         [key]: value
+      },
+    });
+  }
+
+  handleAdd(e) {
+    e.preventDefault();
+    const { editorState } = this.props;
+    const { title, target, newTab } = this.state.form;
+    const currentEntity = getSelectionEntity(editorState);
+    let selection = editorState.getSelection();
+
+    if (currentEntity) {
+      const entityRange = getEntityRange(editorState, currentEntity);
+      selection = selection.merge({
+        anchorOffset: entityRange.start,
+        focusOffset: entityRange.end,
+      });
+    }
+
+    const entityKey = editorState
+      .getCurrentContent()
+      .createEntity('LINK', 'MUTABLE', { url: target, targetOption: newTab ? '_blank' : '_self' })
+      .getLastCreatedEntityKey();
+
+    let contentState = Modifier.replaceText(
+      editorState.getCurrentContent(),
+      selection,
+      `${title}`,
+      editorState.getCurrentInlineStyle(),
+      entityKey,
+    );
+
+    let newEditorState = EditorState.push(editorState, contentState, 'insert-characters');
+
+    selection = newEditorState.getSelection().merge({
+      anchorOffset: selection.get('anchorOffset') + title.length,
+      focusOffset: selection.get('anchorOffset') + title.length,
+    });
+    newEditorState = EditorState.acceptSelection(newEditorState, selection);
+    contentState = Modifier.insertText(
+      newEditorState.getCurrentContent(),
+      selection,
+      ' ',
+      newEditorState.getCurrentInlineStyle(),
+      undefined,
+    );
+    this.props.onAdd(EditorState.push(newEditorState, contentState, 'insert-characters'));
+  }
+
+  onPromptPopover() {
+    const { link, selectionText } = this.getCurrentValues();
+    this.setState({
+      form: {
+        ...this.state.form,
+        title: selectionText,
+        target: link
       }
     });
   }
 
-  onAdd(e) {
-    e.preventDefault();
-    const { title, target, newTab } = this.state.form
-    const links = linkify.match(target);
-    const linkifiedTarget = links && links[0] ? links[0].url : '';
-    this.props.onAdd({
-      title,
-      target: linkifiedTarget,
-      newTab }
-    );
-  }
-
   render() {
-    const { toolId, tool } = this.props
+    const { toolId, tool, onBlur, onFocus } = this.props
+
     return (
       <Popover
         key={toolId}
@@ -51,12 +121,14 @@ class Link extends PureComponent {
           <div className="editor_popover_content">
             <Form className="editor_link"
               model={this.state.form}
-              onSubmit={this.onAdd}>
+              onSubmit={this.handleAdd}>
               <Form.Item className="link_item">
                 <Input
                   placeholder="Link title"
                   value={this.state.form.title}
-                  onChange={this.onChange.bind(null, 'title')}
+                  onChange={this.handleChange.bind(null, 'title')}
+                  onFocus={onFocus}
+                  onBlur={onBlur}
                   >
                 </Input>
               </Form.Item>
@@ -64,7 +136,10 @@ class Link extends PureComponent {
                 <Input
                   placeholder="Link target"
                   value={this.state.form.target}
-                  onChange={this.onChange.bind(null, 'target')}>
+                  onChange={this.handleChange.bind(null, 'target')}
+                  onFocus={onFocus}
+                  onBlur={onBlur}
+                  >
                 </Input>
               </Form.Item>
               <Form.Item label="Opens in new tab">
@@ -72,7 +147,7 @@ class Link extends PureComponent {
                   onText=""
                   offText=""
                   value={this.state.form.newTab}
-                  onChange={this.onChange.bind(this, 'newTab')}
+                  onChange={this.handleChange.bind(this, 'newTab')}
                 />
               </Form.Item>
               <Form.Item>
@@ -82,7 +157,7 @@ class Link extends PureComponent {
             </Form>
           </div>
       )}>
-        <Button className="button_icon">{tool.item.label}</Button>
+        <Button onClick={this.onPromptPopover} className="button_icon">{tool.item.label}</Button>
       </Popover>
     );
   }
@@ -92,10 +167,15 @@ Link.propTypes = {
   toolId: PropTypes.string,
   tool: PropTypes.object,
   onAdd: PropTypes.func,
+  onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
+  editorState: PropTypes.object,
 };
 
 Link.defaultProps = {
   onAdd: () => {},
+  onBlur: () => {},
+  onFocus: () => {},
 };
 
 export default Link;

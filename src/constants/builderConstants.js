@@ -184,24 +184,36 @@ export const EDITOR_TOOLBAR_CONFIG = {
     type: TOOLBAR_TYPE.BUTTON_DROPDOWN,
     item: { label: 'Link', value: 'link' },
 
-    format: (data, state) => {
-      if(!data)
-        return state;
-
-      let selection = state.getSelection();
-      const entityKey = state
-      .getCurrentContent()
-      .createEntity('LINK', 'MUTABLE', { url: data.target, targetOption: data.newTab })
-      .getLastCreatedEntityKey();
-
-    let contentState = Modifier.replaceText(
-      state.getCurrentContent(),
-      selection,
-      `${data.title}`,
-      state.getCurrentInlineStyle(),
-      entityKey,
-    );
-    return EditorState.push(state, contentState, 'insert-characters');
-    }
+    format: newState => newState
   },
 }
+
+  // let selection = state.getSelection();
+  // const entityKey = state
+  // .getCurrentContent()
+  // .createEntity('LINK', 'MUTABLE', { url: data.target, targetOption: data.newTab })
+  // .getLastCreatedEntityKey();
+
+  // let contentState = Modifier.replaceText(
+  //   state.getCurrentContent(),
+  //   selection,
+  //   `${data.title}`,
+  //   state.getCurrentInlineStyle(),
+  //   entityKey,
+  // );
+
+  // let newEditorState = EditorState.push(state, contentState, 'insert-characters');
+  // selection = newEditorState.getSelection().merge({
+  //   anchorOffset: selection.get('anchorOffset') + data.title.length,
+  //   focusOffset: selection.get('anchorOffset') + data.title.length,
+  // });
+  // newEditorState = EditorState.acceptSelection(newEditorState, selection);
+  // contentState = Modifier.insertText(
+  //   newEditorState.getCurrentContent(),
+  //   selection,
+  //   ' ',
+  //   newEditorState.getCurrentInlineStyle(),
+  //   undefined,
+  // );
+  // return newEditorState
+  // }

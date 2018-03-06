@@ -16,6 +16,7 @@ import ImageUploader from './components/ImageUploader';
 import BottomBar from './components/BottomBar';
 import ModeSwitch from './components/ModeSwitch';
 import './Builder.scss';
+import { getDecorators } from "../../components/EditorTools/decorators";
 
 import {
   generateId,
@@ -227,7 +228,7 @@ class Builder extends PureComponent {
       case OBJECT_TYPE.TEXT:
         newObject = {
           ...newObject,
-          content: EditorState.createEmpty(),
+          content: EditorState.createEmpty(getDecorators()),
         };
       break;
 

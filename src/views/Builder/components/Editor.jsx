@@ -27,9 +27,13 @@ class Editor extends PureComponent {
   }
 
   renderButtonDropdown(toolId, tool) {
+    const { onFocus, onBlur, editorState } = this.props;
     const { format } = tool
     return (
       <Link
+        editorState={editorState}
+        onFocus={onFocus}
+        onBlur={onBlur}
         key={toolId}
         tool={tool}
         toolId={toolId}
