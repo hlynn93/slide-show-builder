@@ -4,7 +4,7 @@ import { Input, Button, Select } from 'element-react'
 import PropTypes from 'prop-types';
 import Link from '../../../components/EditorTools/Link';
 
-import { EDITOR_TOOLBAR_CONFIG, TOOLBAR_TYPE } from '../../../constants/builderConstants';
+import { EDITOR_TOOLBAR_CONFIG, TOOLBAR_TYPE, TEXT_TOOL_TYPE } from '../../../constants/builderConstants';
 
 import 'react-rangeslider/lib/index.css'
 import './Editor.scss';
@@ -26,20 +26,25 @@ class Editor extends PureComponent {
     onChange(id, format(value, editorState))
   }
 
-  renderButtonDropdown(toolId, tool) {
+  renderCustom(toolId, tool) {
     const { onFocus, onBlur, editorState } = this.props;
     const { format } = tool
-    return (
-      <Link
-        editorState={editorState}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        key={toolId}
-        tool={tool}
-        toolId={toolId}
-        onAdd={this.handleChange.bind(null, format)}
-        />
-    )
+    switch (toolId) {
+      case TEXT_TOOL_TYPE.LINK:
+        return (
+          <Link
+            editorState={editorState}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            key={toolId}
+            tool={tool}
+            toolId={toolId}
+            onChange={this.handleChange.bind(null, format)}
+            />
+        )
+
+      default:
+    }
   }
 
   renderSlider(toolId, tool) {
@@ -121,8 +126,8 @@ class Editor extends PureComponent {
         case TOOLBAR_TYPE.SELECT:
           return this.renderDropdown(toolId, toolItem)
 
-        case TOOLBAR_TYPE.BUTTON_DROPDOWN:
-          return this.renderButtonDropdown(toolId, toolItem)
+        case TOOLBAR_TYPE.CUSTOM:
+          return this.renderCustom(toolId, toolItem)
 
         default:
           break;

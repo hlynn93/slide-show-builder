@@ -1,8 +1,8 @@
 import { RichUtils, EditorState, Modifier } from 'draft-js';
 import {
-  toggleCustomInlineStyle,
   setBlockData
 } from 'draftjs-utils';
+import { toggleCustomInlineStyle } from '../utils/rtfUtils';
 
 export const OBJECT_TYPE = {
   IMAGE: 'image',
@@ -32,7 +32,7 @@ export const TOOLBAR_TYPE = {
   SELECT: 'select',
   SLIDER: 'slider',
   TEXTFIELD: 'textfield',
-  BUTTON_DROPDOWN: 'buttonDropdown'
+  CUSTOM: 'custom'
 }
 
 export const EDITOR_TYPE = {
@@ -47,6 +47,7 @@ export const TEXT_TOOL_TYPE = {
   LIST: 'list',
   FONT_SIZE: 'fontSize',
   FONT_FAMILY: 'fontFamily',
+  LINE_HEIGHT: 'lineHeight',
   TEXT_ALIGN: 'textAlign',
   LINK: 'link',
   // COLOR_PICKER: 'colorPicker',
@@ -148,6 +149,17 @@ export const EDITOR_TOOLBAR_CONFIG = {
     ],
     format: (fontSize, state) => toggleCustomInlineStyle(state, TEXT_TOOL_TYPE.FONT_SIZE, fontSize)
   },
+  [TEXT_TOOL_TYPE.LINE_HEIGHT]: {
+    type: TOOLBAR_TYPE.SELECT,
+    items: [
+      {label: '10', value: '10'},
+      {label: '20', value: '20'},
+    ],
+    format: (toggledColor, editorState) => {
+      console.warn(toggledColor);
+      return toggleCustomInlineStyle(editorState, 'lineHeight', toggledColor)
+    }
+  },
   [TEXT_TOOL_TYPE.FONT_FAMILY]: {
     type: TOOLBAR_TYPE.SELECT,
     items: [
@@ -170,50 +182,10 @@ export const EDITOR_TOOLBAR_CONFIG = {
     ],
     format: (textAlign, state) => setBlockData(state, { 'text-align': textAlign })
   },
-  [TEXT_TOOL_TYPE.TEXT_ALIGN]: {
-    type: TOOLBAR_TYPE.BUTTON,
-    items: [
-      {label: 'Left', value: 'left'},
-      {label: 'Center', value: 'center'},
-      {label: 'Right', value: 'right'},
-      {label: 'Justify', value: 'justify'}
-    ],
-    format: (textAlign, state) => setBlockData(state, { 'text-align': textAlign })
-  },
   [TEXT_TOOL_TYPE.LINK]: {
-    type: TOOLBAR_TYPE.BUTTON_DROPDOWN,
-    item: { label: 'Link', value: 'link' },
-
+    type: TOOLBAR_TYPE.CUSTOM,
+    link: { label: 'Link', value: 'link' },
+    unlink: { label: 'Unlink', value: 'link' },
     format: newState => newState
   },
 }
-
-  // let selection = state.getSelection();
-  // const entityKey = state
-  // .getCurrentContent()
-  // .createEntity('LINK', 'MUTABLE', { url: data.target, targetOption: data.newTab })
-  // .getLastCreatedEntityKey();
-
-  // let contentState = Modifier.replaceText(
-  //   state.getCurrentContent(),
-  //   selection,
-  //   `${data.title}`,
-  //   state.getCurrentInlineStyle(),
-  //   entityKey,
-  // );
-
-  // let newEditorState = EditorState.push(state, contentState, 'insert-characters');
-  // selection = newEditorState.getSelection().merge({
-  //   anchorOffset: selection.get('anchorOffset') + data.title.length,
-  //   focusOffset: selection.get('anchorOffset') + data.title.length,
-  // });
-  // newEditorState = EditorState.acceptSelection(newEditorState, selection);
-  // contentState = Modifier.insertText(
-  //   newEditorState.getCurrentContent(),
-  //   selection,
-  //   ' ',
-  //   newEditorState.getCurrentInlineStyle(),
-  //   undefined,
-  // );
-  // return newEditorState
-  // }

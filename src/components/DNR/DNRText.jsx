@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import withDNR from './withDNR';
 import { Editor, RichUtils } from 'draft-js';
-import { getCustomStyleMap } from 'draftjs-utils';
+import { getCustomStyleMap } from '../../utils/rtfUtils';
 
 import './DNR.scss';
 
@@ -11,16 +11,37 @@ const blockStyleFn = contentBlock => {
   switch (type) {
     case 'blockquote': return 'dnr_blockquote'
     case 'code-block': return 'dnr_precode'
-
-    /* Text alignment */
-    case 'left': return 'align-left';
-    case 'center': return 'align-center';
-    case 'right': return 'align-right';
-
     default:
       break;
   }
 }
+
+// const customStyleFn = () => {
+//   return {
+//     ...getCustomStyleMap(),
+//     red: {
+//       color: 'rgba(255, 0, 0, 1.0)',
+//     },
+//     orange: {
+//       color: 'rgba(255, 127, 0, 1.0)',
+//     },
+//     yellow: {
+//       color: 'rgba(180, 180, 0, 1.0)',
+//     },
+//     green: {
+//       color: 'rgba(0, 180, 0, 1.0)',
+//     },
+//     blue: {
+//       color: 'rgba(0, 0, 255, 1.0)',
+//     },
+//     indigo: {
+//       color: 'rgba(75, 0, 130, 1.0)',
+//     },
+//     violet: {
+//       color: 'rgba(127, 0, 255, 1.0)',
+//     },
+//   }
+// }
 
 const Text = ({
   onTextChange,

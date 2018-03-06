@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Popover, Form, Button, Switch } from 'element-react'
 // import linkifyIt from 'linkify-it';
-import { EditorState , Modifier } from 'draft-js';
+import { EditorState , Modifier, RichUtils } from 'draft-js';
 import {
   getEntityRange,
   getSelectionText,
@@ -18,18 +18,38 @@ class Link extends PureComponent {
         title: '',
         target: '',
         newTab: false,
-      }
+      },
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleAdd = this.handleAdd.bind(this)
+    this.handleRemove = this.handleRemove.bind(this)
     this.onPromptPopover = this.onPromptPopover.bind(this)
     this.getCurrentValues = this.getCurrentValues.bind(this)
   }
 
+
+  componentWillMount() {
+    const { editorState } = this.props;
+    if (editorState) {
+      this.setState({
+        currentEntity: getSelectionEntity(editorState),
+      });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.editorState &&
+      this.props.editorState !== nextProps.editorState) {
+      const currentEntity = getSelectionEntity(nextProps.editorState);
+      this.setState({ currentEntity });
+    }
+  }
+
+
   getCurrentValues = () => {
     const { editorState } = this.props;
-    const currentEntity = getSelectionEntity(editorState)
+    const { currentEntity } = this.state;
     const contentState = editorState.getCurrentContent();
     const currentValues = {};
     if (currentEntity && (contentState.getEntity(currentEntity).get('type') === 'LINK')) {
@@ -52,11 +72,25 @@ class Link extends PureComponent {
     });
   }
 
+  handleRemove () {
+    const { editorState } = this.props;
+    const { currentEntity } = this.state;
+    let selection = editorState.getSelection();
+    if (currentEntity) {
+      const entityRange = getEntityRange(editorState, currentEntity);
+      selection = selection.merge({
+        anchorOffset: entityRange.start,
+        focusOffset: entityRange.end,
+      });
+      this.props.onChange(RichUtils.toggleLink(editorState, selection, null));
+    }
+  }
+
   handleAdd(e) {
     e.preventDefault();
     const { editorState } = this.props;
     const { title, target, newTab } = this.state.form;
-    const currentEntity = getSelectionEntity(editorState);
+    const { currentEntity } = this.state;
     let selection = editorState.getSelection();
 
     if (currentEntity) {
@@ -69,7 +103,10 @@ class Link extends PureComponent {
 
     const entityKey = editorState
       .getCurrentContent()
-      .createEntity('LINK', 'MUTABLE', { url: target, targetOption: newTab ? '_blank' : '_self' })
+      .createEntity('LINK', 'MUTABLE', {
+        url: target,
+        targetOption: newTab ? '_blank' : '_self'
+      })
       .getLastCreatedEntityKey();
 
     let contentState = Modifier.replaceText(
@@ -94,7 +131,7 @@ class Link extends PureComponent {
       newEditorState.getCurrentInlineStyle(),
       undefined,
     );
-    this.props.onAdd(EditorState.push(newEditorState, contentState, 'insert-characters'));
+    this.props.onChange(EditorState.push(newEditorState, contentState, 'insert-characters'));
   }
 
   onPromptPopover() {
@@ -112,53 +149,56 @@ class Link extends PureComponent {
     const { toolId, tool, onBlur, onFocus } = this.props
 
     return (
-      <Popover
-        key={toolId}
-        placement="bottom"
-        width="200"
-        trigger="click"
-        content={(
-          <div className="editor_popover_content">
-            <Form className="editor_link"
-              model={this.state.form}
-              onSubmit={this.handleAdd}>
-              <Form.Item className="link_item">
-                <Input
-                  placeholder="Link title"
-                  value={this.state.form.title}
-                  onChange={this.handleChange.bind(null, 'title')}
-                  onFocus={onFocus}
-                  onBlur={onBlur}
-                  >
-                </Input>
-              </Form.Item>
-              <Form.Item className="link_item">
-                <Input
-                  placeholder="Link target"
-                  value={this.state.form.target}
-                  onChange={this.handleChange.bind(null, 'target')}
-                  onFocus={onFocus}
-                  onBlur={onBlur}
-                  >
-                </Input>
-              </Form.Item>
-              <Form.Item label="Opens in new tab">
-                <Switch
-                  onText=""
-                  offText=""
-                  value={this.state.form.newTab}
-                  onChange={this.handleChange.bind(this, 'newTab')}
-                />
-              </Form.Item>
-              <Form.Item>
-                <Button nativeType="submit">Add</Button>
-                <Button>Cancel</Button>
-              </Form.Item>
-            </Form>
-          </div>
-      )}>
-        <Button onClick={this.onPromptPopover} className="button_icon">{tool.item.label}</Button>
-      </Popover>
+      <div>
+        <Popover
+          key={toolId}
+          placement="bottom"
+          width="200"
+          trigger="click"
+          content={(
+            <div className="editor_popover_content">
+              <Form className="editor_link"
+                model={this.state.form}
+                onSubmit={this.handleAdd}>
+                <Form.Item className="link_item">
+                  <Input
+                    placeholder="Link title"
+                    value={this.state.form.title}
+                    onChange={this.handleChange.bind(null, 'title')}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
+                    >
+                  </Input>
+                </Form.Item>
+                <Form.Item className="link_item">
+                  <Input
+                    placeholder="Link target"
+                    value={this.state.form.target}
+                    onChange={this.handleChange.bind(null, 'target')}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
+                    >
+                  </Input>
+                </Form.Item>
+                <Form.Item label="Opens in new tab">
+                  <Switch
+                    onText=""
+                    offText=""
+                    value={this.state.form.newTab}
+                    onChange={this.handleChange.bind(this, 'newTab')}
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Button nativeType="submit">Add</Button>
+                  <Button>Cancel</Button>
+                </Form.Item>
+              </Form>
+            </div>
+        )}>
+          <Button onClick={this.onPromptPopover} className="button_icon">{tool.link.label}</Button>
+        </Popover>
+          <Button onClick={this.handleRemove} className="button_icon">{tool.unlink.label}</Button>
+      </div>
     );
   }
 }
@@ -166,14 +206,14 @@ class Link extends PureComponent {
 Link.propTypes = {
   toolId: PropTypes.string,
   tool: PropTypes.object,
-  onAdd: PropTypes.func,
+  onChange: PropTypes.func,
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,
   editorState: PropTypes.object,
 };
 
 Link.defaultProps = {
-  onAdd: () => {},
+  onChange: () => {},
   onBlur: () => {},
   onFocus: () => {},
 };
