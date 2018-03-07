@@ -213,7 +213,7 @@ class Builder extends PureComponent {
     let newObject = {
       id: generateId(),
       type,
-      attr: DEFAULT_ATTRIBUTE
+      attr: DEFAULT_ATTRIBUTE,
     };
 
     switch (type) {
@@ -229,6 +229,7 @@ class Builder extends PureComponent {
         newObject = {
           ...newObject,
           content: EditorState.createEmpty(getDecorators()),
+          textAlign: 'left',
         };
       break;
 
@@ -284,6 +285,10 @@ class Builder extends PureComponent {
     this.setState({ curSlideIndex: id });
   }
 
+  /**
+   * Update the snapshot after 1 second of inactivity
+   * to display at the bottom bar
+  */
   updateSnapshot() {
     const { slides, curSlideIndex, mode } = this.state
     const slideIndex = curSlideIndex;
@@ -364,9 +369,21 @@ class Builder extends PureComponent {
     this.setState({ mode });
   }
 
-  handleTextChange(id, editorState) {
-    this.updateObject(id, {
-      content: editorState
+  handleTextChange(id, value, key) {
+    const object = this.state.objects[id] || {}
+
+    /*
+      This is to handle cases such as text-alignment
+      which are not part of editor state. Note the field must pre-exist to update
+    */
+    if(object[key]) {
+      return this.updateObject(id, {
+        [key]: value
+      })
+    }
+
+    return this.updateObject(id, {
+      content: value
     });
   }
 
@@ -504,10 +521,6 @@ class Builder extends PureComponent {
 
     const objectType = (objects[activeObjectId] && objects[activeObjectId].type) ?
       objects[activeObjectId].type : undefined
-
-
-      // console.warn(this.state);
-
 
     /**
      *  Construct editor configuration based on the object type

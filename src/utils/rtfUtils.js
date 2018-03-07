@@ -1,3 +1,8 @@
+/**
+ * This file is extended from
+ * https://github.com/jpuri/react-draft-wysiwyg/blob/4877a25fdef473236d6981426751b29d5995d7be/src/controls/Inline/index.js
+ * to support line height and text align properties
+ */
 import {
   Modifier,
   RichUtils,
@@ -18,7 +23,7 @@ import {
 * - if focus id anywhere inside the block and selection is collapsed
 *     style of a character before focus is returned.
 */
-export function getSelectionInlineStyle(editorState) {
+export const getSelectionInlineStyle = editorState => {
   const currentSelection = editorState.getSelection();
   if (currentSelection.isCollapsed()) {
     const inlineStyles = {};

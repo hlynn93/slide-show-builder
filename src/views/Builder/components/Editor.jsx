@@ -23,7 +23,12 @@ class Editor extends PureComponent {
     if(!id)
       return
 
-    onChange(id, format(value, editorState))
+    // If the value is one of the text-align values
+    if(['left', 'right', 'justify', 'center'].indexOf(value) > -1) {
+      return onChange(id, value, 'textAlign')
+    }
+
+    return onChange(id, format(value, editorState))
   }
 
   renderCustom(toolId, tool) {

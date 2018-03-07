@@ -1,7 +1,4 @@
 import { RichUtils, EditorState, Modifier } from 'draft-js';
-import {
-  setBlockData
-} from 'draftjs-utils';
 import { toggleCustomInlineStyle } from '../utils/rtfUtils';
 
 export const OBJECT_TYPE = {
@@ -156,7 +153,6 @@ export const EDITOR_TOOLBAR_CONFIG = {
       {label: '20', value: '20'},
     ],
     format: (toggledColor, editorState) => {
-      console.warn(toggledColor);
       return toggleCustomInlineStyle(editorState, 'lineHeight', toggledColor)
     }
   },
@@ -180,7 +176,7 @@ export const EDITOR_TOOLBAR_CONFIG = {
       {label: 'Right', value: 'right'},
       {label: 'Justify', value: 'justify'}
     ],
-    format: (textAlign, state) => setBlockData(state, { 'text-align': textAlign })
+    format: (textAlign, state) => toggleCustomInlineStyle(state, TEXT_TOOL_TYPE.TEXT_ALIGN, textAlign)
   },
   [TEXT_TOOL_TYPE.LINK]: {
     type: TOOLBAR_TYPE.CUSTOM,
