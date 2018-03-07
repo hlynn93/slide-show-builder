@@ -1,4 +1,6 @@
-import { toggleCustomInlineStyle } from '../utils/rtfUtils';
+import {
+  toggleCustomInlineStyle
+} from '../utils/rtfUtils';
 
 export const OBJECT_TYPE = {
   IMAGE: 'image',
@@ -41,7 +43,7 @@ export const TEXT_TOOL_TYPE = {
   INLINE: 'inline',
   BLOCK_TYPE: 'blockType',
   LIST: 'list',
-  // FONT_SIZE: 'fontSize',
+  FONT_SIZE: 'fontSize',
   // FONT_FAMILY: 'fontFamily',
   // LINE_HEIGHT: 'lineHeight',
   // TEXT_ALIGN: 'textAlign',
@@ -74,7 +76,7 @@ export const EASING = {
 
 /**
  * TOOLBAR CONFIGURATIONS
-*/
+ */
 export const EDITOR_TOOLBAR_CONFIG = {
   [IMAGE_TOOL_TYPE.ROTATION]: {
     type: TOOLBAR_TYPE.SLIDER,
@@ -82,12 +84,13 @@ export const EDITOR_TOOLBAR_CONFIG = {
       min: 0,
       max: 360,
     },
-    format: value => ({ [IMAGE_TOOL_TYPE.ROTATION]: value })
+    format: value => ({
+      [IMAGE_TOOL_TYPE.ROTATION]: value
+    })
   },
 
   [TEXT_TOOL_TYPE.INLINE]: {
-    items: [
-      {
+    items: [{
         value: 'BOLD',
         image: 'bold'
       },
@@ -118,21 +121,46 @@ export const EDITOR_TOOLBAR_CONFIG = {
     ],
   },
   [TEXT_TOOL_TYPE.BLOCK_TYPE]: {
-    items: [
-      { label: 'Normal', value: 'unstyled' },
-      { label: 'H1', value: 'header-one' },
-      { label: 'H2', value: 'header-two' },
-      { label: 'H3', value: 'header-three' },
-      { label: 'H4', value: 'header-four' },
-      { label: 'H5', value: 'header-five' },
-      { label: 'H6', value: 'header-six' },
-      { label: 'Blockquote', value: 'blockquote' },
-      { label: 'Code', value: 'code-block' },
+    items: [{
+        label: 'Normal',
+        value: 'unstyled'
+      },
+      {
+        label: 'H1',
+        value: 'header-one'
+      },
+      {
+        label: 'H2',
+        value: 'header-two'
+      },
+      {
+        label: 'H3',
+        value: 'header-three'
+      },
+      {
+        label: 'H4',
+        value: 'header-four'
+      },
+      {
+        label: 'H5',
+        value: 'header-five'
+      },
+      {
+        label: 'H6',
+        value: 'header-six'
+      },
+      {
+        label: 'Blockquote',
+        value: 'blockquote'
+      },
+      {
+        label: 'Code',
+        value: 'code-block'
+      },
     ],
   },
   [TEXT_TOOL_TYPE.LIST]: {
-    items: [
-      {
+    items: [{
         image: 'unordered-list',
         value: 'unordered-list-item'
       },
@@ -151,20 +179,34 @@ export const EDITOR_TOOLBAR_CONFIG = {
     ]
   },
   [TEXT_TOOL_TYPE.FONT_SIZE]: {
-    type: TOOLBAR_TYPE.SELECT,
-    items: [
-      {label: '10', value: 10},
-      {label: '14', value: 14},
-      {label: '18', value: 18},
-      {label: '24', value: 24}
-    ],
-    format: (fontSize, state) => toggleCustomInlineStyle(state, TEXT_TOOL_TYPE.FONT_SIZE, fontSize)
+    items: [{
+        label: '10',
+        value: 10
+      },
+      {
+        label: '14',
+        value: 14
+      },
+      {
+        label: '18',
+        value: 18
+      },
+      {
+        label: '24',
+        value: 24
+      }
+    ]
   },
   [TEXT_TOOL_TYPE.LINE_HEIGHT]: {
     type: TOOLBAR_TYPE.SELECT,
-    items: [
-      {label: '10', value: '10'},
-      {label: '20', value: '20'},
+    items: [{
+        label: '10',
+        value: '10'
+      },
+      {
+        label: '20',
+        value: '20'
+      },
     ],
     format: (toggledColor, editorState) => {
       return toggleCustomInlineStyle(editorState, 'lineHeight', toggledColor)
@@ -172,30 +214,64 @@ export const EDITOR_TOOLBAR_CONFIG = {
   },
   [TEXT_TOOL_TYPE.FONT_FAMILY]: {
     type: TOOLBAR_TYPE.SELECT,
-    items: [
-      {label: 'Arial', value: 'Arial'},
-      {label: 'Georgia', value: 'Georgia'},
-      {label: 'Impact', value: 'Impact'},
-      {label: 'Tahoma', value: 'Tahoma'},
-      {label: 'Times New Roman', value: 'Times New Roman'},
-      {label: 'Verdana', value: 'Verdana'}
+    items: [{
+        label: 'Arial',
+        value: 'Arial'
+      },
+      {
+        label: 'Georgia',
+        value: 'Georgia'
+      },
+      {
+        label: 'Impact',
+        value: 'Impact'
+      },
+      {
+        label: 'Tahoma',
+        value: 'Tahoma'
+      },
+      {
+        label: 'Times New Roman',
+        value: 'Times New Roman'
+      },
+      {
+        label: 'Verdana',
+        value: 'Verdana'
+      }
     ],
     format: (fontFamily, state) => toggleCustomInlineStyle(state, TEXT_TOOL_TYPE.FONT_FAMILY, fontFamily)
   },
   [TEXT_TOOL_TYPE.TEXT_ALIGN]: {
     type: TOOLBAR_TYPE.BUTTON,
-    items: [
-      {label: 'Left', value: 'left'},
-      {label: 'Center', value: 'center'},
-      {label: 'Right', value: 'right'},
-      {label: 'Justify', value: 'justify'}
+    items: [{
+        label: 'Left',
+        value: 'left'
+      },
+      {
+        label: 'Center',
+        value: 'center'
+      },
+      {
+        label: 'Right',
+        value: 'right'
+      },
+      {
+        label: 'Justify',
+        value: 'justify'
+      }
     ],
     format: (textAlign, state) => toggleCustomInlineStyle(state, TEXT_TOOL_TYPE.TEXT_ALIGN, textAlign)
   },
   [TEXT_TOOL_TYPE.LINK]: {
     type: TOOLBAR_TYPE.CUSTOM,
-    link: { label: 'Link', value: 'link' },
-    unlink: { label: 'Unlink', value: 'link' },
+    link: {
+      label: 'Link',
+      value: 'link'
+    },
+    unlink: {
+      label: 'Unlink',
+      value: 'link'
+    },
     format: newState => newState
   },
 }
