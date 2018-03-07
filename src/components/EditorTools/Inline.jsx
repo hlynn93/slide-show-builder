@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { RichUtils, EditorState, Modifier } from 'draft-js';
 
@@ -6,7 +6,7 @@ import { getSelectionInlineStyle } from '../../utils/rtfUtils';
 import ControlGroup from './components/ControlGroup';
 import './EditorTools.scss'
 
-class Inline extends Component {
+class Inline extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -61,10 +61,9 @@ class Inline extends Component {
 
   render() {
 
-    const { toolId, items } = this.props;
+    const { items } = this.props;
     return (
       <ControlGroup
-        key={toolId}
         onClick={this.toggleStyle}
         items={items}
         activeIds={this.state.currentStyles}
@@ -77,7 +76,10 @@ Inline.propTypes = {
   items: PropTypes.array,
   editorState: PropTypes.object,
   onChange: PropTypes.func,
-  toolId: PropTypes.string,
+};
+
+Inline.defaultProps = {
+  onChange: () => {},
 };
 
 export default Inline;

@@ -8,17 +8,12 @@
 
   margin-bottom: 8px;
   display: block;
-  border-right: 1px solid lightgrey;
 }
 
 .control {
   padding: 8px 8px 0px 8px;
   display: inline-block;
   border: 1px solid lightgrey;
-
-  &:last-child {
-    border-right: none;
-  }
 
   &--active {
     background-color: lightgrey;

@@ -3,7 +3,7 @@ import Slider from 'react-rangeslider'
 import { Input, Button, Select } from 'element-react'
 import PropTypes from 'prop-types';
 import Link from '../../../components/EditorTools/Link';
-import { Inline } from '../../../components/EditorTools';
+import { Inline, Block, List } from '../../../components/EditorTools';
 
 import { EDITOR_TOOLBAR_CONFIG, TEXT_TOOL_TYPE } from '../../../constants/builderConstants';
 
@@ -12,6 +12,8 @@ import './Editor.scss';
 
 const mapIdToComponent = {
   [TEXT_TOOL_TYPE.INLINE]: props => <Inline {...props}/>,
+  [TEXT_TOOL_TYPE.BLOCK_TYPE]: props => <Block {...props}/>,
+  [TEXT_TOOL_TYPE.LIST]: props => <List {...props}/>,
 }
 
 class Editor extends PureComponent {

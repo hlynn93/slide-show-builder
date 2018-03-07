@@ -1,4 +1,3 @@
-import { RichUtils } from 'draft-js';
 import { toggleCustomInlineStyle } from '../utils/rtfUtils';
 
 export const OBJECT_TYPE = {
@@ -40,8 +39,8 @@ export const EDITOR_TYPE = {
 
 export const TEXT_TOOL_TYPE = {
   INLINE: 'inline',
-  // BLOCK_TYPE: 'blockType',
-  // LIST: 'list',
+  BLOCK_TYPE: 'blockType',
+  LIST: 'list',
   // FONT_SIZE: 'fontSize',
   // FONT_FAMILY: 'fontFamily',
   // LINE_HEIGHT: 'lineHeight',
@@ -87,7 +86,6 @@ export const EDITOR_TOOLBAR_CONFIG = {
   },
 
   [TEXT_TOOL_TYPE.INLINE]: {
-    type: TOOLBAR_TYPE.BUTTON,
     items: [
       {
         value: 'BOLD',
@@ -120,7 +118,6 @@ export const EDITOR_TOOLBAR_CONFIG = {
     ],
   },
   [TEXT_TOOL_TYPE.BLOCK_TYPE]: {
-    type: TOOLBAR_TYPE.SELECT,
     items: [
       { label: 'Normal', value: 'unstyled' },
       { label: 'H1', value: 'header-one' },
@@ -132,15 +129,26 @@ export const EDITOR_TOOLBAR_CONFIG = {
       { label: 'Blockquote', value: 'blockquote' },
       { label: 'Code', value: 'code-block' },
     ],
-    format: (style, state) => RichUtils.toggleBlockType(state, style)
   },
   [TEXT_TOOL_TYPE.LIST]: {
-    type: TOOLBAR_TYPE.BUTTON,
     items: [
-      {label: 'UL', value: 'unordered-list-item'},
-      {label: 'OL', value: 'ordered-list-item'}
-    ],
-    format: (style, state) => RichUtils.toggleBlockType(state, style)
+      {
+        image: 'unordered-list',
+        value: 'unordered-list-item'
+      },
+      {
+        image: 'ordered-list',
+        value: 'ordered-list-item'
+      },
+      {
+        image: 'right-indent',
+        value: 'right-indent'
+      },
+      {
+        image: 'left-indent',
+        value: 'left-indent'
+      },
+    ]
   },
   [TEXT_TOOL_TYPE.FONT_SIZE]: {
     type: TOOLBAR_TYPE.SELECT,
