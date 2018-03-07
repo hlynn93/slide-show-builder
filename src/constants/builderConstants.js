@@ -1,4 +1,4 @@
-import { RichUtils, EditorState, Modifier } from 'draft-js';
+import { RichUtils } from 'draft-js';
 import { toggleCustomInlineStyle } from '../utils/rtfUtils';
 
 export const OBJECT_TYPE = {
@@ -40,13 +40,14 @@ export const EDITOR_TYPE = {
 
 export const TEXT_TOOL_TYPE = {
   INLINE: 'inline',
-  BLOCK_TYPE: 'blockType',
-  LIST: 'list',
-  FONT_SIZE: 'fontSize',
-  FONT_FAMILY: 'fontFamily',
-  LINE_HEIGHT: 'lineHeight',
-  TEXT_ALIGN: 'textAlign',
-  LINK: 'link',
+  // BLOCK_TYPE: 'blockType',
+  // LIST: 'list',
+  // FONT_SIZE: 'fontSize',
+  // FONT_FAMILY: 'fontFamily',
+  // LINE_HEIGHT: 'lineHeight',
+  // TEXT_ALIGN: 'textAlign',
+  // LINK: 'link',
+
   // COLOR_PICKER: 'colorPicker',
   // EMOJI: 'emoji',
   // HISTORY: 'history',
@@ -88,30 +89,35 @@ export const EDITOR_TOOLBAR_CONFIG = {
   [TEXT_TOOL_TYPE.INLINE]: {
     type: TOOLBAR_TYPE.BUTTON,
     items: [
-      {label: 'Bold', value: 'BOLD'},
-      {label: 'Italic', value: 'ITALIC'},
-      {label: 'Underline', value: 'UNDERLINE'},
-      {label: 'Strikethrough', value: 'STRIKETHROUGH'},
-      {label: 'Monospace', value: 'CODE'},
-      {label: 'Superscript', value: 'SUPERSCRIPT'},
-      {label: 'Subscript', value: 'SUBSCRIPT'},
+      {
+        value: 'BOLD',
+        image: 'bold'
+      },
+      {
+        image: 'italic',
+        value: 'ITALIC'
+      },
+      {
+        image: 'underline',
+        value: 'UNDERLINE'
+      },
+      {
+        image: 'strikethrough',
+        value: 'STRIKETHROUGH'
+      },
+      {
+        image: 'code',
+        value: 'CODE'
+      },
+      {
+        image: 'superscript',
+        value: 'SUPERSCRIPT'
+      },
+      {
+        image: 'subscript',
+        value: 'SUBSCRIPT'
+      },
     ],
-    format: (style, state) => {
-      let newState = RichUtils.toggleInlineStyle(state, style)
-
-      // Remove the initial subscript or superscript style from state
-      if (style === 'SUBSCRIPT' || style === 'SUPERSCRIPT') {
-        const removeStyle = style === 'SUBSCRIPT' ? 'SUPERSCRIPT' : 'SUBSCRIPT';
-        const contentState = Modifier.removeInlineStyle(
-          newState.getCurrentContent(),
-          newState.getSelection(),
-          removeStyle,
-        );
-        newState = EditorState.push(newState, contentState, 'change-inline-style');
-      }
-
-      return newState;
-    }
   },
   [TEXT_TOOL_TYPE.BLOCK_TYPE]: {
     type: TOOLBAR_TYPE.SELECT,

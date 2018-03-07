@@ -3,11 +3,16 @@ import Slider from 'react-rangeslider'
 import { Input, Button, Select } from 'element-react'
 import PropTypes from 'prop-types';
 import Link from '../../../components/EditorTools/Link';
+import { Inline } from '../../../components/EditorTools';
 
-import { EDITOR_TOOLBAR_CONFIG, TOOLBAR_TYPE, TEXT_TOOL_TYPE } from '../../../constants/builderConstants';
+import { EDITOR_TOOLBAR_CONFIG, TEXT_TOOL_TYPE } from '../../../constants/builderConstants';
 
 import 'react-rangeslider/lib/index.css'
 import './Editor.scss';
+
+const mapIdToComponent = {
+  [TEXT_TOOL_TYPE.INLINE]: props => <Inline {...props}/>,
+}
 
 class Editor extends PureComponent {
   constructor(props) {
@@ -18,17 +23,17 @@ class Editor extends PureComponent {
     this.handleChange = this.handleChange.bind(this)
   }
 
-  handleChange(format, value) {
-    const { id, onChange, editorState } = this.props
+  handleChange(newState) {
+    const { id, onChange } = this.props
     if(!id)
       return
 
     // If the value is one of the text-align values
-    if(['left', 'right', 'justify', 'center'].indexOf(value) > -1) {
-      return onChange(id, value, 'textAlign')
+    if(['left', 'right', 'justify', 'center'].indexOf(newState) > -1) {
+      return onChange(id, newState, 'textAlign')
     }
 
-    return onChange(id, format(value, editorState))
+    return onChange(id, newState)
   }
 
   renderCustom(toolId, tool) {
@@ -117,27 +122,25 @@ class Editor extends PureComponent {
 
   render() {
 
-    const { toolTypes } = this.props
+    const {
+      toolTypes,
+      editorState,
+      onBlur,
+      onFocus
+    } = this.props
 
     const controls = Object.values(toolTypes).map(toolId => {
       const toolItem = EDITOR_TOOLBAR_CONFIG[toolId]
-      switch (toolItem.type) {
-        case TOOLBAR_TYPE.SLIDER:
-          return this.renderSlider(toolId, toolItem)
-
-        case TOOLBAR_TYPE.BUTTON:
-          return this.renderButtonGroup(toolId, toolItem)
-
-        case TOOLBAR_TYPE.SELECT:
-          return this.renderDropdown(toolId, toolItem)
-
-        case TOOLBAR_TYPE.CUSTOM:
-          return this.renderCustom(toolId, toolItem)
-
-        default:
-          break;
-      }
+      return mapIdToComponent[toolId]({
+        ...toolItem,
+        key: toolId,
+        editorState: editorState,
+        onBlur: onBlur,
+        onFocus: onFocus,
+        onChange: this.handleChange
+      })
     })
+
     return (
       <div className="editor">
         { controls }
