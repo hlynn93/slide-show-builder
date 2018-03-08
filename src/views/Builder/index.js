@@ -89,7 +89,7 @@ const DEFAULT_BUILDER_STATE = {
   status: {
     [STATUS.IS_EDITING_TEXT]: false,
   },
-  scale: 1,
+  scale: 1
 }
 
 class Builder extends PureComponent {
@@ -369,21 +369,20 @@ class Builder extends PureComponent {
     this.setState({ mode });
   }
 
-  handleTextChange(id, value, key) {
-    const object = this.state.objects[id] || {}
-
+  handleTextChange(id, editorState) {
     /*
       This is to handle cases such as text-alignment
-      which are not part of editor state. Note the field must pre-exist to update
+      which are not part of editor state.
     */
-    if(object[key]) {
-      return this.updateObject(id, {
-        [key]: value
-      })
-    }
+   const key = editorState.objectKey
+   if(key) {
+    return this.updateObject(id, {
+      [key]: editorState.value
+    })
+   }
 
     return this.updateObject(id, {
-      content: value
+      content: editorState
     });
   }
 

@@ -161,7 +161,11 @@ const customInlineStylesMap =
 * Set style.
 */
 const addToCustomStyleMap = (styleType, styleKey, style) => { // eslint-disable-line
-  customInlineStylesMap[styleType][`${styleType.toLowerCase()}-${style}`] = { [`${styleKey}`]: style };
+  if(styleType.toLowerCase() === 'lineheight') { // Because 'px' is not automatically added up
+    customInlineStylesMap[styleType][`${styleType.toLowerCase()}-${style}`] = { [`${styleKey}`]: `${style}px` };
+  } else {
+    customInlineStylesMap[styleType][`${styleType.toLowerCase()}-${style}`] = { [`${styleKey}`]: style };
+  }
 };
 
 /**

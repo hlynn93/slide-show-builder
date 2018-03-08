@@ -1,14 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Popover, Form, Button, Switch } from 'element-react'
-// import linkifyIt from 'linkify-it';
 import { EditorState , Modifier, RichUtils } from 'draft-js';
 import {
   getEntityRange,
   getSelectionText,
   getSelectionEntity,
 } from 'draftjs-utils';
-// const linkify = linkifyIt();
+import './EditorTools.scss'
 
 class Link extends PureComponent {
   constructor(props) {

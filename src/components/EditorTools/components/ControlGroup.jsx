@@ -19,7 +19,6 @@ const ControlGroup = ({
       isActive={activeIds[item.value]} />
   ))
 
-
   return (
     <div className="control_group">
       {controls}

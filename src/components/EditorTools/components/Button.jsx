@@ -19,7 +19,11 @@ const Button = ({
         baseClass,
         { [`${baseClass}--active`]: isActive }
       )}
-      onClick={onClick.bind(null, item.value)}
+      onMouseDown={(e) => {
+        /* To prevent loss of focus on the editor */
+        e.preventDefault();
+        onClick(item.value);
+      }}
       >
       { item.image ?
         <img src={process.env.PUBLIC_URL + `/images/icons/editor/${item.image}.png`} className="control_icon" />

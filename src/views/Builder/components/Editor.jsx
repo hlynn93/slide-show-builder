@@ -39,7 +39,10 @@ class Editor extends PureComponent {
 
     // If the value is one of the text-align values
     if(['left', 'right', 'justify', 'center'].indexOf(newState) > -1) {
-      return onChange(id, newState, 'textAlign')
+      return onChange(id, {
+        objectKey: 'textAlign',
+        value: newState,
+      })
     }
 
     return onChange(id, newState)
@@ -50,6 +53,7 @@ class Editor extends PureComponent {
     const {
       toolTypes,
       editorState,
+      textAlign,
       onBlur,
       onFocus
     } = this.props
@@ -59,7 +63,8 @@ class Editor extends PureComponent {
       return mapIdToComponent[toolId]({
         ...toolItem,
         key: toolId,
-        editorState: editorState,
+        editorState,
+        textAlign,
         onBlur: onBlur,
         onFocus: onFocus,
         onChange: this.handleChange
