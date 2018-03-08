@@ -146,12 +146,13 @@ class Link extends PureComponent {
   }
 
   render() {
-    const { toolId, tool, onBlur, onFocus } = this.props
+    const { items, onBlur, onFocus } = this.props
+    if(items.length < 2)
+      throw "Link element needs at least two items"
 
     return (
       <div>
         <Popover
-          key={toolId}
           placement="bottom"
           width="200"
           trigger="click"
@@ -195,17 +196,16 @@ class Link extends PureComponent {
               </Form>
             </div>
         )}>
-          <Button onClick={this.onPromptPopover} className="button_icon">{tool.link.label}</Button>
+          <Button onClick={this.onPromptPopover} className="button_icon">{items[0].label}</Button>
         </Popover>
-          <Button onClick={this.handleRemove} className="button_icon">{tool.unlink.label}</Button>
+          <Button onClick={this.handleRemove} className="button_icon">{items[1].label}</Button>
       </div>
     );
   }
 }
 
 Link.propTypes = {
-  toolId: PropTypes.string,
-  tool: PropTypes.object,
+  items: PropTypes.array,
   onChange: PropTypes.func,
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,

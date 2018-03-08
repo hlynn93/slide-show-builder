@@ -1,9 +1,14 @@
 import React, { PureComponent } from 'react';
-import Slider from 'react-rangeslider'
-import { Input, Button, Select } from 'element-react'
 import PropTypes from 'prop-types';
-import Link from '../../../components/EditorTools/Link';
-import { Inline, Block, List, FontSize } from '../../../components/EditorTools';
+import { Inline,
+  Block,
+  List,
+  FontSize,
+  FontFamily,
+  LineHeight,
+  TextAlign,
+  Link
+} from '../../../components/EditorTools';
 
 import { EDITOR_TOOLBAR_CONFIG, TEXT_TOOL_TYPE } from '../../../constants/builderConstants';
 
@@ -15,14 +20,15 @@ const mapIdToComponent = {
   [TEXT_TOOL_TYPE.BLOCK_TYPE]: props => <Block {...props}/>,
   [TEXT_TOOL_TYPE.LIST]: props => <List {...props}/>,
   [TEXT_TOOL_TYPE.FONT_SIZE]: props => <FontSize {...props}/>,
+  [TEXT_TOOL_TYPE.FONT_FAMILY]: props => <FontFamily {...props}/>,
+  [TEXT_TOOL_TYPE.LINE_HEIGHT]: props => <LineHeight {...props}/>,
+  [TEXT_TOOL_TYPE.TEXT_ALIGN]: props => <TextAlign {...props}/>,
+  [TEXT_TOOL_TYPE.LINK]: props => <Link {...props}/>,
 }
 
 class Editor extends PureComponent {
   constructor(props) {
     super(props);
-    this.renderSlider = this.renderSlider.bind(this)
-    this.renderButtonGroup = this.renderButtonGroup.bind(this)
-    this.renderDropdown = this.renderDropdown.bind(this)
     this.handleChange = this.handleChange.bind(this)
   }
 
@@ -37,90 +43,6 @@ class Editor extends PureComponent {
     }
 
     return onChange(id, newState)
-  }
-
-  renderCustom(toolId, tool) {
-    const { onFocus, onBlur, editorState } = this.props;
-    const { format } = tool
-    switch (toolId) {
-      case TEXT_TOOL_TYPE.LINK:
-        return (
-          <Link
-            editorState={editorState}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            key={toolId}
-            tool={tool}
-            toolId={toolId}
-            onChange={this.handleChange.bind(null, format)}
-            />
-        )
-
-      default:
-    }
-  }
-
-  renderSlider(toolId, tool) {
-    const { attribute, onFocus, onBlur } = this.props;
-    const { item, format } = tool
-    const value = attribute[toolId] || 0
-    return (
-      <div key={toolId} className="editor_slider_wrapper">
-        <Slider
-          className="editor_slider"
-          min={item.min}
-          max={item.max}
-          value={value}
-          onChange={this.handleChange.bind(null, format)}
-        />
-        <Input
-          className="editor_slider_input"
-          value={value || undefined}
-          onChange={this.handleChange.bind(null, format)}
-          onFocus={onFocus}
-          onBlur={onBlur}
-        />
-      </div>
-    )
-  }
-
-  renderButtonGroup(toolId, tool) {
-    const { items, format } = tool
-    return (
-      <Button.Group
-        key={toolId}
-        className="button_group"
-        >
-        {
-          items.map(el => (
-            <Button
-              key={el.label}
-              className="button_icon"
-              onClick={this.handleChange.bind(null, format, el.value)}
-              >{el.label}</Button>
-          ))
-        }
-      </Button.Group>
-    )
-  }
-
-  renderDropdown(toolId, tool) {
-    const { items, format } = tool
-    const placeholder = (items && items.length > 0)
-      ? items[0].label : "";
-    return (
-      <Select
-        className="button_group"
-        key={toolId}
-        onChange={this.handleChange.bind(null, format)}
-        placeholder={placeholder}>
-        {
-          items.map(el =>
-            <Select.Option key={el.value} label={el.label} value={el.value} />
-          )
-        }
-      </Select>
-    )
   }
 
   render() {
@@ -160,6 +82,7 @@ Editor.propTypes = {
   id: PropTypes.string,
   toolTypes: PropTypes.object,
   editorState: PropTypes.object,
+  textAlign: PropTypes.string,
 };
 
 Editor.defaultProps = {

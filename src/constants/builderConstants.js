@@ -1,7 +1,3 @@
-import {
-  toggleCustomInlineStyle
-} from '../utils/rtfUtils';
-
 export const OBJECT_TYPE = {
   IMAGE: 'image',
   TEXT: 'text',
@@ -44,10 +40,10 @@ export const TEXT_TOOL_TYPE = {
   BLOCK_TYPE: 'blockType',
   LIST: 'list',
   FONT_SIZE: 'fontSize',
-  // FONT_FAMILY: 'fontFamily',
-  // LINE_HEIGHT: 'lineHeight',
-  // TEXT_ALIGN: 'textAlign',
-  // LINK: 'link',
+  LINE_HEIGHT: 'lineHeight',
+  FONT_FAMILY: 'fontFamily',
+  TEXT_ALIGN: 'textAlign',
+  LINK: 'link',
 
   // COLOR_PICKER: 'colorPicker',
   // EMOJI: 'emoji',
@@ -161,59 +157,30 @@ export const EDITOR_TOOLBAR_CONFIG = {
   },
   [TEXT_TOOL_TYPE.LIST]: {
     items: [{
+        tooltip: 'Transform the text into an unordered list',
         image: 'unordered-list',
         value: 'unordered-list-item'
       },
       {
+        tooltip: 'Transform the text into an ordered list',
         image: 'ordered-list',
         value: 'ordered-list-item'
       },
       {
+        tooltip: 'Push the indentation to the right',
         image: 'right-indent',
         value: 'right-indent'
       },
       {
+        tooltip: 'Push the indentation to the left',
         image: 'left-indent',
         value: 'left-indent'
       },
     ]
   },
-  [TEXT_TOOL_TYPE.FONT_SIZE]: {
-    items: [{
-        label: '10',
-        value: 10
-      },
-      {
-        label: '14',
-        value: 14
-      },
-      {
-        label: '18',
-        value: 18
-      },
-      {
-        label: '24',
-        value: 24
-      }
-    ]
-  },
-  [TEXT_TOOL_TYPE.LINE_HEIGHT]: {
-    type: TOOLBAR_TYPE.SELECT,
-    items: [{
-        label: '10',
-        value: '10'
-      },
-      {
-        label: '20',
-        value: '20'
-      },
-    ],
-    format: (toggledColor, editorState) => {
-      return toggleCustomInlineStyle(editorState, 'lineHeight', toggledColor)
-    }
-  },
+  [TEXT_TOOL_TYPE.FONT_SIZE]: {},
+  [TEXT_TOOL_TYPE.LINE_HEIGHT]: { },
   [TEXT_TOOL_TYPE.FONT_FAMILY]: {
-    type: TOOLBAR_TYPE.SELECT,
     items: [{
         label: 'Arial',
         value: 'Arial'
@@ -239,39 +206,41 @@ export const EDITOR_TOOLBAR_CONFIG = {
         value: 'Verdana'
       }
     ],
-    format: (fontFamily, state) => toggleCustomInlineStyle(state, TEXT_TOOL_TYPE.FONT_FAMILY, fontFamily)
   },
   [TEXT_TOOL_TYPE.TEXT_ALIGN]: {
-    type: TOOLBAR_TYPE.BUTTON,
     items: [{
-        label: 'Left',
+        tooltip: 'Align the text to the left',
+        image: 'align-left',
         value: 'left'
       },
       {
-        label: 'Center',
+        tooltip: 'Align the text to the center',
+        image: 'align-center',
         value: 'center'
       },
       {
-        label: 'Right',
+        tooltip: 'Align the text to the right',
+        image: 'align-right',
         value: 'right'
       },
       {
-        label: 'Justify',
+        tooltip: 'Align the text blocks to space out as much as possible',
+        image: 'align-justify',
         value: 'justify'
       }
-    ],
-    format: (textAlign, state) => toggleCustomInlineStyle(state, TEXT_TOOL_TYPE.TEXT_ALIGN, textAlign)
+    ]
   },
   [TEXT_TOOL_TYPE.LINK]: {
-    type: TOOLBAR_TYPE.CUSTOM,
-    link: {
-      label: 'Link',
-      value: 'link'
-    },
-    unlink: {
-      label: 'Unlink',
-      value: 'link'
-    },
-    format: newState => newState
+    items: [
+      {
+        label: 'Lsink',
+        value: 'link'
+      },
+      {
+        label: 'Unlink',
+        value: 'link'
+      },
+    ]
+
   },
 }

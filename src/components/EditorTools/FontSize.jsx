@@ -60,13 +60,13 @@ class FontSize extends PureComponent {
         onFocus={this.props.onFocus}
         style={{ width: 100 }}
         append="px"
+        placeholder="Font size"
         />
     );
   }
 }
 
 FontSize.propTypes = {
-  items: PropTypes.array,
   editorState: PropTypes.object,
   onChange: PropTypes.func,
   onBlur: PropTypes.func,

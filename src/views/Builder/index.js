@@ -533,6 +533,9 @@ class Builder extends PureComponent {
 
       editorState: objects[activeObjectId] ?
         objects[activeObjectId].content : undefined,
+
+      textAlign: objects[activeObjectId] ?
+      objects[activeObjectId].textAlign : undefined,
     }
 
     switch (objectType) {
