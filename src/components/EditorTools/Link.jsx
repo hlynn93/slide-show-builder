@@ -1,12 +1,17 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Popover, Form, Button, Switch } from 'element-react'
+import { Input, Popover, Form, Switch, Button } from 'element-react'
 import { EditorState , Modifier, RichUtils } from 'draft-js';
 import {
   getEntityRange,
   getSelectionText,
   getSelectionEntity,
 } from 'draftjs-utils';
+import { IconButton } from './components';
+
+import linkifyIt from 'linkify-it';
+const linkify = linkifyIt();
+
 import './EditorTools.scss'
 
 class Link extends PureComponent {
@@ -90,6 +95,8 @@ class Link extends PureComponent {
     const { editorState } = this.props;
     const { title, target, newTab } = this.state.form;
     const { currentEntity } = this.state;
+    const links = linkify.match(target);
+    const linkifiedTarget = links && links[0] ? links[0].url : '';
     let selection = editorState.getSelection();
 
     if (currentEntity) {
@@ -103,7 +110,7 @@ class Link extends PureComponent {
     const entityKey = editorState
       .getCurrentContent()
       .createEntity('LINK', 'MUTABLE', {
-        url: target,
+        url: linkifiedTarget,
         targetOption: newTab ? '_blank' : '_self'
       })
       .getLastCreatedEntityKey();
@@ -150,7 +157,7 @@ class Link extends PureComponent {
       throw "Link element needs at least two items"
 
     return (
-      <div>
+      <div className="control_group">
         <Popover
           placement="bottom"
           width="200"
@@ -195,9 +202,13 @@ class Link extends PureComponent {
               </Form>
             </div>
         )}>
-          <Button onClick={this.onPromptPopover} className="button_icon">{items[0].label}</Button>
+          <IconButton
+            item={items[0]}
+            onClick={this.onPromptPopover}/>
         </Popover>
-          <Button onClick={this.handleRemove} className="button_icon">{items[1].label}</Button>
+          <IconButton
+            item={items[1]}
+            onClick={this.handleRemove}/>
       </div>
     );
   }

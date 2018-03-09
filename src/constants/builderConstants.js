@@ -253,11 +253,11 @@ export const EDITOR_TOOLBAR_CONFIG = {
   [TEXT_TOOL_TYPE.LINK]: {
     items: [
       {
-        label: 'Lsink',
-        value: 'link'
+        image: 'link',
+        value: 'link',
       },
       {
-        label: 'Unlink',
+        image: 'unlink',
         value: 'link'
       },
     ]

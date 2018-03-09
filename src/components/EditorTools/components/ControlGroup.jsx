@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Button from './Button';
+import IconButton from './IconButton';
 
 import '../EditorTools.scss';
 
@@ -12,7 +12,7 @@ const ControlGroup = ({
 }) => {
 
   const controls = items.map((item,id) => (
-    <Button
+    <IconButton
       key={id}
       item={item}
       onClick={onClick}

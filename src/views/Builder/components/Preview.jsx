@@ -26,6 +26,7 @@ class Preview extends PureComponent {
           key={i}
           {...this.props}
           objectIds={slides[curSlideIndex].modes[mode].objectIds || []}
+          presenterMode
           />
       </Transition>
     ))
