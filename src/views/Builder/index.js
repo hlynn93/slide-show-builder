@@ -401,8 +401,8 @@ class Builder extends PureComponent {
     })
   }
 
+  /* Change the attr of the object */
   handleObjectChange(id, attr) {
-    console.warn(id, attr);
     if(this.state.objects[id])
       this.updateObject(id, { attr })
   }

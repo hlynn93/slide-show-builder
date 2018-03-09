@@ -35,6 +35,12 @@ class Editor extends PureComponent {
     this.handleChange = this.handleChange.bind(this)
   }
 
+  /*
+    newState can either be
+    an editorState object ({ ...editorState }),
+    text-align value ('center') or
+    an object's attr ({ rotation: '34' })
+  */
   handleChange(newState) {
     const { id, onChange } = this.props
     if(!id)

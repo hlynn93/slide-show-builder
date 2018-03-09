@@ -20,7 +20,6 @@ class Rotation extends PureComponent {
         item
       } = this.props;
 
-      console.warn(attr, item.value);
       const value = attr[item.value] || 0
       return (
         <div key={item.value} className="editor_slider_wrapper">
