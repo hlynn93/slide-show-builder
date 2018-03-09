@@ -12,9 +12,10 @@ import Canvas from './components/Canvas';
 import EditorPanel from './components/EditorPanel';
 import Editor from './components/Editor';
 import Preview from './components/Preview';
-import ImageUploader from './components/ImageUploader';
+// import ImageUploader from './components/ImageUploader';
 import BottomBar from './components/BottomBar';
 import ModeSwitch from './components/ModeSwitch';
+import Gallery from './components/Gallery';
 import './Builder.scss';
 import { getDecorators } from "../../components/EditorTools/decorators";
 
@@ -28,7 +29,7 @@ import {
 import {
   OBJECT_TYPE,
   CANVAS_MODE,
-  IMAGE_TOOL_TYPE,
+  // IMAGE_TOOL_TYPE,
   TEXT_TOOL_TYPE,
   TRANSITION,
   EASING
@@ -220,8 +221,7 @@ class Builder extends PureComponent {
       case OBJECT_TYPE.IMAGE:
         newObject = {
           ...newObject,
-          content: data.content,
-          src: data.src,
+          ...data,
         }
         break;
 
@@ -541,7 +541,7 @@ class Builder extends PureComponent {
       case OBJECT_TYPE.IMAGE:
         editorConfig = {
           ...editorConfig,
-          toolTypes: IMAGE_TOOL_TYPE,
+          // toolTypes: IMAGE_TOOL_TYPE,
           onChange: this.handleObjectChange
         }
         break;
@@ -570,7 +570,7 @@ class Builder extends PureComponent {
           onPreview={this.toggleDialog.bind(null, DIALOG.PREVIEW)}
         />
         <div className="builder_content">
-          <ImageUploader
+          <Gallery
             visible={dialogs[DIALOG.IMAGE_UPLOADER]}
             onCancel={this.toggleDialog.bind(null, DIALOG.IMAGE_UPLOADER)}
             onImageChange={this.addObject}
@@ -636,3 +636,8 @@ Builder.defaultProps = {
 };
 
 export default Builder;
+{/* <ImageUploader
+            visible={dialogs[DIALOG.IMAGE_UPLOADER]}
+            onCancel={this.toggleDialog.bind(null, DIALOG.IMAGE_UPLOADER)}
+            onImageChange={this.addObject}
+            /> */}

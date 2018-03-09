@@ -8,7 +8,7 @@ const extractBaseId = (idString) => idString.split(ID_SEPARATOR)[0]
 /**
  * Concat ID and the mode to be used as an object ID for specific mode
  */
-const formatId = (baseId, mode) => baseId + ID_SEPARATOR + mode
+const formatId = (type, baseId, mode) => baseId + ID_SEPARATOR + type + ID_SEPARATOR +  mode
 
 /**
 * Generate a unique value to be used as an ID for objects
@@ -27,7 +27,7 @@ export const addObject = (objects, slides, slideIndex, object) => {
   Object.values(CANVAS_MODE).map(mode => {
     const newObject = {
       ...object,
-      id: formatId(object.id, mode)
+      id: formatId(object.type, object.id, mode)
     }
     newObjects[newObject.id] = newObject;
     newSlide.modes[mode].objectIds.push(newObject.id)

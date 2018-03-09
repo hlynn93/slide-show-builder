@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import PresenterScreen from './components/PresenterScreen';
 import Controls from './components/Controls';
-import initialState from './data.json';
+import initialState from '../../data/getPresenter.json'
 import { ASPECT_RATIO } from '../../constants/builderConstants';
 import { withRouter } from "react-router-dom";
 import { union, difference, isNumber } from 'lodash';

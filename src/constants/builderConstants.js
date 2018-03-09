@@ -204,7 +204,27 @@ export const EDITOR_TOOLBAR_CONFIG = {
       {
         label: 'Verdana',
         value: 'Verdana'
-      }
+      },
+      {
+        label: 'Alegreya',
+        value: 'Alegreya'
+      },
+      {
+        label: 'Roboto',
+        value: 'Roboto'
+      },
+      {
+        label: 'Merriweather',
+        value: 'Merriweather'
+      },
+      {
+        label: 'Nunito',
+        value: 'Nunito'
+      },
+      {
+        label: 'Quattrocento',
+        value: 'Quattrocento'
+      },
     ],
   },
   [TEXT_TOOL_TYPE.TEXT_ALIGN]: {

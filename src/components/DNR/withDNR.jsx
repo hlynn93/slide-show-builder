@@ -16,7 +16,6 @@ export default (Component) => {
     className,
     id,
     isActive,
-    onKeyDown,
     onDrag,
     onDragStart,
     onDragStop,
@@ -68,7 +67,6 @@ export default (Component) => {
             onClick={onClick}
             >
             <Component
-              onKeyDown={onKeyDown}
               style={componentStyle}
               {...object}
               {...props} />
