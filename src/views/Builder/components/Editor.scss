@@ -9,28 +9,6 @@
   max-width: 240px;
 }
 
-.editor_slider_wrapper {
-
-  //Override css
-  .rangeslider-horizontal {
-    height: 8px;
-  }
-
-  .rangeslider-horizontal .rangeslider__handle:after {
-    display: none;
-  }
-}
-
-.editor_slider {
-  width: 200px;
-  display: inline-flex;
-}
-
-.editor_slider_input {
-  width: 50px;
-  margin-left: 12px;
-}
-
 .button_group {
 
   &:last-child {

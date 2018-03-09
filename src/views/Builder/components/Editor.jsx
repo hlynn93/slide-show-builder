@@ -7,10 +7,11 @@ import { Inline,
   FontFamily,
   LineHeight,
   TextAlign,
-  Link
+  Link,
+  Rotation
 } from '../../../components/EditorTools';
 
-import { EDITOR_TOOLBAR_CONFIG, TEXT_TOOL_TYPE } from '../../../constants/builderConstants';
+import { EDITOR_TOOLBAR_CONFIG, TEXT_TOOL_TYPE, IMAGE_TOOL_TYPE } from '../../../constants/builderConstants';
 
 import 'react-rangeslider/lib/index.css'
 import './Editor.scss';
@@ -24,6 +25,8 @@ const mapIdToComponent = {
   [TEXT_TOOL_TYPE.LINE_HEIGHT]: props => <LineHeight {...props}/>,
   [TEXT_TOOL_TYPE.TEXT_ALIGN]: props => <TextAlign {...props}/>,
   [TEXT_TOOL_TYPE.LINK]: props => <Link {...props}/>,
+
+  [IMAGE_TOOL_TYPE.ROTATION]: props => <Rotation {...props}/>,
 }
 
 class Editor extends PureComponent {
@@ -52,19 +55,18 @@ class Editor extends PureComponent {
 
     const {
       toolTypes,
-      editorState,
-      textAlign,
       onBlur,
-      onFocus
+      onFocus,
+      object
     } = this.props
 
     const controls = Object.values(toolTypes).map(toolId => {
       const toolItem = EDITOR_TOOLBAR_CONFIG[toolId]
+
       return mapIdToComponent[toolId]({
         ...toolItem,
+        ...object,
         key: toolId,
-        editorState,
-        textAlign,
         onBlur: onBlur,
         onFocus: onFocus,
         onChange: this.handleChange
@@ -83,7 +85,7 @@ Editor.propTypes = {
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
-  attribute: PropTypes.object,
+  object: PropTypes.object,
   id: PropTypes.string,
   toolTypes: PropTypes.object,
   editorState: PropTypes.object,
@@ -91,7 +93,7 @@ Editor.propTypes = {
 };
 
 Editor.defaultProps = {
-  attribute: {},
+  object: {},
   onChange: () => {},
   toolTypes: {}
 };

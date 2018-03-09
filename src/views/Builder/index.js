@@ -29,7 +29,7 @@ import {
 import {
   OBJECT_TYPE,
   CANVAS_MODE,
-  // IMAGE_TOOL_TYPE,
+  IMAGE_TOOL_TYPE,
   TEXT_TOOL_TYPE,
   TRANSITION,
   EASING
@@ -228,7 +228,7 @@ class Builder extends PureComponent {
       case OBJECT_TYPE.TEXT:
         newObject = {
           ...newObject,
-          content: EditorState.createEmpty(getDecorators()),
+          editorState: EditorState.createEmpty(getDecorators()),
           textAlign: 'left',
         };
       break;
@@ -382,7 +382,7 @@ class Builder extends PureComponent {
    }
 
     return this.updateObject(id, {
-      content: editorState
+      editorState
     });
   }
 
@@ -402,6 +402,7 @@ class Builder extends PureComponent {
   }
 
   handleObjectChange(id, attr) {
+    console.warn(id, attr);
     if(this.state.objects[id])
       this.updateObject(id, { attr })
   }
@@ -526,22 +527,14 @@ class Builder extends PureComponent {
      */
     let editorConfig = {
       id: activeObjectId,
-
-      attribute: objects[activeObjectId] ?
-        objects[activeObjectId].attr : {},
-
-      editorState: objects[activeObjectId] ?
-        objects[activeObjectId].content : undefined,
-
-      textAlign: objects[activeObjectId] ?
-      objects[activeObjectId].textAlign : undefined,
+      object: objects[activeObjectId]
     }
 
     switch (objectType) {
       case OBJECT_TYPE.IMAGE:
         editorConfig = {
           ...editorConfig,
-          // toolTypes: IMAGE_TOOL_TYPE,
+          toolTypes: IMAGE_TOOL_TYPE,
           onChange: this.handleObjectChange
         }
         break;

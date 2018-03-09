@@ -18,7 +18,7 @@ const blockStyleFn = contentBlock => {
 
 const Text = ({
   onTextChange,
-  content,
+  editorState,
   textAlign,
   ...props
 }) => {
@@ -37,7 +37,7 @@ const Text = ({
       <Editor
         { ...props }
         handleKeyCommand={handleTextKeyCommand}
-        editorState={content}
+        editorState={editorState}
         onChange={onTextChange}
         customStyleMap={getCustomStyleMap()}
         blockStyleFn={blockStyleFn}
@@ -51,7 +51,7 @@ Text.propTypes = {
   isActive: PropTypes.bool,
   className: PropTypes.string,
   onTextChange: PropTypes.func,
-  content: PropTypes.any,
+  editorState: PropTypes.any,
   placeholder: PropTypes.string,
   readOnly: PropTypes.bool,
   textAlign: PropTypes.oneOf(['left', 'right', 'center', 'justify'])

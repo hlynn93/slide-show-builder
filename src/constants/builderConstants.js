@@ -75,14 +75,11 @@ export const EASING = {
  */
 export const EDITOR_TOOLBAR_CONFIG = {
   [IMAGE_TOOL_TYPE.ROTATION]: {
-    type: TOOLBAR_TYPE.SLIDER,
     item: {
+      value: IMAGE_TOOL_TYPE.ROTATION,
       min: 0,
       max: 360,
     },
-    format: value => ({
-      [IMAGE_TOOL_TYPE.ROTATION]: value
-    })
   },
 
   [TEXT_TOOL_TYPE.INLINE]: {

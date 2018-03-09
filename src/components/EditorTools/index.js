@@ -6,3 +6,5 @@ export { default as FontFamily } from './FontFamily'
 export { default as LineHeight } from './LineHeight'
 export { default as TextAlign } from './TextAlign'
 export { default as Link } from './Link'
+
+export { default as Rotation } from './Rotation'
