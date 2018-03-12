@@ -27,6 +27,7 @@ class SideTools extends PureComponent {
       onToggle,
       onTextClick,
       onPreviewClick,
+      onSaveClick,
       minimize
     } = this.props
 
@@ -46,6 +47,11 @@ class SideTools extends PureComponent {
         icon: 'preview',
         onClick: onPreviewClick,
       },
+      {
+        id: 'save',
+        icon: 'save',
+        onClick: onSaveClick,
+      },
     ]
 
     return (
@@ -64,6 +70,7 @@ SideTools.propTypes = {
   onToggle: PropTypes.func,
   onTextClick: PropTypes.func,
   onPreviewClick: PropTypes.func,
+  onSaveClick: PropTypes.func,
   minimize: PropTypes.bool,
 };
 

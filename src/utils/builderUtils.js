@@ -1,5 +1,6 @@
-import { CANVAS_MODE } from '../constants/builderConstants';
-import { cloneDeep } from 'lodash';
+import { CANVAS_MODE, OBJECT_TYPE } from '../constants/builderConstants';
+import { cloneDeep, merge } from 'lodash';
+import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
 
 const ID_SEPARATOR = '--'
 
@@ -103,4 +104,38 @@ export const removeSlide = (objects, slides, index) => {
     slides: newSlides,
     objects: newObjects
   }
+}
+
+/**
+ * Strip unncessary data away and
+ * convert textbox state to raw values
+ * @param {Object} state
+ */
+export const prepareExport = (state = {}) => {
+  const stateToSave = cloneDeep(state)
+  const { objects } = stateToSave
+  Object.values(objects).map(obj => {
+    if(obj.type === OBJECT_TYPE.TEXT) {
+      obj.editorState = convertToRaw(obj.editorState.getCurrentContent())
+    }
+  })
+
+  return stateToSave
+}
+
+/**
+ * Add additional control data and
+ * convert raw textbox values to text states
+ * @param {Object} state
+ */
+export const prepareImport = (state = {}, defaultState) => {
+  const newState = cloneDeep(state)
+  const { objects } = newState
+  Object.values(objects).map(obj => {
+    if(obj.type === OBJECT_TYPE.TEXT) {
+      obj.editorState = EditorState.createWithContent(convertFromRaw(obj.editorState))
+    }
+  })
+
+  return merge( defaultState, newState );
 }

@@ -4,8 +4,10 @@ import { EditorState } from 'draft-js';
 import {
   cloneDeep,
   merge,
-  mapValues
+  mapValues,
+  isEmpty
 } from 'lodash';
+import { Alert } from 'element-react';
 
 import SideTools from './components/SideTools';
 import Canvas from './components/Canvas';
@@ -19,12 +21,18 @@ import Gallery from './components/Gallery';
 import './Builder.scss';
 import { getDecorators } from "../../components/EditorTools/decorators";
 
+/* To test data persistence.
+  Remove this once the backend has bee integrated */
+import data from '../../data/test.json';
+
 import {
   generateId,
   removeSlide,
   addSlide,
   addObject,
   removeObject,
+  prepareImport,
+  prepareExport
 } from '../../utils/builderUtils';
 import {
   OBJECT_TYPE,
@@ -90,16 +98,18 @@ const DEFAULT_BUILDER_STATE = {
   status: {
     [STATUS.IS_EDITING_TEXT]: false,
   },
-  scale: 1
+  scale: 1,
+  alert: ''
 }
 
 class Builder extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = DEFAULT_BUILDER_STATE
+    this.state = isEmpty(data) ? DEFAULT_BUILDER_STATE : prepareImport(data)
     this.toggleDialog = this.toggleDialog.bind(this)
     this.togglePanel = this.togglePanel.bind(this)
     this.showOneDialog = this.showOneDialog.bind(this)
+    this.showAlert = this.showAlert.bind(this)
     this.hideAllDialogs = this.hideAllDialogs.bind(this)
     this.addSlide = this.addSlide.bind(this)
     this.removeSlide = this.removeSlide.bind(this)
@@ -112,6 +122,7 @@ class Builder extends PureComponent {
     this.updateObject = this.updateObject.bind(this)
     this.handleCanvasClick = this.handleCanvasClick.bind(this)
     this.handleTextChange = this.handleTextChange.bind(this)
+    this.handleSave = this.handleSave.bind(this)
     this.handleModeSwitch = this.handleModeSwitch.bind(this)
     this.handleResize = this.handleResize.bind(this)
     this.handleDrag = this.handleDrag.bind(this)
@@ -148,6 +159,13 @@ class Builder extends PureComponent {
         [key]: !this.state.panels[key]
       }
     });
+  }
+
+  showAlert(msg, duration=3000) {
+    this.setState({ alert: msg });
+    setTimeout(() => {
+      this.setState({ alert: '' });
+    }, duration);
   }
 
   /**
@@ -226,6 +244,11 @@ class Builder extends PureComponent {
         break;
 
       case OBJECT_TYPE.TEXT:
+
+       /*
+        * For persisting editor state from the backend
+        * Use convertFromRaw/convertToRaw APIs to convert between raw data and state
+       */
         newObject = {
           ...newObject,
           editorState: EditorState.createEmpty(getDecorators()),
@@ -363,6 +386,25 @@ class Builder extends PureComponent {
       else
         return this.showOneDialog(DIALOG.EDITOR_PANEL)
     });
+  }
+
+  /*
+  * (This is to test the state persistence)
+  * Save and download the whole app state in a file
+  * Copy and paste the resultant json in /data/test.json file
+  */
+  handleSave() {
+
+    const save = (text, name, type) => {
+      var a = document.createElement("a");
+      var file = new Blob([text], {type: type});
+      a.href = URL.createObjectURL(file);
+      a.download = name;
+      a.click();
+    }
+
+    save(JSON.stringify(prepareExport(this.state)), 'test.json', 'application/json');
+    this.showAlert('The file has successfully been saved!')
   }
 
   handleModeSwitch(mode) {
@@ -516,7 +558,8 @@ class Builder extends PureComponent {
       activeObjectId,
       curSlideIndex,
       dialogs,
-      panels
+      panels,
+      alert
     } = this.state
 
     const objectType = (objects[activeObjectId] && objects[activeObjectId].type) ?
@@ -552,15 +595,25 @@ class Builder extends PureComponent {
 
     const previewScale = 0.7
     const objectIds = slides[curSlideIndex] ? slides[curSlideIndex].modes[mode].objectIds : []
+    console.warn(this.state.objects);
 
     return (
       <div className="builder">
+        {
+          alert &&
+          <Alert
+            className="builder_alert"
+            title="success alert"
+            type="success"
+            showIcon={true} />
+        }
         <SideTools
           minimize={panels[PANEL.SIDE_TOOLS]}
           onImageClick={this.toggleDialog.bind(null, DIALOG.IMAGE_UPLOADER)}
           onToggle={this.togglePanel.bind(null, PANEL.SIDE_TOOLS)}
           onTextClick={this.addObject.bind(null, OBJECT_TYPE.TEXT)}
           onPreviewClick={this.toggleDialog.bind(null, DIALOG.PREVIEW)}
+          onSaveClick={this.handleSave}
         />
         <div className="builder_content">
           <Gallery
