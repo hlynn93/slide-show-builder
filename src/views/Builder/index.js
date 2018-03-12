@@ -322,6 +322,7 @@ class Builder extends PureComponent {
       html2canvas(element, {
         scale: 0.2,
         logging: false,
+        useCORS: true,
       })
       .then(canvas => {
         /* Export the canvas to its data URI representation */
@@ -595,7 +596,6 @@ class Builder extends PureComponent {
 
     const previewScale = 0.7
     const objectIds = slides[curSlideIndex] ? slides[curSlideIndex].modes[mode].objectIds : []
-    console.warn(this.state.objects);
 
     return (
       <div className="builder">

@@ -69,6 +69,8 @@ class Canvas extends Component {
         ...transitionProp,
       }
 
+      if(!object) return;
+
       switch (object.type) {
         case OBJECT_TYPE.IMAGE:
           return <DNRImage
