@@ -557,10 +557,10 @@ class Builder extends PureComponent {
       <div className="builder">
         <SideTools
           minimize={panels[PANEL.SIDE_TOOLS]}
-          onClick={this.toggleDialog.bind(null, DIALOG.IMAGE_UPLOADER)}
+          onImageClick={this.toggleDialog.bind(null, DIALOG.IMAGE_UPLOADER)}
           onToggle={this.togglePanel.bind(null, PANEL.SIDE_TOOLS)}
           onTextClick={this.addObject.bind(null, OBJECT_TYPE.TEXT)}
-          onPreview={this.toggleDialog.bind(null, DIALOG.PREVIEW)}
+          onPreviewClick={this.toggleDialog.bind(null, DIALOG.PREVIEW)}
         />
         <div className="builder_content">
           <Gallery

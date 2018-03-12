@@ -1,55 +1,69 @@
 import React, { PureComponent } from 'react';
-import MdImage from 'react-icons/lib/md/image';
-import MdTextFields from 'react-icons/lib/md/text-fields';
-import FaArrowsAlt from 'react-icons/lib/fa/arrows-alt';
 import Panel from '../../../components/Panel';
 import PropTypes from 'prop-types';
 
 import './SideTools.scss'
 
+const renderButtons = config => (
+  config.map(c => (
+    <div
+      key={c.id}
+      className="sidetools_item">
+      <img
+        onClick={c.onClick}
+        className="sidetools_icon"
+        src={process.env.PUBLIC_URL + `/images/icons/sidetools/${c.icon}.png`}
+      />
+    </div>
+  ))
+)
+
 class SideTools extends PureComponent {
+
   render() {
 
     const {
-      onClick,
+      onImageClick,
       onToggle,
       onTextClick,
-      onPreview,
+      onPreviewClick,
       minimize
     } = this.props
+
+    const config = [
+      {
+        id: 'image',
+        icon: 'photo',
+        onClick: onImageClick,
+      },
+      {
+        id: 'text',
+        icon: 'textbox',
+        onClick: onTextClick,
+      },
+      {
+        id: 'preview',
+        icon: 'preview',
+        onClick: onPreviewClick,
+      },
+    ]
+
     return (
       <Panel
         className="sidetools"
         onToggle={onToggle}
         minimize={!minimize}>
-        <div className="sidetools_item">
-          <MdImage
-            onClick={onClick}
-            className="sidetools_icon"
-          />
-        </div>
-        <div className="sidetools_item">
-          <MdTextFields
-            onClick={onTextClick}
-            className="sidetools_icon"
-          />
-        </div>
-        <div className="sidetools_item">
-          <FaArrowsAlt
-            onClick={onPreview}
-            className="sidetools_icon"
-          />
-        </div>
+        { renderButtons(config) }
       </Panel>
     );
   }
 }
 
 SideTools.propTypes = {
-  onClick: PropTypes.func,
+  onImageClick: PropTypes.func,
   onToggle: PropTypes.func,
   onTextClick: PropTypes.func,
-  onPreview: PropTypes.func,
+  onPreviewClick: PropTypes.func,
   minimize: PropTypes.bool,
 };
 

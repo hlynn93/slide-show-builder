@@ -21,13 +21,29 @@ export const ASPECT_RATIO = {
   }
 }
 
-export const TOOLBAR_TYPE = {
-  BUTTON: 'button',
-  SELECT: 'select',
-  SLIDER: 'slider',
-  TEXTFIELD: 'textfield',
-  CUSTOM: 'custom'
+export const TRANSITION = {
+  FADE: 'fade',
+  BOUNCE: 'bounce',
+  ROLL: 'roll',
+  SLIDE: 'slide',
+  FLIP: 'flip',
+  REVEAL: 'reveal',
+  ROTATE: 'rotate',
+  LIGHTSPEED: 'lightspeed',
+  ZOOM: 'zoom'
 }
+
+export const EASING = {
+  EASE_IN: 'ease-in',
+}
+
+/**
+ * SIDEBAR TOOLS CONFIGURATIONS END
+ */
+
+/**
+ * EDITING TOOLS CONFIGURATIONS START
+ */
 
 export const EDITOR_TYPE = {
   OBJECT: 'OBJECT',
@@ -54,25 +70,7 @@ export const IMAGE_TOOL_TYPE = {
   ROTATION: 'rotation',
 }
 
-export const TRANSITION = {
-  FADE: 'fade',
-  BOUNCE: 'bounce',
-  ROLL: 'roll',
-  SLIDE: 'slide',
-  FLIP: 'flip',
-  REVEAL: 'reveal',
-  ROTATE: 'rotate',
-  LIGHTSPEED: 'lightspeed',
-  ZOOM: 'zoom'
-}
 
-export const EASING = {
-  EASE_IN: 'ease-in',
-}
-
-/**
- * TOOLBAR CONFIGURATIONS
- */
 export const EDITOR_TOOLBAR_CONFIG = {
   [IMAGE_TOOL_TYPE.ROTATION]: {
     item: {
@@ -261,3 +259,7 @@ export const EDITOR_TOOLBAR_CONFIG = {
 
   },
 }
+
+/**
+ * EDITING TOOLS CONFIGURATIONS END
+ */

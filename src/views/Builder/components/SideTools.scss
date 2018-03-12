@@ -4,12 +4,16 @@
   position: fixed !important;
   top: 60px !important;
   width: 60px !important;
-  background: $app-grey-900;
+  background: white;
   z-index: 3;
 
   &_item {
-    border-bottom: 2px solid white;
+    border: 1px solid grey;
     padding: 16px;
+
+    &:hover {
+      background: lightgrey;
+    }
   }
 
   &_icon {
@@ -17,5 +21,6 @@
     font-size: 32px;
     display: block;
     margin: auto;
+    width: 100%;
   }
 }
