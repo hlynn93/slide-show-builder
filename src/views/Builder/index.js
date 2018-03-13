@@ -560,11 +560,9 @@ class Builder extends PureComponent {
       curSlideIndex,
       dialogs,
       panels,
-      alert
+      alert,
+      status
     } = this.state
-
-    const objectType = (objects[activeObjectId] && objects[activeObjectId].type) ?
-      objects[activeObjectId].type : undefined
 
     /**
      *  Construct editor configuration based on the object type
@@ -574,24 +572,18 @@ class Builder extends PureComponent {
       object: objects[activeObjectId]
     }
 
-    switch (objectType) {
-      case OBJECT_TYPE.IMAGE:
-        editorConfig = {
-          ...editorConfig,
-          toolTypes: IMAGE_TOOL_TYPE,
-          onChange: this.handleObjectChange
-        }
-        break;
-
-      case OBJECT_TYPE.TEXT:
-        editorConfig = {
-          ...editorConfig,
-          toolTypes: TEXT_TOOL_TYPE,
-          onChange: this.handleTextChange
-        }
-        break;
-
-      default:
+    if(status[STATUS.IS_EDITING_TEXT]) {
+      editorConfig = {
+        ...editorConfig,
+        toolTypes: TEXT_TOOL_TYPE,
+        onChange: this.handleTextChange
+      }
+    } else {
+      editorConfig = {
+        ...editorConfig,
+        toolTypes: IMAGE_TOOL_TYPE,
+        onChange: this.handleObjectChange
+      }
     }
 
     const previewScale = 0.7
@@ -637,6 +629,7 @@ class Builder extends PureComponent {
             onObjectClick={this.handleObjectClick}
             onTextChange={this.handleTextChange}
             activeId={activeObjectId}
+            isTextFocused={status[STATUS.IS_EDITING_TEXT]}
             />
           <EditorPanel
             hide={!activeObjectId}

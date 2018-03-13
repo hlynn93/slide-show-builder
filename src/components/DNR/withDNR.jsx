@@ -1,4 +1,6 @@
 /**
+
+/**
  * HOC to inject Drag and Resize property to the component
  */
 import React from 'react';
@@ -7,7 +9,7 @@ import cx from 'classnames';
 import { isUndefined } from 'lodash';
 import { IMAGE_TOOL_TYPE } from '../../constants/builderConstants';
 import Transition from '../Transition';
-// import CursorWrapper from './CursorWrapper';
+import CursorWrapper from './CursorWrapper';
 
 /* eslint-disable */
 
@@ -35,6 +37,7 @@ export default (Component) => {
 
     const { attr } = object;
 
+    /* For image rotation */
     const componentStyle = !isUndefined(attr[IMAGE_TOOL_TYPE.ROTATION]) ? {
       transform: `rotate(${attr.rotation}deg)`
     } : {};
@@ -65,15 +68,16 @@ export default (Component) => {
           <div
             className="dnr_inner"
             onClick={onClick}
+            style={componentStyle}
             >
             <Component
-              style={componentStyle}
+              isActive={isActive}
               {...object}
               {...props} />
-            {/* <CursorWrapper
-              style={componentStyle}
-              onClick={onClick}
-              /> */}
+            {
+              isActive &&
+              <CursorWrapper />
+            }
           </div>
         </Transition>
       </Rnd>

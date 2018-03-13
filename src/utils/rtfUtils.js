@@ -145,15 +145,15 @@ const customInlineStylesMap =
     },
     SUPERSCRIPT: {
       fontSize: 11,
-      position: 'relative',
       top: -8,
       display: 'inline-flex',
+      verticalAlign: 'top'
     },
     SUBSCRIPT: {
       fontSize: 11,
-      position: 'relative',
       bottom: -8,
       display: 'inline-flex',
+      verticalAlign: 'bottom'
     },
   };
 

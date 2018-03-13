@@ -29,6 +29,7 @@ class Canvas extends Component {
       activeId,
       presenterMode,
       objectTransition,
+      isTextFocused
     } = this.props
 
     return objectIds.map(id => {
@@ -64,8 +65,9 @@ class Canvas extends Component {
         key: id,
         id: `canvas_object--${id}`,
         className: `canvas_object canvas_object--${id}`,
-        disableDragging: presenterMode,
+        disableDragging: presenterMode || isTextFocused,
         enableResizing: resizeState,
+        bounds: '.builder',
         ...transitionProp,
       }
 
@@ -83,7 +85,8 @@ class Canvas extends Component {
               onTextChange={onTextChange.bind(null, id)}
               onBlur={onBlur}
               onFocus={onFocus}
-              readOnly={presenterMode}/>
+              readOnly={presenterMode}
+              />
 
         default: return null;
       }
@@ -143,6 +146,7 @@ Canvas.propTypes = {
   presenterMode: PropTypes.bool,
   objectTransition: PropTypes.object,
   slideTransition: PropTypes.object,
+  isTextFocused: PropTypes.bool,
 };
 
 Canvas.defaultProps = {

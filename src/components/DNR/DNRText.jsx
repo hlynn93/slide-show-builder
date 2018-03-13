@@ -16,10 +16,17 @@ const blockStyleFn = contentBlock => {
   }
 }
 
+let editorRef;
+let disableEdit = true;
+
 const Text = ({
   onTextChange,
   editorState,
   textAlign,
+  onFocus,
+  onBlur,
+  readOnly,
+  isActive,
   ...props
 }) => {
 
@@ -32,10 +39,28 @@ const Text = ({
     return 'not-handled';
   }
 
+  const handleBlur = () => {
+    disableEdit = true;
+    onBlur();
+  }
+
   return (
-    <div className={"canvas_text"}>
+    <div
+      className={"canvas_text"}
+      onDoubleClick={() => {
+        onFocus();
+        editorRef.focus()
+        disableEdit = false;
+      }}
+      >
       <Editor
         { ...props }
+        onBlur={handleBlur}
+        ref={ref => {
+          /* assign a ref variable to the active textbox */
+          if(isActive) editorRef = ref
+        }}
+        readOnly={readOnly || disableEdit}
         handleKeyCommand={handleTextKeyCommand}
         editorState={editorState}
         onChange={onTextChange}
@@ -54,6 +79,8 @@ Text.propTypes = {
   editorState: PropTypes.any,
   placeholder: PropTypes.string,
   readOnly: PropTypes.bool,
+  onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
   textAlign: PropTypes.oneOf(['left', 'right', 'center', 'justify'])
 };
 
@@ -61,6 +88,7 @@ Text.defaultProps = {
   placeholder: "Write something...",
   readOnly: false,
   isActive: false,
+  onBlur: () => {},
   onChange: () => {}
 };
 

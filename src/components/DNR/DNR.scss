@@ -3,7 +3,7 @@
 .dnr_object {
 
   &--active {
-    outline: 3px solid $app-orange;
+    // outline: 3px solid $app-orange;
   }
 
   .react-reveal {
@@ -36,6 +36,8 @@
 
 .canvas_text {
   padding: 8px;
+  position: relative;
+  z-index: 1;
 }
 
 .canvas_image {
