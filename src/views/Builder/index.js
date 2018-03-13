@@ -564,6 +564,9 @@ class Builder extends PureComponent {
       status
     } = this.state
 
+    const objectType = (objects[activeObjectId] && objects[activeObjectId].type) ?
+      objects[activeObjectId].type : undefined
+
     /**
      *  Construct editor configuration based on the object type
      */
@@ -572,18 +575,24 @@ class Builder extends PureComponent {
       object: objects[activeObjectId]
     }
 
-    if(status[STATUS.IS_EDITING_TEXT]) {
-      editorConfig = {
-        ...editorConfig,
-        toolTypes: TEXT_TOOL_TYPE,
-        onChange: this.handleTextChange
-      }
-    } else {
-      editorConfig = {
-        ...editorConfig,
-        toolTypes: IMAGE_TOOL_TYPE,
-        onChange: this.handleObjectChange
-      }
+    switch (objectType) {
+      case OBJECT_TYPE.IMAGE:
+        editorConfig = {
+          ...editorConfig,
+          toolTypes: IMAGE_TOOL_TYPE,
+          onChange: this.handleObjectChange
+        }
+        break;
+
+      case OBJECT_TYPE.TEXT:
+        editorConfig = {
+          ...editorConfig,
+          toolTypes: TEXT_TOOL_TYPE,
+          onChange: this.handleTextChange
+        }
+        break;
+
+      default:
     }
 
     const previewScale = 0.7
