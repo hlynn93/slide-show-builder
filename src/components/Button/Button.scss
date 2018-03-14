@@ -1,0 +1,29 @@
+@import '../../styles/import.scss';
+
+.control_group {
+
+  &:last-child {
+    margin-bottom: 4px;
+  }
+
+  margin-bottom: 8px;
+  display: block;
+}
+
+.ibutton_icon {
+  width: 16px;
+}
+
+.ibutton_tooltip {
+  display: inline-block;
+}
+
+.ibutton {
+  padding: 8px 8px 0px 8px;
+  display: inline-block;
+  border: 1px solid lightgrey;
+
+  &--active {
+    background-color: lightgrey;
+  }
+}

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import {
   toggleCustomInlineStyle,
   getSelectionCustomInlineStyle
-} from '../../utils/rtfUtils';
-import { TEXT_TOOL_TYPE } from '../../constants/builderConstants';
-import { NumberField } from './components';
+} from '../../../../utils/rtfUtils';
+import { TEXT_TOOL_TYPE } from '../../../../constants/builderConstants';
+import { NumberField } from '../../../../components/Form';
 
 // format: (LineHeight, state) =>
 
@@ -42,10 +42,7 @@ class LineHeight extends PureComponent {
     });
   }
 
-  toggleLineHeight(sizeStr) {
-    const size = parseFloat(sizeStr)
-    if(isNaN(size)) return
-
+  toggleLineHeight(size) {
     const { onChange, editorState } = this.props;
     return onChange(toggleCustomInlineStyle(editorState, TEXT_TOOL_TYPE.LINE_HEIGHT, size))
   }

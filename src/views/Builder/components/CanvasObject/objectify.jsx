@@ -7,8 +7,8 @@ import React from 'react';
 import Rnd from 'react-rnd';
 import cx from 'classnames';
 import { isUndefined } from 'lodash';
-import { IMAGE_TOOL_TYPE } from '../../constants/builderConstants';
-import Transition from '../Transition';
+import { IMAGE_TOOL_TYPE } from '../../../../constants/builderConstants';
+import Transition from '../../../../components/Transition';
 import CursorWrapper from './CursorWrapper';
 
 /* eslint-disable */
@@ -47,8 +47,6 @@ export default (Component) => {
       baseClass,
       { [`${baseClass}--active`]: isActive }
     )
-
-    console.warn(bounds);
 
     return (
       <Rnd

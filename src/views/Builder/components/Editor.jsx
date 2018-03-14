@@ -9,7 +9,7 @@ import { Inline,
   TextAlign,
   Link,
   Rotation
-} from '../../../components/EditorTools';
+} from './EditorTools';
 
 import { EDITOR_TOOLBAR_CONFIG, TEXT_TOOL_TYPE, IMAGE_TOOL_TYPE } from '../../../constants/builderConstants';
 

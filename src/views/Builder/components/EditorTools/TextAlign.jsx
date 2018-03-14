@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import ControlGroup from './components/ControlGroup';
+import { ButtonGroup } from '../../../../components/Button';
 
 /**
  * This component doesn't need its own state
@@ -20,7 +20,7 @@ class TextAlign extends PureComponent {
 
     const { items, textAlign } = this.props;
     return (
-      <ControlGroup
+      <ButtonGroup
         onClick={this.toggleTextAlign}
         items={items}
         activeIds={{ [textAlign]: true }}

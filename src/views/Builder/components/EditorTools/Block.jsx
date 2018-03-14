@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { RichUtils } from 'draft-js';
 
 import { getSelectedBlocksType } from 'draftjs-utils';
-import { Dropdown } from './components';
+import { Dropdown } from '../../../../components/Form';
 
 class Block extends PureComponent {
   constructor(props) {

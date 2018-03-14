@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import {
   toggleCustomInlineStyle,
   getSelectionCustomInlineStyle
-} from '../../utils/rtfUtils';
-import { TEXT_TOOL_TYPE } from '../../constants/builderConstants';
-import { Dropdown } from './components';
+} from '../../../../utils/rtfUtils';
+import { TEXT_TOOL_TYPE } from '../../../../constants/builderConstants';
+import { Dropdown } from '../../../../components/Form';
 
 class FontFamily extends PureComponent {
 

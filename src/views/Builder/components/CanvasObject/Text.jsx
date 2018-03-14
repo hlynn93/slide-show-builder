@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import withDNR from './withDNR';
+import objectify from './objectify';
 import { Editor, RichUtils } from 'draft-js';
-import { getCustomStyleMap } from '../../utils/rtfUtils';
+import { getCustomStyleMap } from '../../../../utils/rtfUtils';
 
-import './DNR.scss';
+import './CanvasObject.scss';
 
 const blockStyleFn = contentBlock => {
   const type = contentBlock.getType();
@@ -92,4 +92,4 @@ Text.defaultProps = {
   onChange: () => {}
 };
 
-export default withDNR(Text);
+export default objectify(Text);

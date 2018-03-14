@@ -7,23 +7,99 @@ import {
   getSelectionText,
   getSelectionEntity,
 } from 'draftjs-utils';
-import { IconButton } from './components';
+import { IconButton, ButtonGroup } from '../../../../components/Button';
+
+import './EditorTools.scss';
 
 import linkifyIt from 'linkify-it';
 const linkify = linkifyIt();
 
-import './EditorTools.scss'
+const LinkPopover = ({
+  form,
+  onSubmit,
+  onChange,
+  onFocus,
+  onBlur,
+  children
+}) => {
+  return (
+    <Popover
+          placement="bottom"
+          width="200"
+          trigger="click"
+          content={(
+            <div className="editor_popover_content">
+              <Form className="editor_link"
+                model={form}
+                onSubmit={onSubmit}>
+                <Form.Item className="link_item">
+                  <Input
+                    placeholder="Link title"
+                    value={form.title}
+                    onChange={onChange.bind(null, 'title')}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
+                    >
+                  </Input>
+                </Form.Item>
+                <Form.Item className="link_item">
+                  <Input
+                    placeholder="Link target"
+                    value={form.target}
+                    onChange={onChange.bind(null, 'target')}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
+                    >
+                  </Input>
+                </Form.Item>
+                <Form.Item label="Opens in new tab">
+                  <Switch
+                    onText=""
+                    offText=""
+                    value={form.newTab}
+                    onChange={onChange.bind(this, 'newTab')}
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Button nativeType="submit">Add</Button>
+                </Form.Item>
+              </Form>
+            </div>
+        )}>
+          {children}
+        </Popover>
+  )
+}
+
+LinkPopover.propTypes = {
+  form: PropTypes.object,
+  onSubmit: PropTypes.func,
+  onChange: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func,
+  children: PropTypes.any
+}
+
+LinkPopover.defaultProps = {
+  form: {},
+  onSubmit: () => {},
+  onChange: () => {},
+  onFocus: () => {},
+  onBlur: () => {},
+}
+
+const DEFAULT_STATE = {
+  form: {
+    title: '',
+    target: '',
+    newTab: false,
+  },
+}
 
 class Link extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      form: {
-        title: '',
-        target: '',
-        newTab: false,
-      },
-    }
+    this.state = DEFAULT_STATE
 
     this.handleChange = this.handleChange.bind(this)
     this.handleAdd = this.handleAdd.bind(this)
@@ -137,7 +213,10 @@ class Link extends PureComponent {
       newEditorState.getCurrentInlineStyle(),
       undefined,
     );
-    this.props.onChange(EditorState.push(newEditorState, contentState, 'insert-characters'));
+
+    this.setState( ...DEFAULT_STATE, () => {
+      this.props.onChange(EditorState.push(newEditorState, contentState, 'insert-characters'));
+    });
   }
 
   onPromptPopover() {
@@ -153,63 +232,28 @@ class Link extends PureComponent {
 
   render() {
     const { items, onBlur, onFocus } = this.props
+    const { form } = this.state
+
     if(items.length < 2)
       throw "Link element needs at least two items"
 
     return (
-      <div className="control_group">
-        <Popover
-          placement="bottom"
-          width="200"
-          trigger="click"
-          content={(
-            <div className="editor_popover_content">
-              <Form className="editor_link"
-                model={this.state.form}
-                onSubmit={this.handleAdd}>
-                <Form.Item className="link_item">
-                  <Input
-                    placeholder="Link title"
-                    value={this.state.form.title}
-                    onChange={this.handleChange.bind(null, 'title')}
-                    onFocus={onFocus}
-                    onBlur={onBlur}
-                    >
-                  </Input>
-                </Form.Item>
-                <Form.Item className="link_item">
-                  <Input
-                    placeholder="Link target"
-                    value={this.state.form.target}
-                    onChange={this.handleChange.bind(null, 'target')}
-                    onFocus={onFocus}
-                    onBlur={onBlur}
-                    >
-                  </Input>
-                </Form.Item>
-                <Form.Item label="Opens in new tab">
-                  <Switch
-                    onText=""
-                    offText=""
-                    value={this.state.form.newTab}
-                    onChange={this.handleChange.bind(this, 'newTab')}
-                  />
-                </Form.Item>
-                <Form.Item>
-                  <Button nativeType="submit">Add</Button>
-                  <Button>Cancel</Button>
-                </Form.Item>
-              </Form>
-            </div>
-        )}>
+      <ButtonGroup>
+        <LinkPopover
+          form={form}
+          onSubmit={this.handleAdd}
+          onChange={this.handleChange}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          >
           <IconButton
             item={items[0]}
             onClick={this.onPromptPopover}/>
-        </Popover>
-          <IconButton
-            item={items[1]}
-            onClick={this.handleRemove}/>
-      </div>
+        </LinkPopover>
+        <IconButton
+          item={items[1]}
+          onClick={this.handleRemove}/>
+      </ButtonGroup>
     );
   }
 }

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import {
   toggleCustomInlineStyle,
   getSelectionCustomInlineStyle
-} from '../../utils/rtfUtils';
-import { TEXT_TOOL_TYPE } from '../../constants/builderConstants';
-import { NumberField } from './components';
+} from '../../../../utils/rtfUtils';
+import { TEXT_TOOL_TYPE } from '../../../../constants/builderConstants';
+import { NumberField } from '../../../../components/Form';
 
 // format: (fontSize, state) =>
 
@@ -42,10 +42,7 @@ class FontSize extends PureComponent {
     });
   }
 
-  toggleFontSize(sizeStr) {
-    const size = parseInt(sizeStr)
-    if(isNaN(size)) return
-
+  toggleFontSize(size) {
     const { onChange, editorState } = this.props;
     return onChange(toggleCustomInlineStyle(editorState, TEXT_TOOL_TYPE.FONT_SIZE, size))
   }

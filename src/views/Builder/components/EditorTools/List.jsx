@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { RichUtils } from 'draft-js';
 import { changeDepth, getSelectedBlocksType } from 'draftjs-utils';
-import ControlGroup from './components/ControlGroup';
+import { ButtonGroup } from '../../../../components/Button';
 
 // format: (style, state) => RichUtils.toggleBlockType(state, style)
 
@@ -50,7 +50,7 @@ class List extends PureComponent {
 
   render() {
     return (
-      <ControlGroup
+      <ButtonGroup
         onClick={this.toggleStyle}
         items={this.props.items}
         activeIds={this.state.currentStyles}

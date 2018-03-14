@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import './DNR.scss';
+import './CanvasObject.scss';
 
 const CursorWrapper = ({
   attr,

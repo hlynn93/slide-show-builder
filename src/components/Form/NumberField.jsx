@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Form } from 'element-react';
-import '../EditorTools.scss';
+import './Form.scss';
 
 class NumberField extends PureComponent {
   constructor(props) {

@@ -19,7 +19,7 @@ import BottomBar from './components/BottomBar';
 import ModeSwitch from './components/ModeSwitch';
 import Gallery from './components/Gallery';
 import './Builder.scss';
-import { getDecorators } from "../../components/EditorTools/decorators";
+import { getDecorators } from "./components/EditorTools/decorators";
 
 /* To test data persistence.
   Remove this once the backend has bee integrated */

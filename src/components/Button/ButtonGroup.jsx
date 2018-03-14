@@ -1,15 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { isEmpty } from 'lodash';
 
 import IconButton from './IconButton';
 
-import '../EditorTools.scss';
+import './Button.scss';
 
-const ControlGroup = ({
+const ButtonGroup = ({
   items,
   activeIds,
-  onClick
+  onClick,
+  children
 }) => {
+
+  if(isEmpty(items))
+    return (
+      <div className="button_group">
+        {children}
+      </div>
+    )
 
   const controls = items.map((item,id) => (
     <IconButton
@@ -20,22 +29,23 @@ const ControlGroup = ({
   ))
 
   return (
-    <div className="control_group">
+    <div className="button_group">
       {controls}
     </div>
   );
 };
 
-ControlGroup.propTypes = {
+ButtonGroup.propTypes = {
   items: PropTypes.array,
   activeIds: PropTypes.object,
   onClick: PropTypes.func,
+  children: PropTypes.any
 };
 
-ControlGroup.defaultProps = {
+ButtonGroup.defaultProps = {
   items: [],
   activeIds: {},
   onClick: () => {}
 };
 
-export default ControlGroup;
+export default ButtonGroup;

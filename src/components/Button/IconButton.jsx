@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Tooltip } from 'element-react';
 
 import cx from 'classnames';
-import '../EditorTools.scss'
+import './Button.scss'
 
 class IconButton extends PureComponent {
   render() {
@@ -13,7 +13,7 @@ class IconButton extends PureComponent {
       isActive,
       ...props
     } = this.props
-    const baseClass = "control"
+    const baseClass = "ibutton"
 
     const button = (
       <div
@@ -30,7 +30,9 @@ class IconButton extends PureComponent {
         }}
         >
         { item.image ?
-          <img src={process.env.PUBLIC_URL + `/images/icons/editor/${item.image}.png`} className="control_icon" />
+          <img
+            src={process.env.PUBLIC_URL + `/images/icons/editor/${item.image}.png`}
+            className="ibutton_icon" />
           :
           item.label
         }
@@ -43,7 +45,7 @@ class IconButton extends PureComponent {
       <Tooltip
         {...props}
         key={item.value}
-        className="control_tooltip"
+        className="ibutton_tooltip"
         effect="light"
         content={item.tooltip}
         placement="top-start"

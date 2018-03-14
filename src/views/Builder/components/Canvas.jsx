@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { DNRImage, DNRText } from '../../../components/DNR';
+import { Image, Text } from './CanvasObject';
 import { ASPECT_RATIO, OBJECT_TYPE } from '../../../constants/builderConstants';
 import { isFirefox } from '../../../utils/commonUtils';
 import Transition from '../../../components/Transition';
@@ -75,12 +75,12 @@ class Canvas extends Component {
 
       switch (object.type) {
         case OBJECT_TYPE.IMAGE:
-          return <DNRImage
+          return <Image
             {...objectProps }
             />
 
         case OBJECT_TYPE.TEXT:
-          return <DNRText
+          return <Text
               {...objectProps}
               onTextChange={onTextChange.bind(null, id)}
               onBlur={onBlur}

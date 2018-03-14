@@ -2,9 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { RichUtils, EditorState, Modifier } from 'draft-js';
 
-import { getSelectionInlineStyle } from '../../utils/rtfUtils';
-import ControlGroup from './components/ControlGroup';
-import './EditorTools.scss'
+import { getSelectionInlineStyle } from '../../../../utils/rtfUtils';
+import { ButtonGroup } from '../../../../components/Button';
 
 class Inline extends PureComponent {
   constructor(props) {
@@ -63,7 +62,7 @@ class Inline extends PureComponent {
 
     const { items } = this.props;
     return (
-      <ControlGroup
+      <ButtonGroup
         onClick={this.toggleStyle}
         items={items}
         activeIds={this.state.currentStyles}

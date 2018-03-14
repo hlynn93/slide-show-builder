@@ -1,42 +1,5 @@
 @import '../../styles/import.scss';
 
-.control_group {
-
-  &:last-child {
-    margin-bottom: 4px;
-  }
-
-  margin-bottom: 8px;
-  display: block;
-}
-
-.control {
-  padding: 8px 8px 0px 8px;
-  display: inline-block;
-  border: 1px solid lightgrey;
-
-  &--active {
-    background-color: lightgrey;
-  }
-}
-
-.link_item {
-  margin-bottom: 12px;
-}
-
-.control_icon {
-  width: 16px;
-}
-
-.control_tooltip {
-  display: inline-block;
-}
-
-.editor_link, .control_group {
-  display: inline-block;
-  margin-right: 12px;
-}
-
 .editor_slider_wrapper {
 
   //Override css

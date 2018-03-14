@@ -2,9 +2,9 @@
  * Draggable and Resizable Image
  */
 import React from 'react';
-import withDNR from './withDNR';
+import objectify from './objectify';
 import PropTypes from 'prop-types';
-import './DNR.scss';
+import './CanvasObject.scss';
 
 const Image = ({
   ...props
@@ -21,4 +21,4 @@ Image.propTypes = {
   className: PropTypes.string,
 }
 
-export default withDNR(Image)
+export default objectify(Image)
