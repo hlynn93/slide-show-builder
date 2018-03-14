@@ -3,6 +3,8 @@
 .switches {
   display: table;
   margin: auto;
+  position: relative;
+  z-index: 5;
 }
 
 .switch_text {

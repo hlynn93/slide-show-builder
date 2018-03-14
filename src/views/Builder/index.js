@@ -626,20 +626,23 @@ class Builder extends PureComponent {
             onSelect={this.handleModeSwitch}
             mode={mode}
             />
-          <Canvas
-            mode={mode}
-            onCanvasClick={this.handleCanvasClick}
-            onResize={this.handleResize}
-            onDrag={this.handleDrag}
-            onBlur={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, false)}
-            onFocus={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, true)}
-            objects={objects}
-            objectIds={objectIds}
-            onObjectClick={this.handleObjectClick}
-            onTextChange={this.handleTextChange}
-            activeId={activeObjectId}
-            isTextFocused={status[STATUS.IS_EDITING_TEXT]}
-            />
+          <div
+            className={`canvas_wrapper`}
+            onClick={this.handleCanvasClick}>
+            <Canvas
+              mode={mode}
+              onResize={this.handleResize}
+              onDrag={this.handleDrag}
+              onBlur={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, false)}
+              onFocus={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, true)}
+              objects={objects}
+              objectIds={objectIds}
+              onObjectClick={this.handleObjectClick}
+              onTextChange={this.handleTextChange}
+              activeId={activeObjectId}
+              isTextFocused={status[STATUS.IS_EDITING_TEXT]}
+              />
+          </div>
           <EditorPanel
             hide={!activeObjectId}
             minimize={dialogs[DIALOG.EDITOR_PANEL]}

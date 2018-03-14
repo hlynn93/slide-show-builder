@@ -97,9 +97,6 @@ class Canvas extends Component {
     const {
       mode,
       scale,
-      onCanvasClick,
-      presenterMode,
-      style,
       slideTransition
     } = this.props
 
@@ -115,27 +112,20 @@ class Canvas extends Component {
     }
 
     return (
-      <div
-        className={`canvas_wrapper ${presenterMode ? 'canvas_wrapper--present' : ''}`}
-        style={style}
-        onClick={onCanvasClick}>
         <Transition {...slideTransition}>
           <div id="canvas" className="canvas" style={canvasStyle}>
               { this.renderObjects() }
           </div>
         </Transition>
-      </div>
     );
   }
 }
 
 Canvas.propTypes = {
-  style: PropTypes.object,
   objectIds: PropTypes.array,
   objects: PropTypes.object,
   onObjectClick: PropTypes.func,
   onTextChange: PropTypes.func,
-  onCanvasClick: PropTypes.func,
   onDrag: PropTypes.func,
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,
@@ -159,7 +149,6 @@ Canvas.defaultProps = {
   slideTransition: {},
   onObjectClick: () => {},
   onTextChange: () => {},
-  onCanvasClick: () => {},
   onDrag: () => {},
   onBlur: () => {},
   onFocus: () => {},

@@ -48,6 +48,8 @@ export default (Component) => {
       { [`${baseClass}--active`]: isActive }
     )
 
+    console.warn(bounds);
+
     return (
       <Rnd
         style={style}
