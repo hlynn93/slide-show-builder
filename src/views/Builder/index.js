@@ -18,8 +18,9 @@ import Preview from './components/Preview';
 import BottomBar from './components/BottomBar';
 import ModeSwitch from './components/ModeSwitch';
 import Gallery from './components/Gallery';
-import './Builder.scss';
+
 import { getDecorators } from "./components/EditorTools/decorators";
+import './Builder.scss';
 
 /* To test data persistence.
   Remove this once the backend has bee integrated */
@@ -229,6 +230,8 @@ class Builder extends PureComponent {
    */
   addObject(type, data) {
 
+    console.warn(data);
+
     let newObject = {
       id: generateId(),
       type,
@@ -240,6 +243,7 @@ class Builder extends PureComponent {
         newObject = {
           ...newObject,
           ...data,
+          id: `${newObject.id}--${data.id}`
         }
         break;
 
@@ -368,6 +372,7 @@ class Builder extends PureComponent {
    * @param {String} id
    */
   updateActiveObjectId(id) {
+    console.warn(id);
     const { activeObjectId, objects } = this.state
 
     if(activeObjectId === id)

@@ -48,6 +48,7 @@ const Text = ({
     <div
       className={"canvas_text"}
       onDoubleClick={() => {
+        if(!editorRef) return;
         onFocus();
         editorRef.focus()
         disableEdit = false;

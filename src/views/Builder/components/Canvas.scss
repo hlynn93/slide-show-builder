@@ -21,6 +21,7 @@
   background: white;
   border: 1px solid $app-grey;
   margin: auto;
+  overflow: scroll;
 
   &--desktop {
     height: 600px;
