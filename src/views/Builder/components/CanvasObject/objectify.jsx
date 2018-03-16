@@ -52,8 +52,15 @@ export default (Component) => {
     return (
       <Rnd
         style={style}
+        size={{
+          width: attr.width,
+          height: attr.height
+        }}
         default={attr}
-        position={attr}
+        position={{
+          x: attr.x,
+          y: attr.y,
+        }}
         bounds={bounds || 'parent'}
         onResizeStart={onResizeStart}
         onResize={onResize}

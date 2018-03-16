@@ -1,5 +1,5 @@
 import { CANVAS_MODE, OBJECT_TYPE } from '../constants/builderConstants';
-import { cloneDeep, merge } from 'lodash';
+import { cloneDeep, merge, concat } from 'lodash';
 import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
 
 const ID_SEPARATOR = '--'
@@ -108,7 +108,7 @@ export const removeSlide = (objects, slides, index) => {
 
 /**
  * Strip unncessary data away and
- * convert textbox state to raw values
+ * convert editorState state to raw values
  * @param {Object} state
  */
 export const prepareExport = (state = {}) => {
@@ -140,4 +140,50 @@ export const prepareImport = (state = {}, defaultState) => {
   })
 
   return merge( defaultState, newState );
+}
+
+/**
+ * Create a history stack from the builder state
+ * by removing unncessary states
+ * @param {Object} state
+ */
+export const formatState = state => {
+  const stateStack = { ...state }
+  const fieldsToRemove = [ 'dialogs', 'panels', 'status',
+    'history', 'scale', 'alert' ];
+  fieldsToRemove.map(field => delete stateStack[field])
+  return stateStack
+}
+
+const HISTORY_LIMIT = 20
+export const addStateToHistory = (history, stateStack) => {
+  const { cursor, states } = history
+  // at present
+  if (cursor === 0) {
+    const newStates = concat(stateStack, states)
+      .slice(0, Math.min(states.length + 1, HISTORY_LIMIT))
+    return {
+      ...history,
+      states: newStates,
+    }
+  } else { // the user undid and made changes
+    return {
+      cursor: 0,
+      states: concat(stateStack, states.slice(cursor))
+    }
+  }
+}
+
+export const shiftHistoryState = (history, shiftValue) => {
+  const { cursor, states } = history
+  const nextCursor = cursor + shiftValue
+  if( (nextCursor > states.length) || (nextCursor < 0) ) {
+    console.error("Shift value is out of bound");
+    return history;
+  }
+
+  return {
+    ...history,
+    cursor: nextCursor,
+  }
 }

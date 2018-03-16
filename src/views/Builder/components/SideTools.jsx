@@ -28,6 +28,8 @@ class SideTools extends PureComponent {
       onTextClick,
       onPreviewClick,
       onSaveClick,
+      onRedoClick,
+      onUndoClick,
       minimize
     } = this.props
 
@@ -52,6 +54,16 @@ class SideTools extends PureComponent {
         icon: 'save',
         onClick: onSaveClick,
       },
+      {
+        id: 'undo',
+        icon: 'undo',
+        onClick: onUndoClick,
+      },
+      {
+        id: 'redo',
+        icon: 'redo',
+        onClick: onRedoClick,
+      },
     ]
 
     return (
@@ -71,6 +83,8 @@ SideTools.propTypes = {
   onTextClick: PropTypes.func,
   onPreviewClick: PropTypes.func,
   onSaveClick: PropTypes.func,
+  onUndoClick: PropTypes.func,
+  onRedoClick: PropTypes.func,
   minimize: PropTypes.bool,
 };
 

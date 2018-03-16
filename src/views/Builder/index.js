@@ -33,7 +33,10 @@ import {
   addObject,
   removeObject,
   prepareImport,
-  prepareExport
+  prepareExport,
+  formatState,
+  addStateToHistory,
+  shiftHistoryState
 } from '../../utils/builderUtils';
 import {
   OBJECT_TYPE,
@@ -99,6 +102,10 @@ const DEFAULT_BUILDER_STATE = {
   status: {
     [STATUS.IS_EDITING_TEXT]: false,
   },
+  history: {
+    states: [],
+    cursor: 0
+  },
   scale: 1,
   alert: ''
 }
@@ -116,11 +123,15 @@ class Builder extends PureComponent {
     this.removeSlide = this.removeSlide.bind(this)
     this.addObject = this.addObject.bind(this)
     this.removeObject = this.removeObject.bind(this)
+    this.addHistoryState = this.addHistoryState.bind(this)
     this.updateActiveObjectId = this.updateActiveObjectId.bind(this)
     this.changecurSlideIndexId = this.changecurSlideIndexId.bind(this)
     this.updateStatus = this.updateStatus.bind(this)
     this.updateSnapshot = this.updateSnapshot.bind(this)
     this.updateObject = this.updateObject.bind(this)
+    this.updateHistory = this.updateHistory.bind(this)
+    this.handleRedoClick = this.handleRedoClick.bind(this)
+    this.handleUndoClick = this.handleUndoClick.bind(this)
     this.handleCanvasClick = this.handleCanvasClick.bind(this)
     this.handleTextChange = this.handleTextChange.bind(this)
     this.handleSave = this.handleSave.bind(this)
@@ -238,11 +249,9 @@ class Builder extends PureComponent {
 
     switch (type) {
       case OBJECT_TYPE.IMAGE:
-        newObject = {
-          ...newObject,
-          ...data,
+        newObject = merge(newObject, data, {
           id: `${newObject.id}--${data.id}`
-        }
+        });
         break;
 
       case OBJECT_TYPE.TEXT:
@@ -251,11 +260,10 @@ class Builder extends PureComponent {
         * For persisting editor state from the backend
         * Use convertFromRaw/convertToRaw APIs to convert between raw data and state
        */
-        newObject = {
-          ...newObject,
+        newObject = merge(newObject, {
           editorState: EditorState.createEmpty(getDecorators()),
           textAlign: 'left',
-        };
+        });
       break;
 
       default:
@@ -319,6 +327,7 @@ class Builder extends PureComponent {
     const slideIndex = curSlideIndex;
 
     const takeSnapshot = () => {
+      this.addHistoryState();
       const element = document.getElementById('canvas')
 
       html2canvas(element, {
@@ -362,7 +371,7 @@ class Builder extends PureComponent {
 
     this.snapshotTimer = setTimeout(() => {
       takeSnapshot();
-    }, 1000);
+    }, 500);
   }
 
   /**
@@ -389,6 +398,31 @@ class Builder extends PureComponent {
       else
         return this.showOneDialog(DIALOG.EDITOR_PANEL)
     });
+  }
+
+  updateHistory(history) {
+    this.setState({ history });
+  }
+
+  addHistoryState() {
+    const state = formatState(this.state)
+    this.updateHistory(addStateToHistory(this.state.history, state))
+  }
+
+  handleRedoClick() {
+    const newHistory = shiftHistoryState(this.state.history, -1);
+    this.setState({
+      ...this.state,
+      ...cloneDeep(newHistory.states[newHistory.cursor])
+    }, () => this.updateHistory(newHistory));
+  }
+
+  handleUndoClick() {
+    const newHistory = shiftHistoryState(this.state.history, +1);
+    this.setState({
+      ...this.state,
+      ...cloneDeep(newHistory.states[newHistory.cursor])
+    }, () => this.updateHistory(newHistory));
   }
 
   /*
@@ -476,6 +510,21 @@ class Builder extends PureComponent {
 
   handleKeyDown(e) {
     const { status, activeObjectId, curSlideIndex, slides, objects } = this.state
+
+    /*
+    * General key controls)
+    */
+
+    /* Cmd/Ctrl + Shift + Z */
+    if (e.keyCode == 90 && e.shiftKey && (e.ctrlKey || e.metaKey)) {
+      return this.handleRedoClick();
+    }
+
+    /* Cmd/Ctrl + Z */
+    if (e.keyCode == 90 && (e.ctrlKey || e.metaKey)) {
+      return this.handleUndoClick();
+    }
+
     /* Check whether the text is being edited or an object is selected */
     if(status[STATUS.IS_EDITING_TEXT])
       return
@@ -617,6 +666,8 @@ class Builder extends PureComponent {
           onTextClick={this.addObject.bind(null, OBJECT_TYPE.TEXT)}
           onPreviewClick={this.toggleDialog.bind(null, DIALOG.PREVIEW)}
           onSaveClick={this.handleSave}
+          onUndoClick={this.handleUndoClick}
+          onRedoClick={this.handleRedoClick}
         />
         <div className="builder_content">
           <Gallery
@@ -628,24 +679,20 @@ class Builder extends PureComponent {
             onSelect={this.handleModeSwitch}
             mode={mode}
             />
-          {/* <div
-            className={`canvas_wrapper`}
-            onClick={this.handleCanvasClick}> */}
-            <Canvas
-              mode={mode}
-              onCanvasClick={this.handleCanvasClick}
-              onResize={this.handleResize}
-              onDrag={this.handleDrag}
-              onBlur={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, false)}
-              onFocus={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, true)}
-              objects={objects}
-              objectIds={objectIds}
-              onObjectClick={this.handleObjectClick}
-              onTextChange={this.handleTextChange}
-              activeId={activeObjectId}
-              isTextFocused={status[STATUS.IS_EDITING_TEXT]}
-              />
-          {/* </div> */}
+          <Canvas
+            mode={mode}
+            onCanvasClick={this.handleCanvasClick}
+            onResize={this.handleResize}
+            onDrag={this.handleDrag}
+            onBlur={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, false)}
+            onFocus={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, true)}
+            objects={objects}
+            objectIds={objectIds}
+            onObjectClick={this.handleObjectClick}
+            onTextChange={this.handleTextChange}
+            activeId={activeObjectId}
+            isTextFocused={status[STATUS.IS_EDITING_TEXT]}
+            />
           <EditorPanel
             hide={!activeObjectId}
             minimize={dialogs[DIALOG.EDITOR_PANEL]}

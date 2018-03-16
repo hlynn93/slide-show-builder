@@ -12,10 +12,18 @@ class Gallery extends PureComponent {
     this.handleImageClick = this.handleImageClick.bind(this)
   }
 
-  handleImageClick(img, e) {
+  handleImageClick(img, ref, e) {
     e.preventDefault();
+    const width = this[ref].offsetWidth;
+    const height = this[ref].offsetHeight;
     this.props.onCancel();
-    this.props.onImageChange(OBJECT_TYPE.IMAGE, img)
+    this.props.onImageChange(OBJECT_TYPE.IMAGE, {
+      ...img,
+      attr: {
+        width,
+        height
+      }
+    })
   }
 
   render() {
@@ -41,9 +49,10 @@ class Gallery extends PureComponent {
                     key={id}
                     className="gallery_item">
                     <img
+                      ref={ref => this[`imgRefs-${id}`] = ref}
                       src={img.src}
                       className="gallery_img"
-                      onClick={this.handleImageClick.bind(null, img)}
+                      onClick={this.handleImageClick.bind(null, img, `imgRefs-${id}`)}
                       />
                   </div>
                 ))
