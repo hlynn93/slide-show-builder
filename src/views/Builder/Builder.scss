@@ -9,8 +9,11 @@
   bottom: 0;
 
   .builder_content {
-    margin-left: $sidebar-abs-width;
-    height: 100%;
+    position: absolute;
+    left: $sidebar-abs-width + 2;
+    top: $header-height;
+    bottom: $bottom-bar-height + 2px;
+    right: 0;
   }
 
   .preview_dialog {

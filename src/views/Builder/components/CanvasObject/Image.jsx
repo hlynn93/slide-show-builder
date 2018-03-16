@@ -6,7 +6,9 @@ import objectify from './objectify';
 import PropTypes from 'prop-types';
 import './CanvasObject.scss';
 
+/* eslint-disable */
 const Image = ({
+  isActive,
   ...props
 }) => (
   <img

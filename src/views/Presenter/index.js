@@ -6,6 +6,7 @@ import initialState from '../../data/getPresenter.json'
 import { ASPECT_RATIO } from '../../constants/builderConstants';
 import { withRouter } from "react-router-dom";
 import { union, difference, isNumber } from 'lodash';
+import { prepareImport } from '../../utils/builderUtils';
 
 import './Presenter.scss';
 
@@ -14,7 +15,7 @@ const CONTROL_HEIGHT = 37;
 class Presenter extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = initialState
+    this.state = prepareImport(initialState)
     this.handleKeyDown = this.handleKeyDown.bind(this)
     this.handleNext = this.handleNext.bind(this)
     this.handlePrev = this.handlePrev.bind(this)

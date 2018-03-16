@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
+
 import { Image, Text } from './CanvasObject';
 import { ASPECT_RATIO, OBJECT_TYPE } from '../../../constants/builderConstants';
 import { isFirefox } from '../../../utils/commonUtils';
@@ -67,7 +69,7 @@ class Canvas extends Component {
         className: `canvas_object canvas_object--${id}`,
         disableDragging: presenterMode || isTextFocused,
         enableResizing: resizeState,
-        bounds: '.builder',
+        bounds: '.builder_content',
         ...transitionProp,
       }
 
@@ -77,6 +79,7 @@ class Canvas extends Component {
         case OBJECT_TYPE.IMAGE:
           return <Image
             {...objectProps }
+            lockAspectRatio={true}
             />
 
         case OBJECT_TYPE.TEXT:
@@ -97,7 +100,9 @@ class Canvas extends Component {
     const {
       mode,
       scale,
-      slideTransition
+      slideTransition,
+      presenterMode,
+      onCanvasClick
     } = this.props
 
     /*  Firefox does not support `zoom` css property  */
@@ -111,18 +116,33 @@ class Canvas extends Component {
       ...scaleStyle
     }
 
+    const baseClass = 'canvas'
+    const classes = cx(
+      baseClass,
+      { [`${baseClass}--scrollable`]: presenterMode }
+    )
+
     return (
+      <div
+        className={`canvas_wrapper`}
+        onClick={onCanvasClick}>
         <Transition {...slideTransition}>
-          <div id="canvas" className="canvas" style={canvasStyle}>
+          <div
+            id="canvas"
+            className={classes}
+            style={canvasStyle}
+            >
               { this.renderObjects() }
           </div>
         </Transition>
+        </div>
     );
   }
 }
 
 Canvas.propTypes = {
   objectIds: PropTypes.array,
+  onCanvasClick: PropTypes.func,
   objects: PropTypes.object,
   onObjectClick: PropTypes.func,
   onTextChange: PropTypes.func,

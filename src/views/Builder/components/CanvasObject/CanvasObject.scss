@@ -9,8 +9,9 @@
 }
 
 .dnr_inner {
-  width: 100%;
   height: 100%;
+  width: 100%;
+  display: flex;
 }
 
 .dnr_cursor {
@@ -31,9 +32,9 @@
 }
 
 .canvas_text {
-  padding: 8px;
-  position: relative;
-  z-index: 1;
+  padding: 4px;
+  height: 100%;
+  width: 100%;
 }
 
 .canvas_image {

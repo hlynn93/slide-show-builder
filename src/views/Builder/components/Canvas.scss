@@ -1,18 +1,13 @@
 @import '../../../styles/import.scss';
 
 .canvas_wrapper {
-  overflow: scroll;
   position: absolute;
   top: 0;
   right: 0;
   left: 0;
   bottom: 0;
   padding-top: 100px;
-
-  &--present {
-    overflow: initial;
-    margin: 0 auto;
-  }
+  overflow: scroll;
 }
 
 .canvas {
@@ -21,11 +16,10 @@
   background: white;
   border: 1px solid $app-grey;
   margin: auto;
-  overflow: scroll;
 
-  &--desktop {
-    height: 600px;
-    width: 960px;
+  &--scrollable {
+    // overflow-x: hidden;
+    // overflow-y: scroll;
   }
 
   &_object {

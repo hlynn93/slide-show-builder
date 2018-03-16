@@ -32,6 +32,7 @@ export default (Component) => {
     inProp,
     onClick,
     transition,
+    lockAspectRatio = false,
     ...props
   }) => {
 
@@ -63,6 +64,7 @@ export default (Component) => {
         enableResizing={enableResizing}
         disableDragging={disableDragging}
         className={classes}
+        lockAspectRatio={lockAspectRatio}
         >
         <Transition {...transition}>
           <div

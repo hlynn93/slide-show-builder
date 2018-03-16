@@ -1,5 +1,6 @@
 import React from 'react';
 import Rnd from 'react-rnd';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 
 import './Panel.scss';
@@ -10,6 +11,7 @@ const Panel = ({
   onDragStart,
   onDragStop,
   bounds,
+  className,
   disableDragging,
   disableMinimize,
   onToggle,
@@ -17,8 +19,14 @@ const Panel = ({
   children,
   ...props,
 }) => {
+
+  const classes = cx(
+    'panel',
+    className
+  )
   return (
     <Rnd
+      className={classes}
       default={position}
       bounds={bounds}
       onDrag={onDrag}
@@ -60,6 +68,7 @@ Panel.propTypes = {
   minimize: PropTypes.bool,
   disableMinimize: PropTypes.bool,
   position: PropTypes.object,
+  className: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.object,

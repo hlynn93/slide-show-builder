@@ -116,7 +116,9 @@ export const prepareExport = (state = {}) => {
   const { objects } = stateToSave
   Object.values(objects).map(obj => {
     if(obj.type === OBJECT_TYPE.TEXT) {
-      obj.editorState = convertToRaw(obj.editorState.getCurrentContent())
+      const content = obj.editorState.getCurrentContent();
+      const rawEditorState = convertToRaw(content);
+      obj.editorState = rawEditorState
     }
   })
 
@@ -133,7 +135,7 @@ export const prepareImport = (state = {}, defaultState) => {
   const { objects } = newState
   Object.values(objects).map(obj => {
     if(obj.type === OBJECT_TYPE.TEXT) {
-      obj.editorState = EditorState.createWithContent(convertFromRaw(obj.editorState))
+      obj.editorState = EditorState.createWithContent(convertFromRaw(obj.editorState));
     }
   })
 

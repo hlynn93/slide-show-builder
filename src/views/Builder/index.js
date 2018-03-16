@@ -230,8 +230,6 @@ class Builder extends PureComponent {
    */
   addObject(type, data) {
 
-    console.warn(data);
-
     let newObject = {
       id: generateId(),
       type,
@@ -372,7 +370,6 @@ class Builder extends PureComponent {
    * @param {String} id
    */
   updateActiveObjectId(id) {
-    console.warn(id);
     const { activeObjectId, objects } = this.state
 
     if(activeObjectId === id)
@@ -408,8 +405,8 @@ class Builder extends PureComponent {
       a.download = name;
       a.click();
     }
-
-    save(JSON.stringify(prepareExport(this.state)), 'test.json', 'application/json');
+    const raw = prepareExport(this.state);
+    save(JSON.stringify(raw), 'test.txt', 'text/plain');
     this.showAlert('The file has successfully been saved!')
   }
 
@@ -631,11 +628,12 @@ class Builder extends PureComponent {
             onSelect={this.handleModeSwitch}
             mode={mode}
             />
-          <div
+          {/* <div
             className={`canvas_wrapper`}
-            onClick={this.handleCanvasClick}>
+            onClick={this.handleCanvasClick}> */}
             <Canvas
               mode={mode}
+              onCanvasClick={this.handleCanvasClick}
               onResize={this.handleResize}
               onDrag={this.handleDrag}
               onBlur={this.updateStatus.bind(null, STATUS.IS_EDITING_TEXT, false)}
@@ -647,7 +645,7 @@ class Builder extends PureComponent {
               activeId={activeObjectId}
               isTextFocused={status[STATUS.IS_EDITING_TEXT]}
               />
-          </div>
+          {/* </div> */}
           <EditorPanel
             hide={!activeObjectId}
             minimize={dialogs[DIALOG.EDITOR_PANEL]}

@@ -1,152 +1,242 @@
 {
   "objects": {
-    "1-desktop": {
-      "id": "1-desktop",
-      "type": "image",
+    "JESCO5SSRZORB--text--desktop": {
+      "id": "JESCO5SSRZORB--text--desktop",
+      "type": "text",
       "attr": {
-        "height": 300,
-        "width": 400,
-        "x": 100,
-        "y": 240
+        "width": 200,
+        "x": 62,
+        "y": 14
       },
-      "content": "",
-      "src": "https://i1.wp.com/digital-photography-school.com/wp-content/uploads/2011/07/outdoor-portraits-1.jpg?resize=2000%2C1160&ssl=1"
+      "editorState": {
+        "blocks": [{
+          "key": "bnkpg",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "c6oim",
+          "text": "",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "e9l8",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "fhgac",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "9idi1",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "armth",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "86ju0",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "7omeu",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "36i01",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "dpmbo",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "9oc95",
+          "text": "",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "eflud",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "6l305",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "8bmce",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "6rub6",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "9vf3s",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "a207s",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "40rnm",
+          "text": "fasdfadsfas",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }, {
+          "key": "c3udd",
+          "text": "",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }],
+        "entityMap": {}
+      },
+      "textAlign": "left"
     },
-    "1-mobile": {
-      "id": "1-mobile",
-      "type": "image",
+    "JESCO5SSRZORB--text--mobile": {
+      "id": "JESCO5SSRZORB--text--mobile",
+      "type": "text",
       "attr": {
-        "height": 200,
-        "width": 300,
+        "width": 200,
         "x": 0,
         "y": 0
       },
-      "content": "",
-      "src": "https://i1.wp.com/digital-photography-school.com/wp-content/uploads/2011/07/outdoor-portraits-1.jpg?resize=2000%2C1160&ssl=1"
-    },
-    "2-desktop": {
-      "id": "2-desktop",
-      "type": "image",
-      "attr": {
-        "height": 300,
-        "width": 400,
-        "x": 250,
-        "y": 240
+      "editorState": {
+        "blocks": [{
+          "key": "bnkpg",
+          "text": "",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [],
+          "data": {}
+        }],
+        "entityMap": {}
       },
-      "content": "",
-      "src": "http://www.keatleyphoto.com/wp-content/uploads/2016/05/IMG_2589.jpg"
+      "textAlign": "left"
     },
-    "2-mobile": {
-      "id": "2-mobile",
+    "JESCOARRKD9QU--3--image--desktop": {
+      "id": "JESCOARRKD9QU--3--image--desktop",
       "type": "image",
       "attr": {
-        "height": 200,
-        "width": 300,
+        "width": 200,
+        "x": 411,
+        "y": 65
+      },
+      "src": "https://images.pexels.com/photos/50711/board-electronics-computer-data-processing-50711.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb"
+    },
+    "JESCOARRKD9QU--3--image--mobile": {
+      "id": "JESCOARRKD9QU--3--image--mobile",
+      "type": "image",
+      "attr": {
+        "width": 200,
         "x": 0,
         "y": 0
       },
-      "content": "",
-      "src": "http://www.keatleyphoto.com/wp-content/uploads/2016/05/IMG_2589.jpg"
-    },
-    "3-desktop": {
-      "id": "3-desktop",
-      "type": "image",
-      "attr": {
-        "height": 300,
-        "width": 400,
-        "x": 350,
-        "y": 240
-      },
-      "content": "",
-      "src": "http://www.dannyst.com/blogimg/gallery-portraits-of-strangers-18.jpg"
-    },
-    "3-mobile": {
-      "id": "3-mobile",
-      "type": "image",
-      "attr": {
-        "height": 200,
-        "width": 300,
-        "x": 0,
-        "y": 0
-      },
-      "content": "",
-      "src": "http://www.dannyst.com/blogimg/gallery-portraits-of-strangers-18.jpg"
+      "src": "https://images.pexels.com/photos/50711/board-electronics-computer-data-processing-50711.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb"
     }
   },
-
-  "slides": [
-    {
-      "modes": {
-        "desktop": {
-          "objectIds": ["1-desktop", "2-desktop"],
-          "snapshot": "https://cdn.slidemodel.com/wp-content/uploads/FF0074-01-free-wearable-tech-powerpoint-slides-16x9-2.jpg",
-          "transitions": [
-            {
-              "objectIds": ["1-desktop", "2-desktop"],
-              "transition": {
-                "type": "zoom",
-                "duration": 500
-              }
-            }
-          ]
-        },
-        "mobile": {
-          "objectIds": ["1-mobile", "2-mobile"]
-        }
+  "slides": [{
+    "modes": {
+      "desktop": {
+        "objectIds": ["JESCO5SSRZORB--text--desktop", "JESCOARRKD9QU--3--image--desktop"],
+        "snapshot": "data:image/png;base64,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"
       },
-      "transition": {
-        "type": "rotate",
-        "duration": 1000
+      "mobile": {
+        "objectIds": ["JESCO5SSRZORB--text--mobile", "JESCOARRKD9QU--3--image--mobile"]
       }
     },
-    {
-      "modes": {
-        "desktop": {
-          "objectIds": ["2-desktop", "3-desktop"],
-          "snapshot": "https://cdn.slidemodel.com/wp-content/uploads/FF0074-01-free-wearable-tech-powerpoint-slides-16x9-2.jpg",
-          "transitions": [
-            {
-              "objectIds": ["2-desktop"],
-              "transition": {
-                "type": "bounce",
-                "duration": 500
-              }
-            },
-            {
-              "objectIds": ["3-desktop"],
-              "transition": {
-                "type": "fade",
-                "duration": 500
-              }
-            }
-          ]
-        },
-        "mobile": {
-          "objectIds": ["2-mobile", "3-mobile"]
-        }
-      },
-      "transition": {
-        "type": "rotate",
-        "duration": 1000
-      }
-    },
-    {
-      "modes": {
-        "desktop": {
-          "objectIds": ["2-desktop", "1-desktop"],
-          "snapshot": "https://cdn.slidemodel.com/wp-content/uploads/FF0074-01-free-wearable-tech-powerpoint-slides-16x9-2.jpg"
-        },
-        "mobile": {
-          "objectIds": ["2-mobile", "1-mobile"]
-        }
-      },
-      "transition": {
-        "type": "rotate",
-        "duration": 1000
-      }
+    "transition": {
+      "easing": "ease-in"
     }
-  ],
+  }],
+  "activeObjectId": "JESCOARRKD9QU--3--image--desktop",
   "curSlideIndex": 0,
   "mode": "desktop",
-  "animatedIds": []
+  "dialogs": {
+    "imageUploader": false,
+    "editorPanel": true,
+    "preview": false
+  },
+  "panels": {
+    "sideTools": true
+  },
+  "status": {
+    "isEditingText": false
+  },
+  "scale": 1,
+  "alert": ""
 }
