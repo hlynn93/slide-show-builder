@@ -1,4 +1,6 @@
-# Vignets Starter (Work in Progress)
+# Slide show builder (Discontinued)
+
+This project is to experiment and experience complex state management in react by building a slide show builder.
 
 ## Getting Started
 
