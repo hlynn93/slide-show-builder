@@ -60,7 +60,7 @@
     "react": "^16.2.0",
     "react-dev-utils": "^3.1.1",
     "react-dom": "^16.2.0",
-    "react-draft-wysiwyg": "^1.12.11",
+    "react-draft-wysiwyg": "^1.14.6",
     "react-error-overlay": "^1.0.10",
     "react-icons": "^2.2.7",
     "react-rangeslider": "^2.2.0",
